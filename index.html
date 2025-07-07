@@ -55,9 +55,9 @@
 
   <script>
     const cards = [
-      { id: 1, name: "スカイ", image: "images/sky.jpg" },
-      { id: 2, name: "スカイ(ゆるキャラ)", image: "images/skyyurukyara.jpg" },
-      { id: 3, name: "スカイのヘッドホン", image: "images/skynoheddohon.jpg" }
+      { id: 1, name: "スカイ", image: "images/sky.jpg", maxCopies: 4 },
+      { id: 2, name: "スカイ(ゆるキャラ)", image: "images/skyyurukyara.jpg", maxCopies: 2 },
+      { id: 3, name: "スカイのヘッドホン", image: "images/skynoheddohon.jpg", maxCopies: 1 }
     ];
 
     const deck = [];
@@ -99,15 +99,22 @@
         deckList.appendChild(cardElement);
       });
     }
+function addToDeck(card) {
+  if (deck.length >= 50) {
+    alert("デッキは50枚までです！");
+    return;
+  }
 
-    function addToDeck(card) {
-      if (deck.length >= 50) {
-        alert("デッキは50枚までです！");
-        return;
-      }
-      deck.push(card);
-      renderDeck();
-    }
+  const sameCardCount = deck.filter(c => c.id === card.id).length;
+
+  if (sameCardCount >= card.maxCopies) {
+    alert(`このカード「${card.name}」はデッキに${card.maxCopies}枚までしか入れられません！`);
+    return;
+  }
+
+  deck.push(card);
+  renderDeck();
+}
 
     function removeFromDeck(index) {
       deck.splice(index, 1);
