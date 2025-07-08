@@ -12,7 +12,7 @@
       gap: 10px;
     }
     .card {
-      border: 1px solid #ccc;
+      /*border: 1px solid #ccc;*/
       padding: 5px;
       width: 120px;
       cursor: pointer;
@@ -69,20 +69,14 @@
       const div = document.createElement('div');
       div.className = 'card';
       div.onclick = onClick;
-
+      
       const img = document.createElement('img');
       img.src = card.image;
       img.alt = card.name;
-
-      const name = document.createElement('div');
-      name.className = 'card-name';
-      name.textContent = card.name;
-
       div.appendChild(img);
-      div.appendChild(name);
-
       return div;
     }
+
 
     function renderCards() {
       cardList.innerHTML = '';
