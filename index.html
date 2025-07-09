@@ -5,14 +5,15 @@
   <title>きみとスカイカードゲーム</title>
 </head>
 <body>
-  <h3 onclick="toggleHeader()">≡</h3>
+  <h1 onclick="toggleHeader()">≡</h1>
   <div id="header-area">
     <h1>きみとスカイカードゲーム</h1>
     <h2 onclick="loadHTML('deckmaker.html')" cursor:pointer;">デッキメーカー</h2>
     <h2 onclick="loadHTML('carddictionary.html')" cursor:pointer;">カード図鑑</h2>
     <hr>
   </div>
-  <iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>
+  <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
+  <!--<iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>-->
   <script>
     function loadHTML(file) {
       const viewer = document.getElementById('viewer');
