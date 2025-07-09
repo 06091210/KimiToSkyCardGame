@@ -2,18 +2,14 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>HTML選択</title>
+  <title>きみとスカイカードゲーム</title>
 </head>
 <body>
-  <h1>HTMLプログラムを選択</h1>
-
-  <button onclick="loadHTML('program1.html')">プログラム1</button>
-  <button onclick="loadHTML('program2.html')">プログラム2</button>
-
+  <h1>きみとスカイカードゲーム</h1>
+  <h2><button onclick="loadHTML('program1.html')">プログラム1</button></h2>
+  <h2><button onclick="loadHTML('program2.html')">プログラム2</button></h2>
   <hr>
-
   <iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>
-
   <script>
     function loadHTML(file) {
       const viewer = document.getElementById('viewer');
