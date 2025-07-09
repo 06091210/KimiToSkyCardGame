@@ -22,25 +22,27 @@
  <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
 
 <script>
+  function adjustIframeHeight() {
+    const viewer = document.getElementById('viewer');
+    // ヘッダーの高さを引いたりしたければここで調整（例: -100）
+    viewer.style.height = window.innerHeight + "px";
+  }
+
   function loadHTML(file) {
     const viewer = document.getElementById('viewer');
     viewer.src = file;
-
-    // 読み込まれた後に高さを調整
-    viewer.onload = function() {
-      try {
-        const contentHeight = viewer.contentWindow.document.body.scrollHeight;
-        viewer.style.height = contentHeight + "px";
-      } catch (e) {
-        console.error("iframeの高さを自動調整できません（クロスオリジンの可能性があります）", e);
-      }
-    };
   }
 
   function toggleHeader() {
     const header = document.getElementById('header-area');
     header.style.display = (header.style.display === "none") ? "block" : "none";
+    adjustIframeHeight();  // ヘッダーの表示・非表示で高さ変わる可能性があるため
   }
+
+  // 初期化とリサイズ対応
+  window.addEventListener('load', adjustIframeHeight);
+  window.addEventListener('resize', adjustIframeHeight);
+  window.addEventListener('orientationchange', adjustIframeHeight); // iOSの画面回転対応
 </script>
 </body>
 </html>
