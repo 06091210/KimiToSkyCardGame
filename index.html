@@ -3,30 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>きみとスカイカードゲーム</title>
+  <style>
+    #viewer {
+      border: 1px solid #ccc;
+      width: 100%;
+      min-height: 500px;
+      padding: 10px;
+    }
+    h1, h2 {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1 onclick="toggleHeader()">≡</h1>
   <div id="header-area">
     <h1>きみとスカイカードゲーム</h1>
-    <h2 onclick="loadHTML('deckmaker.html')" cursor:pointer;">デッキメーカー</h2>
-    <h2 onclick="loadHTML('carddictionary.html')" cursor:pointer;">カード図鑑</h2>
+    <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
+    <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
     <hr>
   </div>
-  <iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>
+
+  <!-- iframe の代わりに div を使用 -->
+  <div id="viewer">ここにコンテンツが読み込まれます</div>
+
   <script>
     function loadHTML(file) {
-      const viewer = document.getElementById('viewer');
-      viewer.src = file;
+      fetch(file)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById('viewer').innerHTML = data;
+        })
+        .catch(error => {
+          document.getElementById('viewer').innerHTML = `<p>読み込みエラー: ${error.message}</p>`;
+        });
     }
-    
+
     function toggleHeader() {
       const header = document.getElementById('header-area');
-      if (header.style.display === "none") {
-        header.style.display = "block";
-      } else {
-        header.style.display = "none";
-      }
+      header.style.display = (header.style.display === "none") ? "block" : "none";
     }
   </script>
 </body>
 </html>
+
