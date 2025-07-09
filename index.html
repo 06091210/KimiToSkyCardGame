@@ -22,23 +22,27 @@
  <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
 
 <script>
+  function adjustIframeHeight() {
+    const viewer = document.getElementById('viewer');
+    // ヘッダーの高さを引いたりしたければここで調整（例: -100）
+    viewer.style.height = window.innerHeight + "px";
+  }
+
+  function loadHTML(file) {
+    const viewer = document.getElementById('viewer');
+    viewer.src = file;
+  }
+
   function toggleHeader() {
     const header = document.getElementById('header-area');
-    const viewer = document.getElementById('viewer');
-
-    // ヘッダーの表示/非表示を切り替える
-    if (header.style.display === "none") {
-      header.style.display = "block";
-    } else {
-      header.style.display = "none";
-    }
-
-    // DOMの状態が更新されるのを待ってから高さを再調整
-    setTimeout(() => {
-      const currentHeaderHeight = header.offsetHeight;
-      viewer.style.height = (window.innerHeight - currentHeaderHeight) + "px";
-    }, 50);  // 反映待ちに少し遅延を入れる
+    header.style.display = (header.style.display === "none") ? "block" : "none";
+    adjustIframeHeight();  // ヘッダーの表示・非表示で高さ変わる可能性があるため
   }
+
+  // 初期化とリサイズ対応
+  window.addEventListener('load', adjustIframeHeight);
+  window.addEventListener('resize', adjustIframeHeight);
+  window.addEventListener('orientationchange', adjustIframeHeight); // iOSの画面回転対応
 </script>
 </body>
 </html>
