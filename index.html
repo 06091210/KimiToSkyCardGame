@@ -3,29 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <title>きみとスカイカードゲーム</title>
+  <style>
+    h2 {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1 onclick="toggleHeader()">≡</h1>
+
   <div id="header-area">
     <h1>きみとスカイカードゲーム</h1>
-    <h2 onclick="loadHTML('deckmaker.html')" cursor:pointer;">デッキメーカー</h2>
-    <h2 onclick="loadHTML('carddictionary.html')" cursor:pointer;">カード図鑑</h2>
+    <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
+    <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
     <hr>
   </div>
-  <iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>
+
+  <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
+
   <script>
     function loadHTML(file) {
       const viewer = document.getElementById('viewer');
       viewer.src = file;
+
+      // 読み込み後に高さ調整
+      viewer.onload = function () {
+        try {
+          const contentHeight = viewer.contentWindow.document.body.scrollHeight;
+          viewer.style.height = contentHeight + 'px';
+        } catch (e) {
+          console.warn('iframeの高さ取得に失敗しました（クロスオリジンの可能性あり）');
+        }
+      };
     }
-    
+
     function toggleHeader() {
       const header = document.getElementById('header-area');
-      if (header.style.display === "none") {
-        header.style.display = "block";
-      } else {
-        header.style.display = "none";
-      }
+      header.style.display = (header.style.display === "none") ? "block" : "none";
     }
   </script>
 </body>
