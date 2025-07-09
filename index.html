@@ -19,28 +19,28 @@
     <hr>
   </div>
 
-  <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
+ <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
 
-  <script>
-    function loadHTML(file) {
-      const viewer = document.getElementById('viewer');
-      viewer.src = file;
+<script>
+  function loadHTML(file) {
+    const viewer = document.getElementById('viewer');
+    viewer.src = file;
 
-      // 読み込み後に高さ調整
-      viewer.onload = function () {
-        try {
-          const contentHeight = viewer.contentWindow.document.body.scrollHeight;
-          viewer.style.height = contentHeight + 'px';
-        } catch (e) {
-          console.warn('iframeの高さ取得に失敗しました（クロスオリジンの可能性あり）');
-        }
-      };
-    }
+    // 読み込まれた後に高さを調整
+    viewer.onload = function() {
+      try {
+        const contentHeight = viewer.contentWindow.document.body.scrollHeight;
+        viewer.style.height = contentHeight + "px";
+      } catch (e) {
+        console.error("iframeの高さを自動調整できません（クロスオリジンの可能性があります）", e);
+      }
+    };
+  }
 
-    function toggleHeader() {
-      const header = document.getElementById('header-area');
-      header.style.display = (header.style.display === "none") ? "block" : "none";
-    }
-  </script>
+  function toggleHeader() {
+    const header = document.getElementById('header-area');
+    header.style.display = (header.style.display === "none") ? "block" : "none";
+  }
+</script>
 </body>
 </html>
