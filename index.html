@@ -5,15 +5,34 @@
   <title>きみとスカイカードゲーム</title>
 </head>
 <body>
-  <h1>きみとスカイカードゲーム</h1>
-  <h2 onclick="loadHTML('deckmaker.html')" style="display:inline">デッキメーカー</h2>
-  <h2 onclick="loadHTML('carddictionary.html')" style="display:inline">カード図鑑</h2>
-  <hr>
+  <!-- 表示・非表示ボタン -->
+  <button onclick="toggleHeader()">ヘッダー表示切替</button>
+
+  <!-- 上部の表示を囲む div（ここを表示・非表示にする） -->
+  <div id="header-area">
+    <h1>きみとスカイカードゲーム</h1>
+    <h2 onclick="loadHTML('deckmaker.html')" style="display:inline; cursor:pointer;">デッキメーカー</h2>
+    <h2 onclick="loadHTML('carddictionary.html')" style="display:inline; cursor:pointer;">カード図鑑</h2>
+    <hr>
+  </div>
+
+  <!-- iframeエリア -->
   <iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>
+
+  <!-- JavaScript -->
   <script>
     function loadHTML(file) {
       const viewer = document.getElementById('viewer');
       viewer.src = file;
+    }
+
+    function toggleHeader() {
+      const header = document.getElementById('header-area');
+      if (header.style.display === "none") {
+        header.style.display = "block";
+      } else {
+        header.style.display = "none";
+      }
     }
   </script>
 </body>
