@@ -6,27 +6,18 @@
 </head>
 <body>
   <h1>HTMLプログラムを選択</h1>
-  <select id="htmlSelector" onchange="loadHTML()">
-    <option value="">選択してください</option>
-    <option value="program1.html">プログラム1</option>
-    <option value="program2.html">プログラム2</option>
-  </select>
+
+  <button onclick="loadHTML('program1.html')">プログラム1</button>
+  <button onclick="loadHTML('program2.html')">プログラム2</button>
 
   <hr>
 
   <iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>
 
   <script>
-    function loadHTML() {
-      const selector = document.getElementById('htmlSelector');
+    function loadHTML(file) {
       const viewer = document.getElementById('viewer');
-      const selectedValue = selector.value;
-
-      if (selectedValue) {
-        viewer.src = selectedValue;
-      } else {
-        viewer.src = '';
-      }
+      viewer.src = file;
     }
   </script>
 </body>
