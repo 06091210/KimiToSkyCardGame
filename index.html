@@ -2,32 +2,39 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>きみとスカイカードゲーム</title>
+  <title>外部HTML切り替え</title>
+  <style>
+    #content {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      min-height: 100px;
+    }
+  </style>
 </head>
 <body>
-  <h1 onclick="toggleHeader()">≡</h1>
-  <div id="header-area">
-    <h1>きみとスカイカードゲーム</h1>
-    <h2 onclick="loadHTML('deckmaker.html')" cursor:pointer;">デッキメーカー</h2>
-    <h2 onclick="loadHTML('carddictionary.html')" cursor:pointer;">カード図鑑</h2>
-    <hr>
-  </div>
-  <!--<iframe id="viewer" width="100%" height="500px" style="border: 1px solid #ccc;"></iframe>-->
+  <h1>きみとスカイカードゲーム</h1>
+  <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
+  <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
+
+  <div id="content">ここに外部HTMLが読み込まれます</div>
+
   <script>
     function loadHTML(file) {
-      const viewer = document.getElementById('viewer');
-      viewer.src = file;
-    }
-    
-    function toggleHeader() {
-      const header = document.getElementById('header-area');
-      if (header.style.display === "none") {
-        header.style.display = "block";
-      } else {
-        header.style.display = "none";
-      }
+      fetch(file)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('読み込み失敗: ' + response.status);
+          }
+          return response.text();
+        })
+        .then(data => {
+          document.getElementById('content').innerHTML = data;
+        })
+        .catch(error => {
+          document.getElementById('content').innerHTML = '<p style="color:red;">読み込みエラー: ' + error.message + '</p>';
+        });
     }
   </script>
 </body>
 </html>
-
