@@ -117,7 +117,8 @@
 
     renderCards();
     renderDeck();
-    function generateDeckCode() {
+
+function generateDeckCode() {
   const counts = {};
 
   deck.forEach(card => {
@@ -128,9 +129,21 @@
     .map(([id, count]) => `${id}x${count}`)
     .join(',');
 
-  document.getElementById('deckCode').value = code;
+  const deckCodeTextarea = document.getElementById('deckCode');
+  deckCodeTextarea.value = code;
+
+  // 🔽 クリップボードにコピーする処理を追加
+  navigator.clipboard.writeText(code)
+    .then(() => {
+      alert("デッキコードをクリップボードにコピーしました！");
+    })
+    .catch(err => {
+      console.error("コピー失敗:", err);
+      alert("コピーに失敗しました。手動でコピーしてください。");
+    });
 }
 
+    
 function loadDeckFromCode() {
   const code = document.getElementById('deckCode').value.trim();
   if (!code) return;
