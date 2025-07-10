@@ -101,11 +101,21 @@
   }
 
   function copyToClipboard() {
-    const text = document.getElementById("deckCode").value;
-    navigator.clipboard.writeText(text)
-      .then(() => alert('コピーしました！'))
-      .catch(err => alert('コピーに失敗しました: ' + err));
-  }
+      const textarea = document.getElementById("myTextarea");
+      textarea.select(); // テキストを選択
+      textarea.setSelectionRange(0, 99999); // モバイル対応
+
+      try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+          alert("クリップボードにコピーしました！");
+        } else {
+          alert("コピーに失敗しました。");
+        }
+      } catch (err) {
+        alert("コピー時にエラーが発生しました: " + err);
+      }
+    }
 
   const sameCardCount = deck.filter(c => c.id === card.id).length;
 
