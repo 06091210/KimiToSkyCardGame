@@ -47,10 +47,12 @@
 <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
 <button onclick="generateDeckCode()">コードを生成</button>
 <button onclick="loadDeckFromCode()">コードから復元</button>
+<button onclick="copyToClipboard()">コピー</button>
 <body>
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
   <div id="deckList" class="deck-container"></div>
+
   <script>
     const cards = [
       { id: 1, name: "スカイ", image: "images/sky.jpg", maxCopies: 5 },
@@ -91,10 +93,18 @@
         deckList.appendChild(cardElement);
       });
     }
-function addToDeck(card) {
-  if (deck.length >= 50) {
-    alert("デッキは50枚までです！");
-    return;
+    
+    function addToDeck(card) {
+      if (deck.length >= 50) {
+        alert("デッキは50枚までです！");
+        return;
+  }
+
+  function copyToClipboard() {
+    const text = document.getElementById("myTextarea").value;
+    navigator.clipboard.writeText(text)
+      .then(() => alert('コピーしました！'))
+      .catch(err => alert('コピーに失敗しました: ' + err));
   }
 
   const sameCardCount = deck.filter(c => c.id === card.id).length;
