@@ -43,6 +43,10 @@
     }
 </style>
 </head>
+<h2>デッキコード</h2>
+<textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
+<button onclick="generateDeckCode()">コードを生成</button>
+<button onclick="loadDeckFromCode()">コードから復元</button>
 <body>
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
@@ -111,6 +115,54 @@ function addToDeck(card) {
 
     renderCards();
     renderDeck();
+    function generateDeckCode() {
+  const counts = {};
+
+  deck.forEach(card => {
+    counts[card.id] = (counts[card.id] || 0) + 1;
+  });
+
+  const code = Object.entries(counts)
+    .map(([id, count]) => `${id}x${count}`)
+    .join(',');
+
+  document.getElementById('deckCode').value = code;
+}
+
+function loadDeckFromCode() {
+  const code = document.getElementById('deckCode').value.trim();
+  if (!code) return;
+
+  const newDeck = [];
+
+  const entries = code.split(',');
+  for (const entry of entries) {
+    const [idStr, countStr] = entry.split('x');
+    const id = parseInt(idStr);
+    const count = parseInt(countStr);
+
+    const card = cards.find(c => c.id === id);
+    if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
+      alert(`無効なカードIDや枚数です: ${entry}`);
+      return;
+    }
+
+    for (let i = 0; i < count; i++) {
+      newDeck.push(card);
+    }
+  }
+
+  if (newDeck.length > 50) {
+    alert("デッキは50枚までです！");
+    return;
+  }
+
+  // デッキを置き換え
+  deck.length = 0;
+  newDeck.forEach(card => deck.push(card));
+  renderDeck();
+}
+
   </script>
 </body>
 </html>
