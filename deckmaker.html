@@ -119,30 +119,38 @@
     renderDeck();
 
 function generateDeckCode() {
+  // カードIDごとの枚数を数える
   const counts = {};
 
   deck.forEach(card => {
     counts[card.id] = (counts[card.id] || 0) + 1;
   });
 
+  // デッキコード文字列を生成（例: "1x3,2x2"）
   const code = Object.entries(counts)
     .map(([id, count]) => `${id}x${count}`)
     .join(',');
 
+  // テキストエリアにコードを表示
   const deckCodeTextarea = document.getElementById('deckCode');
   deckCodeTextarea.value = code;
 
-  // 🔽 クリップボードにコピーする処理を追加
+  // 空のコードだったらコピーせず終了（デッキ空の時の対策）
+  if (!code) {
+    alert("デッキが空です。カードを追加してください。");
+    return;
+  }
+
+  // クリップボードにコピー
   navigator.clipboard.writeText(code)
     .then(() => {
       alert("デッキコードをクリップボードにコピーしました！");
     })
     .catch(err => {
-      console.error("コピー失敗:", err);
+      console.error("クリップボードへのコピーに失敗しました:", err);
       alert("コピーに失敗しました。手動でコピーしてください。");
     });
 }
-
     
 function loadDeckFromCode() {
   const code = document.getElementById('deckCode').value.trim();
