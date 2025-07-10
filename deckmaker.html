@@ -47,7 +47,6 @@
 <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
 <button onclick="generateDeckCode()">コードを生成</button>
 <button onclick="loadDeckFromCode()">コードから復元</button>
-<button onclick="copyToClipboard()">コピー</button>
 <body>
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
@@ -99,23 +98,6 @@
         alert("デッキは50枚までです！");
         return;
   }
-
-  function copyToClipboard() {
-      const textarea = document.getElementById("myTextarea");
-      textarea.select(); // テキストを選択
-      textarea.setSelectionRange(0, 99999); // モバイル対応
-
-      try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          alert("クリップボードにコピーしました！");
-        } else {
-          alert("コピーに失敗しました。");
-        }
-      } catch (err) {
-        alert("コピー時にエラーが発生しました: " + err);
-      }
-    }
 
   const sameCardCount = deck.filter(c => c.id === card.id).length;
 
