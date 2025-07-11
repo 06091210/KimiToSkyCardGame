@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>山札のドラッグサンプル</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+  #deck {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    height: 140px;
+    background-image: url(''); /* 山札画像（裏面）*/
+    background-size: cover;
+    cursor: pointer;
+    user-select: none;
+  }
+  #drawnCard {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 100px;
+    height: 140px;
+    background-size: cover;
+    cursor: grab;
+    user-select: none;
+    display: none; /* 最初は非表示 */
+    z-index: 1000;
+  }
+</style>
+</head>
+<body>
+
+<div id="deck" title="山札"></div>
+<div id="drawnCard" title="ドラッグできるカード"></div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const drawnCard = document.getElementById('drawnCard');
+
+  // 例として、山札からめくるカード画像URL
+  const cardImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Playing_card_spade_A.svg/100px-Playing_card_spade_A.svg.png';
+
+  // クリックでカードをめくる（表示）
+  deck.addEventListener('click', () => {
+    // 表示されていなければ表示する
+    if (drawnCard.style.display === 'none') {
+      drawnCard.style.backgroundImage = `url(${cardImageUrl})`;
+      drawnCard.style.display = 'block';
+
+      // 山札の位置に重ねる（右上固定）
+      drawnCard.style.top = deck.offsetTop + 'px';
+      drawnCard.style.right = (window.innerWidth - deck.offsetLeft - deck.offsetWidth) + 'px';
+
+      // ドラッグ開始位置初期化
+      drawnCard.style.left = '';
+      drawnCard.style.right = (window.innerWidth - deck.offsetLeft - deck.offsetWidth) + 'px';
+      drawnCard.style.top = deck.offsetTop + 'px';
+    }
+  });
+
+  // ドラッグ処理
+  let isDragging = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+
+  drawnCard.addEventListener('mousedown', startDrag);
+  drawnCard.addEventListener('touchstart', startDrag, {passive: false});
+
+  function startDrag(e) {
+    e.preventDefault();
+    isDragging = true;
+
+    // タッチイベントとマウスイベントの差異対応
+    const evt = e.type === 'touchstart' ? e.touches[0] : e;
+
+    const rect = drawnCard.getBoundingClientRect();
+    dragOffsetX = evt.clientX - rect.left;
+    dragOffsetY = evt.clientY - rect.top;
+
+    drawnCard.style.cursor = 'grabbing';
+  }
+
+  window.addEventListener('mousemove', drag);
+  window.addEventListener('touchmove', drag, {passive: false});
+
+  function drag(e) {
+    if (!isDragging) return;
+
+    e.preventDefault();
+    const evt = e.type === 'touchmove' ? e.touches[0] : e;
+
+    let newX = evt.clientX - dragOffsetX;
+    let newY = evt.clientY - dragOffsetY;
+
+    // 画面内でドラッグできるように制限をかける（任意）
+    const maxX = window.innerWidth - drawnCard.offsetWidth;
+    const maxY = window.innerHeight - drawnCard.offsetHeight;
+
+    if (newX < 0) newX = 0;
+    if (newY < 0) newY = 0;
+    if (newX > maxX) newX = maxX;
+    if (newY > maxY) newY = maxY;
+
+    // left, top指定で動かすのでrightはリセット
+    drawnCard.style.left = newX + 'px';
+    drawnCard.style.top = newY + 'px';
+    drawnCard.style.right = 'auto';
+  }
+
+  window.addEventListener('mouseup', endDrag);
+  window.addEventListener('touchend', endDrag);
+  window.addEventListener('touchcancel', endDrag);
+
+  function endDrag(e) {
+    if (!isDragging) return;
+    isDragging = false;
+    drawnCard.style.cursor = 'grab';
+  }
+</script>
+
+</body>
+</html>
