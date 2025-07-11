@@ -11,16 +11,19 @@
     }
     
     #menu-button {
-  position: fixed;
+  /*position: fixed;
   top: 10px;
   left: 10px;
   background: white;
   border: 1px solid #ccc;
   padding: 5px 10px;
+  */
   font-size: 24px;
+  /*
   font-weight: bold;
   z-index: 1000;
   cursor: pointer;
+  */
     }
 
 
@@ -71,8 +74,7 @@
   </style>
 </head>
 <body>
-  <div onclick="toggleHeader()">≡</div> <!-- ← ここを変更 -->
-  <!--<div id="menu-button" onclick="toggleHeader()">≡</div>-->
+  <div id="menu-button" onclick="toggleHeader()">≡</div> <!-- ← ここを変更 -->
   <div id="header-area">
     <!--<h1>きみとスカイカードゲーム</h1>-->
     <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
