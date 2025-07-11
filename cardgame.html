@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>画像の切り替えとドラッグ</title>
   <style>
+    body.no-scroll {
+      overflow: hidden;
+      touch-action: none;
+    }
+
     body {
       margin: 0;
       padding: 0;
@@ -73,25 +78,16 @@
 
     // モバイル対応: タッチ操作
     overlayImage.addEventListener('touchstart', (e) => {
-      isDragging = true;
-      const touch = e.touches[0];
-      offsetX = touch.clientX - overlayImage.offsetLeft;
-      offsetY = touch.clientY - overlayImage.offsetTop;
-    });
+  isDragging = true;
+  document.body.classList.add('no-scroll'); // ← 追加
+  // ...
+}, { passive: false });
 
-    document.addEventListener('touchmove', (e) => {
-  if (isDragging) {
-    e.preventDefault(); // ← これが重要！スクロールを防ぐ
-    const touch = e.touches[0];
-    overlayImage.style.left = (touch.clientX - offsetX) + 'px';
-    overlayImage.style.top = (touch.clientY - offsetY) + 'px';
-  }
-}, { passive: false }); // ← これがないと preventDefault() が無効になる
+document.addEventListener('touchend', () => {
+  isDragging = false;
+  document.body.classList.remove('no-scroll'); // ← 削除
+});
 
-
-    document.addEventListener('touchend', () => {
-      isDragging = false;
-    });
   </script>
 
 </body>
