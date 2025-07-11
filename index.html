@@ -42,8 +42,11 @@
   min-width: 150px;
   background-color: #f0f0f0;
   padding: 10px;
-  margin-top: 50px;  /* ← これを追加！ */
+  height: 100vh; /* ← 高さを画面いっぱいに */
+  box-sizing: border-box;
+  margin-top: 0;  /* ← ここも忘れずリセット */
     }
+
 
     #viewer {
       flex-grow: 1;
@@ -75,6 +78,7 @@
 <body>
   <div id="menu-button" onclick="toggleHeader()">≡</div> <!-- ← ここを変更 -->
   <div id="header-area">
+    <div style="margin-top: 50px;">
     <!--<h1>きみとスカイカードゲーム</h1>-->
     <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
     <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
