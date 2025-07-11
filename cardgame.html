@@ -80,12 +80,14 @@
     });
 
     document.addEventListener('touchmove', (e) => {
-      if (isDragging) {
-        const touch = e.touches[0];
-        overlayImage.style.left = (touch.clientX - offsetX) + 'px';
-        overlayImage.style.top = (touch.clientY - offsetY) + 'px';
-      }
-    });
+  if (isDragging) {
+    e.preventDefault(); // ← これが重要！スクロールを防ぐ
+    const touch = e.touches[0];
+    overlayImage.style.left = (touch.clientX - offsetX) + 'px';
+    overlayImage.style.top = (touch.clientY - offsetY) + 'px';
+  }
+}, { passive: false }); // ← これがないと preventDefault() が無効になる
+
 
     document.addEventListener('touchend', () => {
       isDragging = false;
