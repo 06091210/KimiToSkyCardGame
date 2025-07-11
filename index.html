@@ -1,68 +1,53 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>きみとスカイカードゲーム</title>
   <style>
+    /* 全ての余白リセット＆サイズ調整 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
-    #menu-button {
-  position: fixed;
-  top: 10px;
-  left: 10px;
 
-  /* 不要な装飾を削除 ↓ */
-  background: none;
-  border: none;
-  padding: 0;
-
-  font-size: 24px;
-  font-weight: bold;
-  z-index: 1000;
-  cursor: pointer;
-}
-
+    /* htmlとbodyを画面サイズに固定しスクロール禁止 */
     html, body {
       height: 100%;
-      width: 100%;
+      overflow: hidden;  /* ← スクロール禁止 */
+      font-family: sans-serif;
     }
 
     body {
       display: flex;
       flex-direction: row;
-      font-family: sans-serif;
+      height: 100vh; /* 画面いっぱい */
     }
 
-    #header-area {
-  width: 200px;
-  min-width: 150px;
-  background-color: #f0f0f0;
-  padding: 10px;
-  height: 100vh; /* ← 高さを画面いっぱいに */
-  box-sizing: border-box;
-  margin-top: 0;  /* ← ここも忘れずリセット */
-    }
-
-
-    #viewer {
-      flex-grow: 1;
-      border: none;
-      height: 100vh;
-    }
-
-    h1:first-of-type {
+    /* ≡ボタンのスタイル（背景・枠なしでシンプル） */
+    #menu-button {
       position: fixed;
       top: 10px;
       left: 10px;
-      z-index: 10;
-      background: white;
-      border: 1px solid #ccc;
-      padding: 5px;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 1000;
       cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      user-select: none; /* テキスト選択防止 */
+    }
+
+    /* サイドバー */
+    #header-area {
+      width: 200px;
+      min-width: 150px;
+      background-color: #f0f0f0;
+      padding: 60px 10px 10px 10px; /* 上部に60pxの余白（≡分） */
+      height: 100vh;
+      box-sizing: border-box;
+      overflow-y: auto; /* 内容が多くなったら縦スクロールだけ許可 */
     }
 
     h2 {
@@ -73,30 +58,40 @@
     hr {
       margin-top: 10px;
     }
+
+    /* iframeを余白なしで画面いっぱいに */
+    #viewer {
+      flex-grow: 1;
+      border: none;
+      height: 100vh;
+      display: block; /* iframeの下の空白除去 */
+    }
   </style>
 </head>
 <body>
-  <div id="menu-button" onclick="toggleHeader()">≡</div> <!-- ← ここを変更 -->
+  <div id="menu-button" onclick="toggleHeader()">≡</div>
+
   <div id="header-area">
-    <div style="margin-top: 50px;">
-    <!--<h1>きみとスカイカードゲーム</h1>-->
     <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
     <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
     <h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>
-    <hr>
+    <hr />
   </div>
 
   <iframe id="viewer" src=""></iframe>
 
   <script>
     function loadHTML(file) {
-      const viewer = document.getElementById('viewer');
-      viewer.src = file;
+      document.getElementById('viewer').src = file;
     }
 
     function toggleHeader() {
       const header = document.getElementById('header-area');
-      header.style.display = (header.style.display === "none") ? "block" : "none";
+      if (header.style.display === 'none') {
+        header.style.display = 'block';
+      } else {
+        header.style.display = 'none';
+      }
     }
   </script>
 </body>
