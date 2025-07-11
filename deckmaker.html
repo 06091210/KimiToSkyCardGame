@@ -42,15 +42,15 @@
       font-size: 14px;
     }
 </style>
-</head
-<textarea id="deckCode" rows="2" cols="50" placeholder="デッキコード"></textarea><br>
-<button onclick="generateDeckCode()">コードをコピー</button>
+</head>
+<h2>デッキコード</h2>
+<textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
+<button onclick="generateDeckCode()">コードを生成</button>
 <button onclick="loadDeckFromCode()">コードから復元</button>
 <body>
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
   <div id="deckList" class="deck-container"></div>
-
   <script>
     const cards = [
       { id: 1, name: "スカイ", image: "images/sky.jpg", maxCopies: 5 },
@@ -91,11 +91,10 @@
         deckList.appendChild(cardElement);
       });
     }
-    
-    function addToDeck(card) {
-      if (deck.length >= 50) {
-        alert("デッキは50枚までです！");
-        return;
+function addToDeck(card) {
+  if (deck.length >= 50) {
+    alert("デッキは50枚までです！");
+    return;
   }
 
   const sameCardCount = deck.filter(c => c.id === card.id).length;
@@ -116,41 +115,20 @@
 
     renderCards();
     renderDeck();
-
-function generateDeckCode() {
-  // カードIDごとの枚数を数える
+    function generateDeckCode() {
   const counts = {};
 
   deck.forEach(card => {
     counts[card.id] = (counts[card.id] || 0) + 1;
   });
 
-  // デッキコード文字列を生成（例: "1x3,2x2"）
   const code = Object.entries(counts)
     .map(([id, count]) => `${id}x${count}`)
     .join(',');
 
-  // テキストエリアにコードを表示
-  const deckCodeTextarea = document.getElementById('deckCode');
-  deckCodeTextarea.value = code;
-
-  // 空のコードだったらコピーせず終了（デッキ空の時の対策）
-  if (!code) {
-    alert("デッキが空です。カードを追加してください。");
-    return;
-  }
-
-  // クリップボードにコピー
-  navigator.clipboard.writeText(code)
-    .then(() => {
-      alert("デッキコードをクリップボードにコピーしました！");
-    })
-    .catch(err => {
-      console.error("クリップボードへのコピーに失敗しました:", err);
-      alert("コピーに失敗しました。手動でコピーしてください。");
-    });
+  document.getElementById('deckCode').value = code;
 }
-    
+
 function loadDeckFromCode() {
   const code = document.getElementById('deckCode').value.trim();
   if (!code) return;
