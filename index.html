@@ -45,8 +45,7 @@
   height: 100vh; /* ← 高さを画面いっぱいに */
   box-sizing: border-box;
   margin-top: 0;  /* ← ここも忘れずリセット */
-    }
-
+}
 
     #viewer {
       flex-grow: 1;
@@ -77,13 +76,15 @@
 </head>
 <body>
   <div id="menu-button" onclick="toggleHeader()">≡</div> <!-- ← ここを変更 -->
+
   <div id="header-area">
-    <div style="margin-top: 50px;">
     <!--<h1>きみとスカイカードゲーム</h1>-->
-    <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
-    <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
-    <h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>
-    <hr>
+    <div style="margin-top: 50px;"> <!-- ← 中身を下げる -->
+      <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
+      <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
+      <h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>
+      <hr>
+    </div>
   </div>
 
   <iframe id="viewer" src=""></iframe>
