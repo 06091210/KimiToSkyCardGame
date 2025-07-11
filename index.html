@@ -4,8 +4,54 @@
   <meta charset="UTF-8">
   <title>きみとスカイカードゲーム</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: row;
+      font-family: sans-serif;
+    }
+
+    #header-area {
+      width: 200px;
+      min-width: 150px;
+      background-color: #f0f0f0;
+      padding: 10px;
+    }
+
+    #viewer {
+      flex-grow: 1;
+      border: none;
+      height: 100vh;
+    }
+
+    h1:first-of-type {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 5px;
+      cursor: pointer;
+    }
+
     h2 {
       cursor: pointer;
+      margin: 10px 0;
+    }
+
+    hr {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -20,30 +66,18 @@
     <hr>
   </div>
 
- <iframe id="viewer" width="100%" style="border: 1px solid #ccc;"></iframe>
+  <iframe id="viewer" src=""></iframe>
 
-<script>
-  function adjustIframeHeight() {
-    const viewer = document.getElementById('viewer');
-    // ヘッダーの高さを引いたりしたければここで調整（例: -100）
-    viewer.style.height = window.innerHeight + "px";
-  }
+  <script>
+    function loadHTML(file) {
+      const viewer = document.getElementById('viewer');
+      viewer.src = file;
+    }
 
-  function loadHTML(file) {
-    const viewer = document.getElementById('viewer');
-    viewer.src = file;
-  }
-
-  function toggleHeader() {
-    const header = document.getElementById('header-area');
-    header.style.display = (header.style.display === "none") ? "block" : "none";
-    adjustIframeHeight();  // ヘッダーの表示・非表示で高さ変わる可能性があるため
-  }
-
-  // 初期化とリサイズ対応
-  window.addEventListener('load', adjustIframeHeight);
-  window.addEventListener('resize', adjustIframeHeight);
-  window.addEventListener('orientationchange', adjustIframeHeight); // iOSの画面回転対応
-</script>
+    function toggleHeader() {
+      const header = document.getElementById('header-area');
+      header.style.display = (header.style.display === "none") ? "block" : "none";
+    }
+  </script>
 </body>
 </html>
