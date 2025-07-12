@@ -2,9 +2,10 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>カードドロー＆ドラッグ</title>
+  <title>ランダムカードドロー（ドラッグ移動対応）</title>
   <style>
     body { font-family: sans-serif; margin: 20px; }
+
     #drawnCardArea {
       margin-top: 20px;
       display: flex;
@@ -18,37 +19,12 @@
       margin-bottom: 10px;
     }
 
-    .card {
-      width: 100px;
-      margin: 5px;
-      cursor: grab;
-    }
-
     .movable {
-  position: absolute;
-  width: 100px;
-  cursor: grab;
-  user-select: none;
-  touch-action: none; /* ← モバイルでのスクロールを防止 */
-    }
-
-    
-    #drawnCardContainer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    /* ドロップ領域（オプション） */
-    #dropZone {
-      margin-top: 30px;
-      width: 300px;
-      height: 200px;
-      border: 2px dashed gray;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: gray;
+      position: absolute;
+      width: 100px;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
     }
   </style>
 </head>
@@ -60,11 +36,7 @@
 
 <div id="drawnCardArea" style="display: none;">
   <img id="brankImage" src="images/brank.jpeg" alt="カードを引く">
-  <div id="drawnCardContainer"></div>
 </div>
-
-<!-- ドロップ領域（確認用） -->
-<div id="dropZone">ここにドロップ</div>
 
 <script>
   const cards = [
@@ -76,75 +48,70 @@
   const deck = [];
 
   function createCardElement(card) {
-  const img = document.createElement('img');
-  img.src = card.image;
-  img.alt = card.name;
-  img.className = 'movable';
-  img.style.position = 'absolute';
-  img.style.top = '200px';
-  img.style.left = '100px';
-  img.style.width = '100px';
-  img.style.cursor = 'grab';
-  img.style.userSelect = 'none';
-  img.style.touchAction = 'none'; // ← モバイルでのスクロール防止
+    const img = document.createElement('img');
+    img.src = card.image;
+    img.alt = card.name;
+    img.className = 'movable';
+    img.style.top = '200px';
+    img.style.left = '100px';
 
-  let isDragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
 
-  // PC用: マウス
-  img.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    const rect = img.getBoundingClientRect();
-    offsetX = e.clientX - rect.left;
-    offsetY = e.clientY - rect.top;
-    img.style.cursor = 'grabbing';
-    e.preventDefault(); // テキスト選択防止
-  });
+    // マウス操作
+    img.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      const rect = img.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      img.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
 
-  document.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    moveImage(e.clientX, e.clientY);
-  });
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      moveImage(e.clientX, e.clientY);
+    });
 
-  document.addEventListener('mouseup', () => {
-    isDragging = false;
-    img.style.cursor = 'grab';
-  });
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      img.style.cursor = 'grab';
+    });
 
-  // モバイル用: タッチ
-  img.addEventListener('touchstart', (e) => {
-    isDragging = true;
-    const rect = img.getBoundingClientRect();
-    const touch = e.touches[0];
-    offsetX = touch.clientX - rect.left;
-    offsetY = touch.clientY - rect.top;
-    e.preventDefault(); // スクロール防止
-  });
+    // タッチ操作
+    img.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      const rect = img.getBoundingClientRect();
+      const touch = e.touches[0];
+      offsetX = touch.clientX - rect.left;
+      offsetY = touch.clientY - rect.top;
+      e.preventDefault();
+    });
 
-  document.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    const touch = e.touches[0];
-    moveImage(touch.clientX, touch.clientY);
-  });
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      moveImage(touch.clientX, touch.clientY);
+    });
 
-  document.addEventListener('touchend', () => {
-    isDragging = false;
-  });
+    document.addEventListener('touchend', () => {
+      isDragging = false;
+    });
 
-  document.addEventListener('touchcancel', () => {
-    isDragging = false;
-  });
+    document.addEventListener('touchcancel', () => {
+      isDragging = false;
+    });
 
-  function moveImage(clientX, clientY) {
-    const x = clientX - offsetX;
-    const y = clientY - offsetY;
-    img.style.left = x + 'px';
-    img.style.top = y + 'px';
+    function moveImage(clientX, clientY) {
+      const x = clientX - offsetX;
+      const y = clientY - offsetY;
+      img.style.left = x + 'px';
+      img.style.top = y + 'px';
+    }
+
+    return img;
   }
-
-  return img;
-}
 
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
@@ -194,26 +161,8 @@
     const drawnCard = deck.splice(randomIndex, 1)[0];
 
     const cardElement = createCardElement(drawnCard);
-    document.getElementById('drawnCardContainer').appendChild(cardElement);
+    document.body.appendChild(cardElement); // body に追加することで自由に動かせる
   }
-
-  // ドロップ領域設定（必要に応じて）
-  const dropZone = document.getElementById('dropZone');
-  dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.style.borderColor = 'blue';
-  });
-
-  dropZone.addEventListener('dragleave', () => {
-    dropZone.style.borderColor = 'gray';
-  });
-
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    const cardName = e.dataTransfer.getData('text/plain');
-    dropZone.textContent = `${cardName} をドロップしました！`;
-    dropZone.style.borderColor = 'gray';
-  });
 </script>
 
 </body>
