@@ -133,6 +133,7 @@ function enableDragMove(cardElement) {
 
   cardElement.style.position = 'absolute';
 
+  // --- マウス用 ---
   cardElement.addEventListener('mousedown', (e) => {
     e.preventDefault();
     isDragging = true;
@@ -154,7 +155,38 @@ function enableDragMove(cardElement) {
       cardElement.style.zIndex = '';
     }
   });
+
+  // --- タッチ用 ---
+  cardElement.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (e.touches.length === 1) { // 単一指ドラッグのみ対応
+      isDragging = true;
+      const touch = e.touches[0];
+      const rect = cardElement.getBoundingClientRect();
+      offsetX = touch.clientX - rect.left;
+      offsetY = touch.clientY - rect.top;
+      cardElement.style.zIndex = 1000;
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    if (e.touches.length === 1) {
+      e.preventDefault(); // ページスクロール抑制
+      const touch = e.touches[0];
+      cardElement.style.left = (touch.clientX - offsetX) + 'px';
+      cardElement.style.top = (touch.clientY - offsetY) + 'px';
+    }
+  }, { passive: false });
+
+  document.addEventListener('touchend', (e) => {
+    if (isDragging) {
+      isDragging = false;
+      cardElement.style.zIndex = '';
+    }
+  });
 }
+
 
 </script>
 
