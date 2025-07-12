@@ -6,24 +6,31 @@
   <style>
     body { font-family: sans-serif; margin: 20px; }
     .card {
-  all: unset; /* すべてのスタイルをリセット（強力）*/
-}
-
-.card img {
-  width: 100%;
-  height: auto;
-  border-radius: 0;
-}
-    
-    /*.card-name {
-      margin-top: 5px;
-      font-size: 14px;
+      all: unset;
+      cursor: move;
     }
-    */
+
+    .card img {
+      width: 100px;
+      height: auto;
+      border-radius: 0;
+    }
+
     #drawnCardArea {
       margin-top: 20px;
-      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #drawnCardContainer {
+      margin-top: 10px;
+    }
+
+    #brankImage {
+      width: 100px;
       cursor: pointer;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -35,7 +42,8 @@
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 
 <div id="drawnCardArea" style="display: none;">
-  <!-- brank 画像や引いたカードが表示される -->
+  <img id="brankImage" src="images/brank.jpeg" alt="カードを引く">
+  <div id="drawnCardContainer"></div>
 </div>
 
 <script>
@@ -47,17 +55,23 @@
 
   const deck = [];
 
-function createCardElement(card) {
-  const div = document.createElement('div');
-  div.className = 'card';
+  function createCardElement(card) {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.draggable = true;
 
-  const img = document.createElement('img');
-  img.src = card.image;
-  img.alt = card.name;  // alt属性はそのままでOK
-  div.appendChild(img);
+    const img = document.createElement('img');
+    img.src = card.image;
+    img.alt = card.name;
+    div.appendChild(img);
 
-  return div;  // nameDiv は追加しない
-}
+    // ドラッグ時の動作（必要に応じてカスタマイズ）
+    div.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', card.name);
+    });
+
+    return div;
+  }
 
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
@@ -90,20 +104,13 @@ function createCardElement(card) {
     deck.length = 0;
     newDeck.forEach(card => deck.push(card));
 
-    // 非表示処理
     document.getElementById('deckCode').style.display = 'none';
     document.getElementById('loadDeckBtn').style.display = 'none';
 
-    // brank画像を表示
-    const drawnArea = document.getElementById('drawnCardArea');
-    drawnArea.style.display = 'block';
-   drawnArea.innerHTML = `
-  <img src="images/brank.jpeg" alt="カードを引く" style="width: 100%; border-radius: 4px;">
-`;
-
+    document.getElementById('drawnCardArea').style.display = 'flex';
   }
 
-  document.getElementById('drawnCardArea').addEventListener('click', drawRandomCard);
+  document.getElementById('brankImage').addEventListener('click', drawRandomCard);
 
   function drawRandomCard() {
     if (deck.length === 0) {
@@ -114,14 +121,10 @@ function createCardElement(card) {
     const randomIndex = Math.floor(Math.random() * deck.length);
     const drawnCard = deck.splice(randomIndex, 1)[0];
 
-    const drawnArea = document.getElementById('drawnCardArea');
-    drawnArea.innerHTML = ''; // brank画像を削除
-
     const cardElement = createCardElement(drawnCard);
-    drawnArea.appendChild(cardElement);
+    document.getElementById('drawnCardContainer').appendChild(cardElement);
   }
 </script>
 
 </body>
 </html>
-
