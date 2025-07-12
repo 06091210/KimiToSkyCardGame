@@ -114,64 +114,47 @@
   }
 
   function loadDeckFromCode() {
-    const code = document.getElementById('deckCode').value.trim();
-    if (!code) return;
+  const code = document.getElementById('deckCode').value.trim();
+  if (!code) return;
 
-    const newDeck = [];
-    const entries = code.split(',');
+  // デッキ作成処理（省略）
 
-    for (const entry of entries) {
-      const [idStr, countStr] = entry.split('x');
-      const id = parseInt(idStr);
-      const count = parseInt(countStr);
+  deck.length = 0;
+  newDeck.forEach(card => deck.push(card));
 
-      const card = cards.find(c => c.id === id);
-      if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
-        alert(`無効なカードIDや枚数です: ${entry}`);
-        return;
-      }
+  // UI切替
+  document.getElementById('deckCode').style.display = 'none';
+  document.getElementById('loadDeckBtn').style.display = 'none';
+  const drawnCardArea = document.getElementById('drawnCardArea');
+  drawnCardArea.style.display = 'flex';
 
-      for (let i = 0; i < count; i++) {
-        newDeck.push(card);
-      }
-    }
+  // クリックイベントをこのタイミングで設定（重複防止）
+  const brankImage = document.getElementById('brankImage');
+  brankImage.addEventListener('click', drawRandomCard);
+}
 
-    if (newDeck.length > 50) {
-      alert("デッキは50枚までです！");
-      return;
-    }
-
-    deck.length = 0;
-    newDeck.forEach(card => deck.push(card));
-
-    document.getElementById('deckCode').style.display = 'none';
-    document.getElementById('loadDeckBtn').style.display = 'none';
-    document.getElementById('drawnCardArea').style.display = 'flex';
-  }
-
-  document.getElementById('brankImage').addEventListener('click', drawRandomCard);
-
-  function drawRandomCard() {
+function drawRandomCard() {
   if (deck.length === 0) {
     alert("デッキにもうカードがありません！");
     return;
   }
 
-  /*const randomIndex = Math.floor(Math.random() * deck.length);
+  const randomIndex = Math.floor(Math.random() * deck.length);
   const drawnCard = deck.splice(randomIndex, 1)[0];
 
-  // brank.jpeg の位置を取得
   const brankImg = document.getElementById('brankImage');
   const rect = brankImg.getBoundingClientRect();
 
   // カード要素を作成
   const cardElement = createCardElement(drawnCard);
 
-  // カードの表示位置を brank.jpeg に合わせる
+  // brankImageと同じ親要素に入れる（absoluteはbody基準なので調整必要）
+  document.body.appendChild(cardElement);
+
+  // 画面内の絶対座標で位置調整
+  cardElement.style.position = 'absolute';
   cardElement.style.left = rect.left + 'px';
   cardElement.style.top = rect.top + 'px';
-
-  document.body.appendChild(cardElement);*/
 }
 
     const randomIndex = Math.floor(Math.random() * deck.length);
