@@ -2,20 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ランダムカードドロー</title>
+  <title>カードドロー＆ドラッグ</title>
   <style>
     body { font-family: sans-serif; margin: 20px; }
-    .card {
-      all: unset;
-      cursor: move;
-    }
-
-    .card img {
-      width: 100px;
-      height: auto;
-      border-radius: 0;
-    }
-
     #drawnCardArea {
       margin-top: 20px;
       display: flex;
@@ -23,21 +12,40 @@
       align-items: center;
     }
 
-    #drawnCardContainer {
-      margin-top: 10px;
-    }
-
     #brankImage {
       width: 100px;
       cursor: pointer;
       margin-bottom: 10px;
+    }
+
+    .card {
+      width: 100px;
+      margin: 5px;
+      cursor: grab;
+    }
+
+    #drawnCardContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    /* ドロップ領域（オプション） */
+    #dropZone {
+      margin-top: 30px;
+      width: 300px;
+      height: 200px;
+      border: 2px dashed gray;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: gray;
     }
   </style>
 </head>
 <body>
 
 <h2>デッキコードから復元してランダムにカードを引く</h2>
-
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 
@@ -45,6 +53,9 @@
   <img id="brankImage" src="images/brank.jpeg" alt="カードを引く">
   <div id="drawnCardContainer"></div>
 </div>
+
+<!-- ドロップ領域（確認用） -->
+<div id="dropZone">ここにドロップ</div>
 
 <script>
   const cards = [
@@ -56,21 +67,19 @@
   const deck = [];
 
   function createCardElement(card) {
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.draggable = true;
-
     const img = document.createElement('img');
     img.src = card.image;
     img.alt = card.name;
-    div.appendChild(img);
+    img.className = 'card';
+    img.setAttribute('draggable', 'true');
 
-    // ドラッグ時の動作（必要に応じてカスタマイズ）
-    div.addEventListener('dragstart', (e) => {
+    // ドラッグイベント設定
+    img.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('text/plain', card.name);
+      console.log(`Dragging ${card.name}`);
     });
 
-    return div;
+    return img;
   }
 
   function loadDeckFromCode() {
@@ -106,7 +115,6 @@
 
     document.getElementById('deckCode').style.display = 'none';
     document.getElementById('loadDeckBtn').style.display = 'none';
-
     document.getElementById('drawnCardArea').style.display = 'flex';
   }
 
@@ -124,6 +132,24 @@
     const cardElement = createCardElement(drawnCard);
     document.getElementById('drawnCardContainer').appendChild(cardElement);
   }
+
+  // ドロップ領域設定（必要に応じて）
+  const dropZone = document.getElementById('dropZone');
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = 'blue';
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = 'gray';
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const cardName = e.dataTransfer.getData('text/plain');
+    dropZone.textContent = `${cardName} をドロップしました！`;
+    dropZone.style.borderColor = 'gray';
+  });
 </script>
 
 </body>
