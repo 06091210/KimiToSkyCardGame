@@ -142,29 +142,20 @@ function drawRandomCard() {
   const randomIndex = Math.floor(Math.random() * deck.length);
   const drawnCard = deck.splice(randomIndex, 1)[0];
 
+  // brank.jpeg の位置を取得
   const brankImg = document.getElementById('brankImage');
   const rect = brankImg.getBoundingClientRect();
 
+  // カード要素を作成
   const cardElement = createCardElement(drawnCard);
 
-  // ブラウザによってはスクロール位置を考慮しないとズレる
-  const scrollX = window.scrollX || window.pageXOffset;
-  const scrollY = window.scrollY || window.pageYOffset;
-
-  cardElement.style.left = (rect.left + scrollX) + 'px';
-  cardElement.style.top = (rect.top + scrollY) + 'px';
-
-  cardElement.style.position = 'absolute';
+  // カードの表示位置を brank.jpeg に合わせる
+  cardElement.style.left = rect.left + 'px';
+  cardElement.style.top = rect.top + 'px';
 
   document.body.appendChild(cardElement);
-  /*}*/
+}
 
-    const randomIndex = Math.floor(Math.random() * deck.length);
-    const drawnCard = deck.splice(randomIndex, 1)[0];
-
-    const cardElement = createCardElement(drawnCard);
-    document.body.appendChild(cardElement); // body に追加することで自由に動かせる
-  }
 </script>
 
 </body>
