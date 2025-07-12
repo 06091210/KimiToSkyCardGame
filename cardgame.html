@@ -145,16 +145,18 @@ function drawRandomCard() {
   const brankImg = document.getElementById('brankImage');
   const rect = brankImg.getBoundingClientRect();
 
-  // カード要素を作成
   const cardElement = createCardElement(drawnCard);
 
-  // brankImageと同じ親要素に入れる（absoluteはbody基準なので調整必要）
-  document.body.appendChild(cardElement);
+  // ブラウザによってはスクロール位置を考慮しないとズレる
+  const scrollX = window.scrollX || window.pageXOffset;
+  const scrollY = window.scrollY || window.pageYOffset;
 
-  // 画面内の絶対座標で位置調整
+  cardElement.style.left = (rect.left + scrollX) + 'px';
+  cardElement.style.top = (rect.top + scrollY) + 'px';
+
   cardElement.style.position = 'absolute';
-  cardElement.style.left = rect.left + 'px';
-  cardElement.style.top = rect.top + 'px';
+
+  document.body.appendChild(cardElement);
 }
 
     const randomIndex = Math.floor(Math.random() * deck.length);
