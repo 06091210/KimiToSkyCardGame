@@ -53,17 +53,10 @@ function createCardElement(card) {
 
   const img = document.createElement('img');
   img.src = card.image;
-  img.alt = card.name;
-  img.draggable = true;
-
-  // ドラッグ開始時の処理
-  img.addEventListener('dragstart', (event) => {
-    console.log(`Dragging card: ${card.name}`);
-    event.dataTransfer.setData("text/plain", JSON.stringify(card));
-  });
-
+  img.alt = card.name;  // alt属性はそのままでOK
   div.appendChild(img);
-  return div;
+
+  return div;  // nameDiv は追加しない
 }
 
   function loadDeckFromCode() {
@@ -105,8 +98,8 @@ function createCardElement(card) {
     const drawnArea = document.getElementById('drawnCardArea');
     drawnArea.style.display = 'block';
    drawnArea.innerHTML = `
-  <img src="images/brank.jpeg" alt="カードを引く"
-       style="width: 100%; border-radius: 4px;" draggable="false">`;
+  <img src="images/brank.jpeg" alt="カードを引く" style="width: 100%; border-radius: 4px;">
+`;
 
   }
 
