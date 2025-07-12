@@ -24,6 +24,15 @@
       cursor: grab;
     }
 
+    .movable {
+  position: absolute;
+  width: 100px;
+  cursor: grab;
+  user-select: none;
+  touch-action: none; /* ← モバイルでのスクロールを防止 */
+    }
+
+    
     #drawnCardContainer {
       display: flex;
       flex-wrap: wrap;
@@ -67,20 +76,75 @@
   const deck = [];
 
   function createCardElement(card) {
-    const img = document.createElement('img');
-    img.src = card.image;
-    img.alt = card.name;
-    img.className = 'card';
-    img.setAttribute('draggable', 'true');
+  const img = document.createElement('img');
+  img.src = card.image;
+  img.alt = card.name;
+  img.className = 'movable';
+  img.style.position = 'absolute';
+  img.style.top = '200px';
+  img.style.left = '100px';
+  img.style.width = '100px';
+  img.style.cursor = 'grab';
+  img.style.userSelect = 'none';
+  img.style.touchAction = 'none'; // ← モバイルでのスクロール防止
 
-    // ドラッグイベント設定
-    img.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', card.name);
-      console.log(`Dragging ${card.name}`);
-    });
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
 
-    return img;
+  // PC用: マウス
+  img.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    const rect = img.getBoundingClientRect();
+    offsetX = e.clientX - rect.left;
+    offsetY = e.clientY - rect.top;
+    img.style.cursor = 'grabbing';
+    e.preventDefault(); // テキスト選択防止
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    moveImage(e.clientX, e.clientY);
+  });
+
+  document.addEventListener('mouseup', () => {
+    isDragging = false;
+    img.style.cursor = 'grab';
+  });
+
+  // モバイル用: タッチ
+  img.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    const rect = img.getBoundingClientRect();
+    const touch = e.touches[0];
+    offsetX = touch.clientX - rect.left;
+    offsetY = touch.clientY - rect.top;
+    e.preventDefault(); // スクロール防止
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    moveImage(touch.clientX, touch.clientY);
+  });
+
+  document.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+
+  document.addEventListener('touchcancel', () => {
+    isDragging = false;
+  });
+
+  function moveImage(clientX, clientY) {
+    const x = clientX - offsetX;
+    const y = clientY - offsetY;
+    img.style.left = x + 'px';
+    img.style.top = y + 'px';
   }
+
+  return img;
+}
 
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
