@@ -108,7 +108,7 @@
 
   document.getElementById('drawnCardArea').addEventListener('click', drawRandomCard);
 
-  function drawRandomCard() {
+  /*function drawRandomCard() {
   if (deck.length === 0) {
     alert("デッキにもうカードがありません！");
     return;
@@ -124,7 +124,36 @@
   drawnArea.appendChild(cardElement);
 
   enableDragMove(cardElement); // ここでドラッグ移動を有効に
+}*/
+  function drawRandomCard() {
+  if (deck.length === 0) {
+    alert("デッキにもうカードがありません！");
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * deck.length);
+  const drawnCard = deck.splice(randomIndex, 1)[0];
+
+  const drawnArea = document.getElementById('drawnCardArea');
+
+  // brank.jpeg は残しておくので innerHTML は変更しない or 置換しない
+  // もし既に brank.jpeg がなければ入れておく
+  if (!drawnArea.querySelector('img[src="images/brank.jpeg"]')) {
+    const brankImg = document.createElement('img');
+    brankImg.src = 'images/brank.jpeg';
+    brankImg.alt = 'カードを引く';
+    brankImg.style.width = '100%';
+    brankImg.style.borderRadius = '4px';
+    drawnArea.appendChild(brankImg);
+  }
+
+  // 引いたカードを表示（brank画像のあとに追加）
+  const cardElement = createCardElement(drawnCard);
+  drawnArea.appendChild(cardElement);
+
+  enableDragMove(cardElement);
 }
+
 
 function enableDragMove(cardElement) {
   let offsetX = 0;
