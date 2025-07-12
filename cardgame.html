@@ -54,11 +54,12 @@ function createCardElement(card) {
   const img = document.createElement('img');
   img.src = card.image;
   img.alt = card.name;
-  img.draggable = true; // ドラッグ可能に設定
+  img.draggable = true;
 
-  // dragstart イベントを追加
+  // ドラッグ開始時の処理
   img.addEventListener('dragstart', (event) => {
-    event.dataTransfer.setData("text/plain", card.id); // 必要に応じてカードIDなど
+    console.log(`Dragging card: ${card.name}`);
+    event.dataTransfer.setData("text/plain", JSON.stringify(card));
   });
 
   div.appendChild(img);
@@ -103,9 +104,10 @@ function createCardElement(card) {
     // brank画像を表示
     const drawnArea = document.getElementById('drawnCardArea');
     drawnArea.style.display = 'block';
-    drawnArea.innerHTML = `
-  <img src="images/brank.jpeg" alt="カードを引く" style="width: 100%; border-radius: 4px;" draggable="false">
-`;
+   drawnArea.innerHTML = `
+  <img src="images/brank.jpeg" alt="カードを引く"
+       style="width: 100%; border-radius: 4px;" draggable="false">`;
+
   }
 
   document.getElementById('drawnCardArea').addEventListener('click', drawRandomCard);
