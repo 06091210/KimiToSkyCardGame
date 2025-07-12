@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ランダムカードドロー（ドラッグ移動対応）</title>
+  <meta charset="UTF-8" />
+  <title>ランダムカードドロー</title>
   <style>
-    body { font-family: sans-serif; margin: 20px; }
+  .card {
+    all: unset;
+    width: 100px;
+    margin: 10px;
+    cursor: grab;
+    display: inline-block;
+    position: absolute;  /* これを追加 */
+    user-select: none;
+  }
+  .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    pointer-events: none;
+  }
+  #drawnCardsContainer {
+    position: relative;
+    height: 300px; /* 十分な高さを確保 */
+    border: 1px solid #ccc;
+  }
+</style>
 
-    #drawnCardArea {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+<div id="drawnCardsContainer" style="margin-top:10px; position: relative; height: 300px; border: 1px solid #ccc;"></div>
 
-    #brankImage {
-      width: 100px;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-
-    .movable {
-      position: absolute;
-      width: 100px;
-      cursor: grab;
-      user-select: none;
-      touch-action: none;
-    }
-  </style>
 </head>
 <body>
 
-<h2>デッキコードから復元してランダムにカードを引く(改1)</h2>
+<h2>デッキコードから復元してランダムにカードを引く</h2>
+
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 
 <div id="drawnCardArea" style="display: none;">
-  <img id="brankImage" src="images/brank.jpeg" alt="カードを引く">
+  <!-- brank 画像や引いたカードが表示される -->
 </div>
 
 <script>
@@ -46,93 +48,113 @@
   ];
 
   const deck = [];
+  const drawnCards = [];  // 引いたカードを保持（必要に応じて）
 
   function createCardElement(card) {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.draggable = true; // ドラッグ可能にする
+    div.title = card.name;
+
     const img = document.createElement('img');
     img.src = card.image;
     img.alt = card.name;
-    img.className = 'movable';
-    img.style.top = '200px';
-    img.style.left = '100px';
+    div.appendChild(img);
 
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    // マウス操作
-    img.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      const rect = img.getBoundingClientRect();
-      offsetX = e.clientX - rect.left;
-      offsetY = e.clientY - rect.top;
-      img.style.cursor = 'grabbing';
-      e.preventDefault();
+    // ドラッグ開始イベントでカード情報をtransferDataにセット
+    div.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', JSON.stringify(card));
+      // カーソルに画像を表示させたい場合はここで設定も可能
     });
 
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      moveImage(e.clientX, e.clientY);
-    });
-
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      img.style.cursor = 'grab';
-    });
-
-    // タッチ操作
-    img.addEventListener('touchstart', (e) => {
-      isDragging = true;
-      const rect = img.getBoundingClientRect();
-      const touch = e.touches[0];
-      offsetX = touch.clientX - rect.left;
-      offsetY = touch.clientY - rect.top;
-      e.preventDefault();
-    });
-
-    document.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
-      const touch = e.touches[0];
-      moveImage(touch.clientX, touch.clientY);
-    });
-
-    document.addEventListener('touchend', () => {
-      isDragging = false;
-    });
-
-    document.addEventListener('touchcancel', () => {
-      isDragging = false;
-    });
-
-    function moveImage(clientX, clientY) {
-      const x = clientX - offsetX;
-      const y = clientY - offsetY;
-      img.style.left = x + 'px';
-      img.style.top = y + 'px';
-    }
-
-    return img;
+    return div;
   }
 
   function loadDeckFromCode() {
-  const code = document.getElementById('deckCode').value.trim();
-  if (!code) return;
+    const code = document.getElementById('deckCode').value.trim();
+    if (!code) return;
 
-  // デッキ作成処理（省略）
+    const newDeck = [];
+    const entries = code.split(',');
 
-  deck.length = 0;
-  newDeck.forEach(card => deck.push(card));
+    for (const entry of entries) {
+      const [idStr, countStr] = entry.split('x');
+      const id = parseInt(idStr);
+      const count = parseInt(countStr);
 
-  // UI切替
-  document.getElementById('deckCode').style.display = 'none';
-  document.getElementById('loadDeckBtn').style.display = 'none';
-  const drawnCardArea = document.getElementById('drawnCardArea');
-  drawnCardArea.style.display = 'flex';
+      const card = cards.find(c => c.id === id);
+      if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
+        alert(`無効なカードIDや枚数です: ${entry}`);
+        return;
+      }
 
-  // クリックイベントをこのタイミングで設定（重複防止）
-  const brankImage = document.getElementById('brankImage');
-  brankImage.addEventListener('click', drawRandomCard);
+      for (let i = 0; i < count; i++) {
+        newDeck.push(card);
+      }
+    }
+
+    if (newDeck.length > 50) {
+      alert("デッキは50枚までです！");
+      return;
+    }
+
+    deck.length = 0;
+    newDeck.forEach(card => deck.push(card));
+
+    // 非表示処理
+    document.getElementById('deckCode').style.display = 'none';
+    document.getElementById('loadDeckBtn').style.display = 'none';
+
+    // drawnCardAreaを表示し、brank画像を常に表示
+    const drawnArea = document.getElementById('drawnCardArea');
+    drawnArea.style.display = 'block';
+
+    drawnArea.innerHTML = `
+      <img id="brankImage" src="images/brank.jpeg" alt="カードを引く" />
+      <div id="drawnCardsContainer" style="margin-top:10px;"></div>
+    `;
+
+    // brank画像クリックでカードを引く
+    document.getElementById('brankImage').addEventListener('click', drawRandomCard);
+  }
+
+function makeDraggable(el) {
+  let offsetX, offsetY;
+  let isDragging = false;
+
+  el.style.position = 'absolute';
+
+  el.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    // マウスと要素のずれを計算
+    offsetX = e.clientX - el.getBoundingClientRect().left;
+    offsetY = e.clientY - el.getBoundingClientRect().top;
+
+    el.style.cursor = 'grabbing';
+
+    // 最前面に持ってくるためz-index上げる
+    el.style.zIndex = 1000;
+
+    // イベントのデフォルト動作キャンセル（画像ドラッグ防止など）
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    // 新しい位置を設定
+    el.style.left = (e.clientX - offsetX) + 'px';
+    el.style.top = (e.clientY - offsetY) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    el.style.cursor = 'grab';
+    el.style.zIndex = ''; // 元に戻す
+  });
 }
 
+// drawRandomCard() 内の最後に下記を呼び出す
 function drawRandomCard() {
   if (deck.length === 0) {
     alert("デッキにもうカードがありません！");
@@ -141,19 +163,18 @@ function drawRandomCard() {
 
   const randomIndex = Math.floor(Math.random() * deck.length);
   const drawnCard = deck.splice(randomIndex, 1)[0];
+  drawnCards.push(drawnCard);
 
-  // brank.jpeg の位置を取得
-  const brankImg = document.getElementById('brankImage');
-  const rect = brankImg.getBoundingClientRect();
-
-  // カード要素を作成
+  const container = document.getElementById('drawnCardsContainer');
   const cardElement = createCardElement(drawnCard);
 
-  // カードの表示位置を brank.jpeg に合わせる
-  cardElement.style.left = rect.left + 'px';
-  cardElement.style.top = rect.top + 'px';
+  // 初期位置はcontainerの左上あたりに設定
+  cardElement.style.left = '10px';
+  cardElement.style.top = '10px';
 
-  document.body.appendChild(cardElement);
+  container.appendChild(cardElement);
+
+  makeDraggable(cardElement);
 }
 
 </script>
