@@ -152,10 +152,27 @@
   document.getElementById('brankImage').addEventListener('click', drawRandomCard);
 
   function drawRandomCard() {
-    if (deck.length === 0) {
-      alert("デッキにもうカードがありません！");
-      return;
-    }
+  if (deck.length === 0) {
+    alert("デッキにもうカードがありません！");
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * deck.length);
+  const drawnCard = deck.splice(randomIndex, 1)[0];
+
+  // brank.jpeg の位置を取得
+  const brankImg = document.getElementById('brankImage');
+  const rect = brankImg.getBoundingClientRect();
+
+  // カード要素を作成
+  const cardElement = createCardElement(drawnCard);
+
+  // カードの表示位置を brank.jpeg に合わせる
+  cardElement.style.left = rect.left + 'px';
+  cardElement.style.top = rect.top + 'px';
+
+  document.body.appendChild(cardElement);
+}
 
     const randomIndex = Math.floor(Math.random() * deck.length);
     const drawnCard = deck.splice(randomIndex, 1)[0];
