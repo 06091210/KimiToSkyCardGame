@@ -17,10 +17,11 @@
       height: auto;
       border-radius: 4px;
     }
-    .card-name {
+    /*.card-name {
       margin-top: 5px;
       font-size: 14px;
     }
+    */
     #drawnCardArea {
       margin-top: 20px;
       width: 120px;
@@ -49,21 +50,16 @@
   const deck = [];
 
   function createCardElement(card) {
-    const div = document.createElement('div');
-    div.className = 'card';
+  const div = document.createElement('div');
+  div.className = 'card';
 
-    const img = document.createElement('img');
-    img.src = card.image;
-    img.alt = card.name;
-    div.appendChild(img);
+  const img = document.createElement('img');
+  img.src = card.image;
+  img.alt = card.name;  // alt属性はそのままでOK
+  div.appendChild(img);
 
-    const nameDiv = document.createElement('div');
-    nameDiv.className = 'card-name';
-    nameDiv.textContent = card.name;
-    div.appendChild(nameDiv);
-
-    return div;
-  }
+  return div;  // nameDiv は追加しない
+}
 
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
