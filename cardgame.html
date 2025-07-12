@@ -31,8 +31,9 @@
 <h2>デッキコードから復元してランダムにカードを引く</h2>
 
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
-<button onclick="loadDeckFromCode()">デッキを復元</button>
+<button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 <button onclick="drawRandomCard()">ランダムに1枚引く</button>
+
 
 <div id="drawnCardArea">
   <!-- 引いたカードがここに表示されます -->
@@ -65,37 +66,42 @@
   }
 
   function loadDeckFromCode() {
-    const code = document.getElementById('deckCode').value.trim();
-    if (!code) return;
+  const code = document.getElementById('deckCode').value.trim();
+  if (!code) return;
 
-    const newDeck = [];
-    const entries = code.split(',');
+  const newDeck = [];
+  const entries = code.split(',');
 
-    for (const entry of entries) {
-      const [idStr, countStr] = entry.split('x');
-      const id = parseInt(idStr);
-      const count = parseInt(countStr);
+  for (const entry of entries) {
+    const [idStr, countStr] = entry.split('x');
+    const id = parseInt(idStr);
+    const count = parseInt(countStr);
 
-      const card = cards.find(c => c.id === id);
-      if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
-        alert(`無効なカードIDや枚数です: ${entry}`);
-        return;
-      }
-
-      for (let i = 0; i < count; i++) {
-        newDeck.push(card);
-      }
-    }
-
-    if (newDeck.length > 50) {
-      alert("デッキは50枚までです！");
+    const card = cards.find(c => c.id === id);
+    if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
+      alert(`無効なカードIDや枚数です: ${entry}`);
       return;
     }
 
-    deck.length = 0;
-    newDeck.forEach(card => deck.push(card));
-    alert("デッキを復元しました。");
+    for (let i = 0; i < count; i++) {
+      newDeck.push(card);
+    }
   }
+
+  if (newDeck.length > 50) {
+    alert("デッキは50枚までです！");
+    return;
+  }
+
+  deck.length = 0;
+  newDeck.forEach(card => deck.push(card));
+
+  alert("デッキを復元しました。");
+
+  // ✅ テキストエリアと復元ボタンを非表示にする
+  document.getElementById('deckCode').style.display = 'none';
+  document.getElementById('loadDeckBtn').style.display = 'none';
+}
 
   function drawRandomCard() {
     if (deck.length === 0) {
