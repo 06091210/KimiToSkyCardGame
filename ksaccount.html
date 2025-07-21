@@ -17,10 +17,8 @@
 </style>
 </head>
 <body>
-  <!-- パスワード入力欄を追加 -->
 <h2>保存</h2>
-  <input type="text" id="Username" placeholder="ユーザー名">
-  <input type="password" id="Password" placeholder="パスワード"> <!-- 追加 -->
+  <input type="text" id="Username">
   <button id="auto-login-btn" onclick="copyText(); loadMessages();">LogIn</button>
   <div id="app">
   <div id="login-area">
@@ -86,44 +84,14 @@
     editorArea.classList.remove('hidden');
     saveMsg.textContent = '';
   }
-    // パスワード確認を追加
+    const autoLoginBtn = document.getElementById('auto-login-btn');
 autoLoginBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
-  const password = document.getElementById("Password").value.trim();
-
-  if (!username || !password) {
-    loginMsg.textContent = 'ユーザー名とパスワードを入力してください';
+  if (!username) {
+    loginMsg.textContent = 'ユーザー名を入力してください';
     loginMsg.style.color = 'red';
     return;
   }
-
-  if (password !== "0123") {
-    loginMsg.textContent = 'パスワードが間違っています';
-    loginMsg.style.color = 'red';
-    return;
-  }
-
-  const users = getUsers();
-  if (users[username]) {
-    currentUser = username;
-    loginMsg.textContent = 'ログイン成功';
-    loginMsg.style.color = 'green';
-    textContent.value = users[username].texts || '';
-    showEditor();
-  } else {
-    users[username] = { texts: '' };
-    saveUsers(users);
-    currentUser = username;
-    loginMsg.textContent = '新規登録完了 & ログインしました';
-    loginMsg.style.color = 'green';
-    showEditor();
-  }
-
-  // ユーザー名のコピー & メッセージ読み込み
-  copyText();
-  loadMessages();
-});
-
   const users = getUsers();
   if (users[username]) {
     currentUser = username;
