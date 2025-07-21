@@ -148,10 +148,8 @@ autoLoginBtn.addEventListener('click', () => {
       container.innerHTML = "一致するユーザーが見つかりませんでした。";
     }
   }
-  // 初回読み込み
   loadMessages();
-  // ⏱ 5秒ごとに更新（必要に応じて秒数を調整）
-  setInterval(loadMessages, 5000);
+  setInterval(loadMessages, 3000);
 </script>
 </body>
 </html>
