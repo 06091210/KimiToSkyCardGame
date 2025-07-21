@@ -19,8 +19,8 @@
 <body>
   <!-- パスワード入力欄を追加 -->
 <h2>保存</h2>
-  <input type="password" id="Password" placeholder="パスワード">
-  <input type="text" id="Username">
+  <input type="text" id="Username" placeholder="ユーザー名">
+  <input type="password" id="Password" placeholder="パスワード"> <!-- 追加 -->
   <button id="auto-login-btn" onclick="copyText(); loadMessages();">LogIn</button>
   <div id="app">
   <div id="login-area">
@@ -86,7 +86,7 @@
     editorArea.classList.remove('hidden');
     saveMsg.textContent = '';
   }
-// パスワード確認を追加
+    // パスワード確認を追加
 autoLoginBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
   const password = document.getElementById("Password").value.trim();
