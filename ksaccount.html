@@ -14,142 +14,166 @@
     input, textarea { width: 100%; padding: 8px; margin: 6px 0; box-sizing: border-box; }
     button { padding: 8px 12px; margin-top: 8px; }
     .hidden { display: none; }
-</style>
+  </style>
 </head>
 <body>
-<h2>保存</h2>
+  <h2>保存</h2>
   <input type="text" id="Username">
   <button id="auto-login-btn" onclick="copyText(); loadMessages();">LogIn</button>
+
   <div id="app">
-  <div id="login-area">
-    <h2>ログイン / 新規登録</h2>
-    <input type="hidden" id="username" placeholder="ユーザー名">
-    <p id="login-msg" style="color:red;"></p>
+    <div id="login-area">
+      <h2>ログイン / 新規登録</h2>
+      <input type="hidden" id="username" placeholder="ユーザー名">
+      <p id="login-msg" style="color:red;"></p>
+    </div>
+
+    <div id="editor-area" class="hidden">
+      <h2>テキストエディタ</h2>
+      <textarea id="text-content" rows="10" placeholder="ここにテキストを入力"></textarea>
+      <button id="save-btn">保存</button>
+      <p id="save-msg" style="color:green;"></p>
+      <div id="output"></div>
+    </div>
   </div>
-  <div id="editor-area" class="hidden">
-    <h2>テキストエディタ</h2>
-    <textarea id="text-content" rows="10" placeholder="ここにテキストを入力"></textarea>
-    <button id="save-btn">保存</button>
-    <p id="save-msg" style="color:green;"></p>
-    <button id="show-btn">表示</button>
-    <div id="output"></div>
-  </div>
-</div>
-<form
-  action="https://formcarry.com/s/_JThRNdZp01"
-  method="POST"
-  enctype="multipart/form-data"
->
-  <label style="display: none;">
-    UserName:
-    <input type="text" name="UserName" id="UserName">
-  </label>
-  <label>
-    message:
-    <input type="text" name="message">
-  </label>
-  <button type="submit">Send</button>
-</form>
+
+  <form
+    action="https://formcarry.com/s/_JThRNdZp01"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <label style="display: none;">
+      UserName:
+      <input type="text" name="UserName" id="UserName">
+    </label>
+    <label>
+      message:
+      <input type="text" name="message">
+    </label>
+    <button type="submit">Send</button>
+  </form>
+
   <h2>取得</h2>
   <div id="messages">読み込み中...</div>
   <h2><a href="https://app.formcarry.com/form/_JThRNdZp01">履歴を閲覧</a></h2>
+
   <h2>KSポイントを編集</h2>
   <iframe src="https://docs.google.com/spreadsheets/d/1-ACLq_6gyZrqD2lFjBt4CAarEuAIZLMEZbZRPdWFk6o/edit"></iframe>
+
   <script>
-  const loginArea = document.getElementById('login-area');
-  const editorArea = document.getElementById('editor-area');
-  const usernameInput = document.getElementById('username');
-  const passwordInput = document.getElementById('password');
-  const loginBtn = document.getElementById('login-btn');
-  const registerBtn = document.getElementById('register-btn');
-  const loginMsg = document.getElementById('login-msg');
-  const textContent = document.getElementById('text-content');
-  const saveBtn = document.getElementById('save-btn');
-  const saveMsg = document.getElementById('save-msg');
-  const showBtn = document.getElementById('show-btn');
-  const output = document.getElementById('output');
-    showBtn.addEventListener('click', () => {
-      const inputText = textContent.value;
-      output.innerHTML = `<h2>${inputText}</h2>`;
-    });
-  let currentUser = null;
-  function getUsers() {
-    const usersJSON = localStorage.getItem('users');
-    return usersJSON ? JSON.parse(usersJSON) : {};
-  }
-  function saveUsers(users) {
-    localStorage.setItem('users', JSON.stringify(users));
-  }
-  function showLogin() {
-  loginArea.classList.remove('hidden');
-  editorArea.classList.add('hidden');
-  loginMsg.textContent = '';
-  saveMsg.textContent = '';
-  usernameInput.value = '';
-}
-  function showEditor() {
-    loginArea.classList.add('hidden');
-    editorArea.classList.remove('hidden');
-    saveMsg.textContent = '';
-  }
-    const autoLoginBtn = document.getElementById('auto-login-btn');
-autoLoginBtn.addEventListener('click', () => {
-  const username = usernameInput.value.trim();
-  if (!username) {
-    loginMsg.textContent = 'ユーザー名を入力してください';
-    loginMsg.style.color = 'red';
-    return;
-  }
-  const users = getUsers();
-  if (users[username]) {
-    currentUser = username;
-    loginMsg.textContent = 'ログイン成功';
-    loginMsg.style.color = 'green';
-    textContent.value = users[username].texts || '';
-    showEditor();
-  } else {
-    users[username] = { texts: '' };
-    saveUsers(users);
-    currentUser = username;
-    loginMsg.textContent = '新規登録完了 & ログインしました';
-    loginMsg.style.color = 'green';
-    showEditor();
-  }
-});
-  saveBtn.addEventListener('click', () => {
-    if (!currentUser) return;
-    const users = getUsers();
-    users[currentUser].texts = textContent.value;
-    saveUsers(users);
-    saveMsg.textContent = '保存しました！';
-    setTimeout(() => saveMsg.textContent = '', 2000);
-  });
-  showLogin();
+    const loginArea = document.getElementById('login-area');
+    const editorArea = document.getElementById('editor-area');
+    const usernameInput = document.getElementById('username');
+    const loginMsg = document.getElementById('login-msg');
+    const textContent = document.getElementById('text-content');
+    const saveBtn = document.getElementById('save-btn');
+    const saveMsg = document.getElementById('save-msg');
+    const output = document.getElementById('output');
+
+    let currentUser = null;
+    let updateIntervalId = null;
+
+    function getUsers() {
+      const usersJSON = localStorage.getItem('users');
+      return usersJSON ? JSON.parse(usersJSON) : {};
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    function showLogin() {
+      loginArea.classList.remove('hidden');
+      editorArea.classList.add('hidden');
+      loginMsg.textContent = '';
+      saveMsg.textContent = '';
+      usernameInput.value = '';
+    }
+
+    function showEditor() {
+      loginArea.classList.add('hidden');
+      editorArea.classList.remove('hidden');
+      saveMsg.textContent = '';
+    }
+
     function copyText() {
       const text = document.getElementById("Username").value;
       document.getElementById("UserName").value = text;
       document.getElementById("username").value = text;
     }
-    const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
-  async function loadMessages() {
-    const response = await fetch(API_URL);
-    const messages = await response.json();
-    const container = document.getElementById("messages");
-    container.innerHTML = "";
-    const inputUsername = document.getElementById("Username").value.trim();
-    messages.reverse().forEach(msg => {
-      if (msg.name === inputUsername) {
-        const div = document.createElement("div");
-        div.innerHTML = `${msg.KSポイント}`;
-        container.appendChild(div);
+
+    const autoLoginBtn = document.getElementById('auto-login-btn');
+    autoLoginBtn.addEventListener('click', () => {
+      const username = usernameInput.value.trim();
+      if (!username) {
+        loginMsg.textContent = 'ユーザー名を入力してください';
+        loginMsg.style.color = 'red';
+        return;
+      }
+
+      const users = getUsers();
+      if (users[username]) {
+        currentUser = username;
+        loginMsg.textContent = 'ログイン成功';
+        loginMsg.style.color = 'green';
+        textContent.value = users[username].texts || '';
+        showEditor();
+        startAutoUpdate(); // ← 自動反映開始
+      } else {
+        users[username] = { texts: '' };
+        saveUsers(users);
+        currentUser = username;
+        loginMsg.textContent = '新規登録完了 & ログインしました';
+        loginMsg.style.color = 'green';
+        showEditor();
+        startAutoUpdate(); // ← 自動反映開始
       }
     });
-    if (container.innerHTML === "") {
-      container.innerHTML = "一致するユーザーが見つかりませんでした。";
+
+    saveBtn.addEventListener('click', () => {
+      if (!currentUser) return;
+      const users = getUsers();
+      users[currentUser].texts = textContent.value;
+      saveUsers(users);
+      saveMsg.textContent = '保存しました！';
+      setTimeout(() => saveMsg.textContent = '', 2000);
+    });
+
+    function updateOutput() {
+      if (!currentUser) return;
+      const inputText = textContent.value;
+      output.innerHTML = `<h2>${inputText}</h2>`;
     }
-  }
-  loadMessages();
-  setInterval(loadMessages, 3000);
-</script>
+
+    function startAutoUpdate() {
+      if (updateIntervalId) clearInterval(updateIntervalId);
+      updateIntervalId = setInterval(updateOutput, 3000);
+    }
+
+    function loadMessages() {
+      const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(messages => {
+          const container = document.getElementById("messages");
+          container.innerHTML = "";
+          const inputUsername = document.getElementById("Username").value.trim();
+          messages.reverse().forEach(msg => {
+            if (msg.name === inputUsername) {
+              const div = document.createElement("div");
+              div.innerHTML = `${msg.KSポイント}`;
+              container.appendChild(div);
+            }
+          });
+          if (container.innerHTML === "") {
+            container.innerHTML = "一致するユーザーが見つかりませんでした。";
+          }
+        });
+    }
+
+    loadMessages();
+    setInterval(loadMessages, 3000);
+    showLogin();
+  </script>
 </body>
 </html>
