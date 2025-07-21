@@ -91,14 +91,24 @@
     }
 
     // キーボード操作対応
-    document.addEventListener('keydown', (e) => {
+    /*document.addEventListener('keydown', (e) => {
       switch (e.key.toLowerCase()) {
         case 'a': changeScore('red', 1); break;
         case 'z': changeScore('red', -1); break;
         case 'k': changeScore('blue', 1); break;
         case 'm': changeScore('blue', -1); break;
       }
-    });
+    });*/
+    document.addEventListener('keydown', (e) => {
+  // 入力中のとき（input要素にフォーカスがあるとき）は処理をスキップ
+  if (document.activeElement.tagName === 'INPUT') return;
+  switch (e.key.toLowerCase()) {
+    case 'a': changeScore('red', 1); break;
+    case 'z': changeScore('red', -1); break;
+    case 'k': changeScore('blue', 1); break;
+    case 'm': changeScore('blue', -1); break;
+  }
+});
   </script>
 </body>
 </html>
