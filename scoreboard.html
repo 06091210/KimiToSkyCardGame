@@ -68,15 +68,15 @@
 <body>
   <div class="scoreboard">
     <div class="team red">
-      <input class="team-name" type="text" value="チーム赤">
+      <input class="team-name" type="text" value="" onclick="changeScore('red', 1)">
       <div class="score" id="score-red">0</div>
-      <button onclick="changeScore('red', 1)">＋1</button>
+      <!--<button onclick="changeScore('red', 1)">＋1</button>-->
       <button onclick="changeScore('red', -1)">−1</button>
     </div>
     <div class="team blue">
-      <input class="team-name" type="text" value="チーム青">
+      <input class="team-name" type="text" value="" onclick="cangeScore('blue', 1)">
       <div class="score" id="score-blue">0</div>
-      <button onclick="changeScore('blue', 1)">＋1</button>
+      <!--<button onclick="changeScore('blue', 1)">＋1</button>-->
       <button onclick="changeScore('blue', -1)">−1</button>
     </div>
   </div>
