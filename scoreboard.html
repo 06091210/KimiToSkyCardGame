@@ -48,18 +48,33 @@
       padding: 10px 20px;
       cursor: pointer;
     }
+
+    input.team-name {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 10px;
+      border: none;
+      background: transparent;
+      color: white;
+      font-weight: bold;
+    }
+
+    input.team-name:focus {
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
   </style>
 </head>
 <body>
   <div class="scoreboard">
     <div class="team red">
-      <h2>チーム赤</h2>
+      <input class="team-name" type="text" value="チーム赤">
       <div class="score" id="score-red">0</div>
       <button onclick="changeScore('red', 1)">＋1</button>
       <button onclick="changeScore('red', -1)">−1</button>
     </div>
     <div class="team blue">
-      <h2>チーム青</h2>
+      <input class="team-name" type="text" value="チーム青">
       <div class="score" id="score-blue">0</div>
       <button onclick="changeScore('blue', 1)">＋1</button>
       <button onclick="changeScore('blue', -1)">−1</button>
@@ -75,7 +90,7 @@
       document.getElementById(`score-${team}`).textContent = scores[team];
     }
 
-    // キーボード操作対応 (例: A/Z=赤, K/M=青)
+    // キーボード操作対応
     document.addEventListener('keydown', (e) => {
       switch (e.key.toLowerCase()) {
         case 'a': changeScore('red', 1); break;
