@@ -31,6 +31,8 @@
     <textarea id="text-content" rows="10" placeholder="ここにテキストを入力"></textarea>
     <button id="save-btn">保存</button>
     <p id="save-msg" style="color:green;"></p>
+    <button id="show-btn">表示</button>
+    <div id="output"></div>
   </div>
 </div>
 <form
@@ -64,6 +66,12 @@
   const textContent = document.getElementById('text-content');
   const saveBtn = document.getElementById('save-btn');
   const saveMsg = document.getElementById('save-msg');
+  const showBtn = document.getElementById('show-btn');
+  const output = document.getElementById('output');
+    showBtn.addEventListener('click', () => {
+      const inputText = textContent.value;
+      output.innerHTML = `<h2>${inputText}</h2>`;
+    });
   let currentUser = null;
   function getUsers() {
     const usersJSON = localStorage.getItem('users');
