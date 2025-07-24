@@ -333,13 +333,27 @@ function filterCards() {
   renderCards(filteredCards);
 }
 
-    function renderCards() {
+    /*function renderCards() {
       cardList.innerHTML = '';
       cards.forEach(card => {
         const cardElement = createCardElement(card, () => addToDeck(card));
         cardList.appendChild(cardElement);
       });
-    }
+    }*/
+    function renderCards(cardArray) {
+  const cardList = document.getElementById("cardList");
+  cardList.innerHTML = "";
+  cardArray.forEach(card => {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    cardDiv.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="card-name">${card.name}</div>
+    `;
+    cardDiv.onclick = () => addToDeck(card);
+    cardList.appendChild(cardDiv);
+  });
+}
 
     function renderDeck() {
       deckList.innerHTML = '';
@@ -441,9 +455,8 @@ function loadDeckFromCode() {
   renderDeck();
 }
 
-// ページ読み込み時に全カード表示
 window.onload = () => {
-  renderCards();
+  renderCards(cards);
 };//追加
   </script>
 </body>
