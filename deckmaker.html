@@ -454,46 +454,10 @@ function loadDeckFromCode() {
   newDeck.forEach(card => deck.push(card));
   renderDeck();
 }
-    
-  // 既存のJavaScriptコードの後に追加してください
 
-  function displayCards(filteredCards) {
-    const cardList = document.getElementById("cardList");
-    cardList.innerHTML = "";
-
-    filteredCards.forEach(card => {
-      const cardElement = document.createElement("div");
-      cardElement.className = "card";
-      cardElement.onclick = () => addToDeck(card);
-
-      const img = document.createElement("img");
-      img.src = card.image;
-      img.alt = card.name;
-
-      const name = document.createElement("div");
-      name.className = "card-name";
-      name.textContent = card.name;
-
-      cardElement.appendChild(img);
-      cardElement.appendChild(name);
-      cardList.appendChild(cardElement);
-    });
-  }
-
-  function filterCards() {
-    const searchInput = document.getElementById("searchInput").value.toLowerCase();
-    const filtered = cards.filter(card => card.name.toLowerCase().includes(searchInput));
-    displayCards(filtered);
-  }
-
-  // ★ ページ読み込み時に全カード表示
-  window.onload = () => {
-    displayCards(cards);
-  };
-    
-/*window.onload = () => {
+window.onload = () => {
   renderCards(cards);
-};//追加*/
+};//追加
   </script>
 </body>
 </html>
