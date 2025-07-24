@@ -44,10 +44,12 @@
 </style>
 </head>
 <h2>デッキコード</h2>
-<textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
+<textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br><!--追加-->
 <button onclick="generateDeckCode()">コードを生成</button>
 <button onclick="loadDeckFromCode()">コードから復元</button>
 <body>
+  <h2>カード検索</h2>
+  <input type="text" id="searchInput" placeholder="カード名を検索" oninput="filterCards()">
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
   <div id="deckList" class="deck-container"></div>
@@ -325,14 +327,35 @@
       return div;
     }
 
+function filterCards() {
+  const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+  const filteredCards = cards.filter(card => card.name.toLowerCase().includes(keyword));
+  renderCards(filteredCards);
+}
 
-    function renderCards() {
+    
+    /*function renderCards() {
       cardList.innerHTML = '';
       cards.forEach(card => {
         const cardElement = createCardElement(card, () => addToDeck(card));
         cardList.appendChild(cardElement);
       });
-    }
+    }*/
+    function renderCards(cardArray) {
+  const cardList = document.getElementById("cardList");
+  cardList.innerHTML = "";
+  cardArray.forEach(card => {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    cardDiv.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="card-name">${card.name}</div>
+    `;
+    cardDiv.onclick = () => addToDeck(card);
+    cardList.appendChild(cardDiv);
+  });
+}//追加
+
 
     function renderDeck() {
       deckList.innerHTML = '';
@@ -434,6 +457,9 @@ function loadDeckFromCode() {
   renderDeck();
 }
 
+    window.onload = () => {
+  renderCards(cards);
+};//追加
   </script>
 </body>
 </html>
