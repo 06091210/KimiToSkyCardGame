@@ -456,8 +456,27 @@ function loadDeckFromCode() {
   newDeck.forEach(card => deck.push(card));
   renderDeck();
 }
+function displayAllCards() {
+  const cardList = document.getElementById("cardList");
+  cardList.innerHTML = "";
 
-    window.onload = () => {
+  cards.forEach(card => {
+    const cardElement = document.createElement("div");
+    cardElement.className = "card";
+    cardElement.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="card-name">${card.name}</div>
+    `;
+    cardElement.onclick = () => addCardToDeck(card);
+    cardList.appendChild(cardElement);
+  });
+}
+
+// ページ読み込み時に全カード表示
+window.onload = function () {
+  displayAllCards();
+};
+window.onload = () => {
   renderCards(cards);
 };//追加
   </script>
