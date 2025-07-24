@@ -454,10 +454,33 @@ function loadDeckFromCode() {
   newDeck.forEach(card => deck.push(card));
   renderDeck();
 }
+    
+function filterCards() {
+  const input = document.getElementById('searchInput').value.toLowerCase();
+  const cardList = document.getElementById('cardList');
+  cardList.innerHTML = ''; // 一度リセット
 
-window.onload = () => {
+  cards.forEach(card => {
+    if (card.name.toLowerCase().includes(input)) {
+      const cardDiv = document.createElement('div');
+      cardDiv.className = 'card';
+      cardDiv.innerHTML = `
+        <img src="${card.image}" alt="${card.name}">
+        <div class="card-name">${card.name}</div>
+      `;
+      cardList.appendChild(cardDiv);
+    }
+  });
+}
+
+/*window.onload = () => {
   renderCards(cards);
-};//追加
+};//追加*/
+  // 最初に全カードを表示する
+  window.addEventListener('DOMContentLoaded', () => {
+    filterCards();
+  });
+    
   </script>
 </body>
 </html>
