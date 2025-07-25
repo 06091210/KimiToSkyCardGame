@@ -48,8 +48,6 @@
 <button onclick="generateDeckCode()">コードを生成</button>
 <button onclick="loadDeckFromCode()">コードから復元</button>
 <body>
-  <h2>カード検索</h2>
-  <input type="text" id="searchInput" placeholder="カード名を検索" oninput="filterCards()">
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
   <div id="deckList" class="deck-container"></div>
@@ -327,34 +325,20 @@
       return div;
     }
 
-function filterCards() {
+/*function filterCards() {
   const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
   const filteredCards = cards.filter(card => card.name.toLowerCase().includes(keyword));
   renderCards(filteredCards);
-}
+}*/
 
-    /*function renderCards() {
+    function renderCards() {
       cardList.innerHTML = '';
       cards.forEach(card => {
         const cardElement = createCardElement(card, () => addToDeck(card));
         cardList.appendChild(cardElement);
       });
-    }*/
-    function renderCards(cardArray) {
-  const cardList = document.getElementById("cardList");
-  cardList.innerHTML = "";
-  cardArray.forEach(card => {
-    const cardDiv = document.createElement("div");
-    cardDiv.className = "card";
-    cardDiv.innerHTML = `
-      <img src="${card.image}" alt="${card.name}">
-      <div class="card-name">${card.name}</div>
-    `;
-    cardDiv.onclick = () => addToDeck(card);
-    cardList.appendChild(cardDiv);
-  });
-}
-
+    }
+    
     function renderDeck() {
       deckList.innerHTML = '';
       deck.forEach((card, index) => {
@@ -362,6 +346,7 @@ function filterCards() {
         deckList.appendChild(cardElement);
       });
     }
+    
 function addToDeck(card) {
   if (deck.length >= 50) {
     alert("デッキは50枚までです！");
@@ -473,14 +458,6 @@ function filterCards() {
   });
 }
 
-/*window.onload = () => {
-  renderCards(cards);
-};//追加*/
-    window.onload = () => {
-  filterCards();
-};
-
-    
   </script>
 </body>
 </html>
