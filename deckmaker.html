@@ -47,6 +47,8 @@
 <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br><!--追加-->
 <button onclick="generateDeckCode()">コードを生成</button>
 <button onclick="loadDeckFromCode()">コードから復元</button>
+<h2>カードを検索</h2>
+<input type="text" id="cardFilter" placeholder="カード名を入力" oninput="filterCards()">
 <body>
   <div id="cardList" class="card-container"></div>
   <h2>デッキ</h2>
@@ -331,13 +333,13 @@
   renderCards(filteredCards);
 }*/
 
-    function renderCards() {
+    /*function renderCards() {
       cardList.innerHTML = '';
       cards.forEach(card => {
         const cardElement = createCardElement(card, () => addToDeck(card));
         cardList.appendChild(cardElement);
       });
-    }
+    }*/
     
     function renderDeck() {
       deckList.innerHTML = '';
@@ -440,7 +442,7 @@ function loadDeckFromCode() {
   renderDeck();
 }
     
-function filterCards() {
+/*function filterCards() {
   const input = document.getElementById('searchInput').value.toLowerCase();
   const cardList = document.getElementById('cardList');
   cardList.innerHTML = ''; // 一度リセット
@@ -456,8 +458,33 @@ function filterCards() {
       cardList.appendChild(cardDiv);
     }
   });
-}
+}*/
+    
+  function renderCards(filteredCards = cards) {
+    const cardList = document.getElementById("cardList");
+    cardList.innerHTML = ""; // 一度クリア
 
+    filteredCards.forEach(card => {
+      const cardElement = document.createElement("div");
+      cardElement.className = "card";
+      cardElement.innerHTML = `
+        <img src="${card.image}" alt="${card.name}">
+        <div class="card-name">${card.name}</div>
+      `;
+      cardElement.onclick = () => addToDeck(card);
+      cardList.appendChild(cardElement);
+    });
+  }
+
+  function filterCards() {
+    const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
+    const filtered = cards.filter(card => card.name.toLowerCase().includes(keyword));
+    renderCards(filtered);
+  }
+
+  // 初期表示
+  renderCards();
+    
   </script>
 </body>
 </html>
