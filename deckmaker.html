@@ -469,13 +469,28 @@ function loadDeckFromCode() {
       cardElement.className = "card";
       cardElement.innerHTML = `
         <img src="${card.image}" alt="${card.name}">
-        <div class="card-name">${card.name}</div>
       `;
       cardElement.onclick = () => addToDeck(card);
       cardList.appendChild(cardElement);
     });
   }
 
+/*function renderCards(filteredCards = cards) {
+    const cardList = document.getElementById("cardList");
+    cardList.innerHTML = ""; // 一度クリア
+
+    filteredCards.forEach(card => {
+      const cardElement = document.createElement("div");
+      cardElement.className = "card";
+      cardElement.innerHTML = `
+        <img src="${card.image}" alt="${card.name}">
+        <div class="card-name">${card.name}</div>
+      `;
+      cardElement.onclick = () => addToDeck(card);
+      cardList.appendChild(cardElement);
+    });
+  }元のプログラム*/
+    
   function filterCards() {
     const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
     const filtered = cards.filter(card => card.name.toLowerCase().includes(keyword));
