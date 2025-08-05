@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -13,6 +13,25 @@
     function sendPasswordToParent() {
       const value = document.getElementById("loginPassword").value;
       parent.postMessage({ type: "passwordInput", value: value }, "https://06091210.github.io");
+      alert("送信しました！");
+    }
+  </script>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ログイン</title>
+</head>
+<body>
+  <textarea id="inputArea"></textarea>
+  <button onclick="sendValue()">送信</button>
+  <script>
+    function sendValue() {
+      const value = document.getElementById("inputArea").value;
+      parent.postMessage({ type: "valueInput", value: value }, "*");
       alert("送信しました！");
     }
   </script>
