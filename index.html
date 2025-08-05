@@ -95,6 +95,9 @@
   <iframe id="viewer" src=""></iframe>
 
   <script>
+    const iframe = document.getElementById("viewer");
+    let sharedValue = "";
+    
     function loadHTML(file) {
       const viewer = document.getElementById('viewer');
       viewer.src = file;
@@ -105,7 +108,7 @@
       header.style.display = (header.style.display === "none") ? "block" : "none";
     }
 
-    window.addEventListener("message", function(event) {
+    /*window.addEventListener("message", function(event) {
   if (event.origin !== "https://06091210.github.io") return;
 
   if (event.data.type === "passwordInput") {
@@ -128,7 +131,22 @@
       value: sharedPassword
     }, "https://06091210.github.io");
   }
-});
+});*/
+    window.addEventListener("message", (event) => {
+      const data = event.data;
+
+      if (data.type === "valueInput") {
+        sharedValue = data.value;
+        console.log("値を保存しました：", sharedValue);
+      }
+
+      if (data.type === "requestValue") {
+        iframe.contentWindow.postMessage({
+          type: "setValue",
+          value: sharedValue
+        }, "*");
+      }
+    });
   </script>
 </body>
 </html>
