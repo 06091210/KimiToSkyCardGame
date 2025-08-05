@@ -86,7 +86,7 @@
 <body>
   <form id="myForm">
     <input type="hidden" name="name" id="nameInput" placeholder="名前"><br>
-    <textarea name="message" placeholder="メッセージ"></textarea>
+    <textarea name="message" placeholder="メッセージ"></textarea><br>
     <button type="submit">上書き</button>
   </form>
   <button onclick="loadMessage()">取得</button>
@@ -101,7 +101,7 @@
         method: "POST",
         body: data
       }).then(() => {
-        alert("送信しました！");
+        alert("上書きしました！");
       });
     });
     parent.postMessage({ type: "requestValue" }, "*");
