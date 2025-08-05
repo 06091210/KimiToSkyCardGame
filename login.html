@@ -35,8 +35,9 @@
     const idNameMap = {
       "123456": "スカイ",
       "654321": "フォーエバー",
-      "111111": "Firp"
+      //"111111": "Firp"
     };
+    idNameMap[63.toString(2)]="Firp";
 
     function sendValue() {
       const name = document.getElementById("nameInput").value.trim();
