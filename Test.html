@@ -24,17 +24,17 @@
         body: data
       })
     });
+    
     function loadMessage() {
       const inputUsername = document.getElementById("username").value.trim();
       const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
-
       fetch(API_URL)
         .then(response => response.json())
         .then(data => {
           const match = data.find(row => row.name === inputUsername);
           const resultDiv = document.getElementById("result");
           if (match) {
-            resultDiv.textContent = match.message || "メッセージがありません。";
+            resultDiv.textContent = match["KSポイント"] || "メッセージがありません。";
           } else {
             resultDiv.textContent = "一致する名前が見つかりませんでした。";
           }
