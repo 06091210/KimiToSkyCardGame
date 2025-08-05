@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -73,6 +73,76 @@
         });
     }*/
     
+  </script>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KSポイント</title>
+</head>
+<body>
+  <form id="myForm">
+    <input type="text" name="name" id="nameInput" placeholder="名前"><br>
+    <textarea name="message" placeholder="メッセージ"></textarea><br>
+    <button type="submit">送信</button>
+  </form>
+
+  <button onclick="loadMessage()">取得</button>
+
+  <div id="result"></div>
+
+  <script>
+    const nameInput = document.getElementById("nameInput");
+
+    // 送信処理
+    document.getElementById("myForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+
+      fetch("https://script.google.com/macros/s/AKfycbxCgt8PFPWbCIOJOFbUTG1Dns9jK8Pfp0T6Xu-pLy2lHTGm6ljSIUIvS8gCMv-ydeXC/exec", {
+        method: "POST",
+        body: data
+      }).then(() => {
+        alert("送信しました！");
+      });
+    });
+
+    // 値を親ページから受け取ったら自動入力して取得
+    parent.postMessage({ type: "requestValue" }, "*");
+
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        const name = event.data.value;
+        nameInput.value = name;
+        loadMessage();
+      }
+    });
+
+    // データ取得処理
+    function loadMessage() {
+      const inputUsername = nameInput.value.trim();
+      const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
+
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          const match = data.find(row => row.name === inputUsername);
+          const resultDiv = document.getElementById("result");
+
+          if (match) {
+            resultDiv.textContent = match["KSポイント"] || "ポイントが登録されていません。";
+          } else {
+            resultDiv.textContent = "一致する名前が見つかりませんでした。";
+          }
+        })
+        .catch(error => {
+          document.getElementById("result").textContent = "エラーが発生しました: " + error;
+        });
+    }
   </script>
 </body>
 </html>
