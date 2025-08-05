@@ -42,6 +42,14 @@
         .catch(error => {
           document.getElementById("result").textContent = "エラーが発生しました: " + error;
         });
+
+    parent.postMessage({ type: "requestValue" }, "*");
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        //document.getElementById("output").textContent = event.data.value || "値がありません";
+        document.getElementById("name").value = event.data.value;
+      }
+    });
     }
   </script>
 </body>
