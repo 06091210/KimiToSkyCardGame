@@ -46,18 +46,11 @@
         alert("名前とIDを両方入力してください。");
         return;
       }
-
-      if (!/^\d{6}$/.test(id)) {
-        alert("IDは6桁の数字で入力してください。");
-        return;
-      }
-
       // IDが存在し、対応する名前と一致するかチェック
       if (!(id in idNameMap) || idNameMap[id] !== name) {
         alert("IDと名前が一致しません。");
         return;
       }
-
       // 認証成功 → 名前のみ送信（IDは送信しない）
       parent.postMessage({ type: "valueInput", value: name }, "*");
       alert("ログインしました！");
