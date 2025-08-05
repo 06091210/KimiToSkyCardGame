@@ -95,6 +95,8 @@
   <iframe id="viewer" src=""></iframe>
 
   <script>
+    let sharedPassword = "";
+    
     function loadHTML(file) {
       const viewer = document.getElementById('viewer');
       viewer.src = file;
@@ -104,24 +106,6 @@
       const header = document.getElementById('header-area');
       header.style.display = (header.style.display === "none") ? "block" : "none";
     }
-
-    window.setPasswordFromLogin = function(passwordText) { //追加
-      const iframe = document.getElementById("viewer");
-      const iframeWindow = iframe.contentWindow;
-
-      try {
-        const iframeDoc = iframe.contentDocument || iframeWindow.document;
-        const input = iframeDoc.getElementById("password");
-
-        if (input) {
-          input.value = passwordText;
-        } else {
-          alert("KSアカウント画面が開かれていないか、まだ読み込まれていません。");
-        }
-      } catch (e) {
-        alert("iframe内にアクセスできません（同一オリジンで開いてください）");
-      }
-    };
   </script>
 </body>
 </html>
