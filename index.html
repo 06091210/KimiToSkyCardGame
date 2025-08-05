@@ -98,46 +98,26 @@
     const iframe = document.getElementById("viewer");
     let sharedValue = "";
     
-    function loadHTML(file) {
+    /*function loadHTML(file) {
       const viewer = document.getElementById('viewer');
       viewer.src = file;
-    }
+    }*/
 
     function toggleHeader() {
       const header = document.getElementById('header-area');
       header.style.display = (header.style.display === "none") ? "block" : "none";
     }
 
-    /*window.addEventListener("message", function(event) {
-  if (event.origin !== "https://06091210.github.io") return;
+    function loadHTML(file) {
+      iframe.src = file;
+    }
 
-  if (event.data.type === "passwordInput") {
-    sharedPassword = event.data.value;
-    console.log("受信したパスワード:", sharedPassword);
-
-    const viewer = document.getElementById("viewer");
-    // password.htmlが開かれている場合のみ送信
-    viewer.contentWindow.postMessage({
-      type: "setPassword",
-      value: sharedPassword
-    }, "https://06091210.github.io");
-  }
-
-  // 🔽 追加：password.htmlから「パスワードくれ」と言われたら送る
-  if (event.data.type === "requestPassword") {
-    const viewer = document.getElementById("viewer");
-    viewer.contentWindow.postMessage({
-      type: "setPassword",
-      value: sharedPassword
-    }, "https://06091210.github.io");
-  }
-});*/
     window.addEventListener("message", (event) => {
       const data = event.data;
 
       if (data.type === "valueInput") {
         sharedValue = data.value;
-        console.log("値を保存しました：", sharedValue);
+        console.log("受信値:", sharedValue);
       }
 
       if (data.type === "requestValue") {
@@ -147,6 +127,7 @@
         }, "*");
       }
     });
+
   </script>
 </body>
 </html>
