@@ -27,9 +27,7 @@
 </head>
 <body>
   <textarea id="inputArea" placeholder="名前を入力"></textarea>
-  <nobr>
-  <h2 onclick="sendValue()">ログイン</h2>
-  </nobr>
+  <button onclick="sendValue()">ログイン</button>
   <script>
     function sendValue() {
       const value = document.getElementById("inputArea").value;
