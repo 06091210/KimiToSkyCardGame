@@ -5,19 +5,15 @@
   <title>ログイン</title>
 </head>
 <body>
-  <h2>ログイン</h2>
-  <textarea id="loginInput" placeholder="パスワードを入力"></textarea>
-  <button onclick="setPassword()">保存</button>
+  <h2>パスワードを入力</h2>
+  <textarea id="loginPassword" placeholder="パスワードを入力してください"></textarea><br>
+  <button onclick="sendPasswordToParent()">送信</button>
 
   <script>
-    function setPassword() {
-      const input = document.getElementById("loginInput").value;
-      if (parent && typeof parent.sharedPassword !== "undefined") {
-        parent.sharedPassword = input;
-        alert("パスワードを保存しました！");
-      } else {
-        alert("親ウィンドウと通信できません。");
-      }
+    function sendPasswordToParent() {
+      const value = document.getElementById("loginPassword").value;
+      parent.postMessage({ type: "passwordInput", value: value }, "https://06091210.github.io");
+      alert("送信しました！");
     }
   </script>
 </body>
