@@ -26,13 +26,15 @@
   <title>入力ページ</title>
 </head>
 <body>
+  <nobr>
   <textarea id="inputArea" placeholder="名前を入力"></textarea>
-  <h2 onclick="sendValue()">送信</h2>
+  <h2 onclick="sendValue()">ログイン</h2>
+  </nobr>
   <script>
     function sendValue() {
       const value = document.getElementById("inputArea").value;
       parent.postMessage({ type: "valueInput", value }, "*");
-      alert("送信しました！");
+      alert("ログインしました！");
     }
   </script>
 </body>
