@@ -17,13 +17,12 @@
       const form = e.target;
       const data = new FormData(form);
 
-      fetch("https://script.google.com/macros/s/AKfycby33ui-yS2wToxi-ra8msJr5u3pOOJ-DxUAhg2vXrOimQqMNU9eLDKsv86iaDRLNouC/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwPg3aR28UVWW8z3ZLLGwQZK089tsp58F0wGe0SOXIAHx0hsYDFJeMN26Ek4z68la04/exec", {
         method: "POST",
         body: data
       })
-      .then(res => res.text())
-      .then(txt => alert("送信成功：" + txt))
-      .catch(err => alert("エラー：" + err));
+      // メッセージ表示なしで終了
+      .catch(err => alert("送信エラー：" + err));
     });
   </script>
 </body>
