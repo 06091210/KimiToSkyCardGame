@@ -106,20 +106,29 @@
     }
 
     window.addEventListener("message", function(event) {
-      if (event.origin !== "https://06091210.github.io") return;
+  if (event.origin !== "https://06091210.github.io") return;
 
-      if (event.data.type === "passwordInput") {
-        sharedPassword = event.data.value;
-        console.log("受信したパスワード:", sharedPassword);
+  if (event.data.type === "passwordInput") {
+    sharedPassword = event.data.value;
+    console.log("受信したパスワード:", sharedPassword);
 
-        // password.html に転送（既に表示されている場合）
-        const viewer = document.getElementById("viewer");
-        viewer.contentWindow.postMessage({
-          type: "setPassword",
-          value: sharedPassword
-        }, "https://06091210.github.io");
-      }
-    });
+    const viewer = document.getElementById("viewer");
+    // password.htmlが開かれている場合のみ送信
+    viewer.contentWindow.postMessage({
+      type: "setPassword",
+      value: sharedPassword
+    }, "https://06091210.github.io");
+  }
+
+  // 🔽 追加：password.htmlから「パスワードくれ」と言われたら送る
+  if (event.data.type === "requestPassword") {
+    const viewer = document.getElementById("viewer");
+    viewer.contentWindow.postMessage({
+      type: "setPassword",
+      value: sharedPassword
+    }, "https://06091210.github.io");
+  }
+});
   </script>
 </body>
 </html>
