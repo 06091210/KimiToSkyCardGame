@@ -23,6 +23,20 @@
         body: data
       })
     });
+
+    // ① 親ウィンドウに「パスワードちょうだい！」とリクエスト
+  window.onload = function () {
+    if (window.parent !== window) {
+      parent.postMessage({ type: "requestPassword" }, "https://06091210.github.io");
+    }
+  };
+  // ② 親から受信したパスワードを表示
+  window.addEventListener("message", function(event) {
+    if (event.origin !== "https://06091210.github.io") return;
+    if (event.data.type === "setPassword") {
+      document.getElementById("name").value = event.data.value;
+    }
+  });//←追加
     
     function loadMessage() {
       const inputUsername = document.getElementById("username").value.trim();
