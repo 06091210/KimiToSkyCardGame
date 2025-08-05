@@ -1,4 +1,4 @@
-<!--<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -24,50 +24,12 @@
       })
     });
     
-    function loadMessage() {
-      const inputUsername = document.getElementById("username").value.trim();
-      const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
-
-      fetch(API_URL)
-        .then(response => response.json())
-        .then(data => {
-          const match = data.find(row => row.name === inputUsername);
-          const resultDiv = document.getElementById("result");
-          if (match) {
-            resultDiv.textContent = match["KSポイント"] || "メッセージがありません。";
-          } else {
-            resultDiv.textContent = "一致する名前が見つかりませんでした。";
-          }
-        })
-        .catch(error => {
-          document.getElementById("result").textContent = "エラーが発生しました: " + error;
-        });
-    }
-  </script>
-</body>
-</html>-->
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>出力ページ</title>
-</head>
-<body>
-  <input type="text" id="username" placeholder="名前" />
-  <button onclick="loadMessage()">取得</button>
-  <div id="result"></div>
-
-  <script>
-    // 値を要求
     parent.postMessage({ type: "requestValue" }, "*");
-
-    // 値を受け取ったら自動でフォームに入力
     window.addEventListener("message", (event) => {
       if (event.data.type === "setValue") {
         const name = event.data.value;
         document.getElementById("username").value = name;
-        loadMessage(); // 自動で検索
+        loadMessage();
       }
     });
 
@@ -90,7 +52,27 @@
           document.getElementById("result").textContent = "エラーが発生しました: " + error;
         });
     }
+    
+    /*function loadMessage() {
+      const inputUsername = document.getElementById("username").value.trim();
+      const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
+
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(data => {
+          const match = data.find(row => row.name === inputUsername);
+          const resultDiv = document.getElementById("result");
+          if (match) {
+            resultDiv.textContent = match["KSポイント"] || "メッセージがありません。";
+          } else {
+            resultDiv.textContent = "一致する名前が見つかりませんでした。";
+          }
+        })
+        .catch(error => {
+          document.getElementById("result").textContent = "エラーが発生しました: " + error;
+        });
+    }*/
+    
   </script>
 </body>
 </html>
-
