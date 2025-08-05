@@ -22,16 +22,16 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ログイン</title>
+  <meta charset="UTF-8" />
+  <title>入力ページ</title>
 </head>
 <body>
-  <textarea id="inputArea"></textarea>
+  <textarea id="inputArea" placeholder="名前を入力"></textarea>
   <button onclick="sendValue()">送信</button>
   <script>
     function sendValue() {
       const value = document.getElementById("inputArea").value;
-      parent.postMessage({ type: "valueInput", value: value }, "*");
+      parent.postMessage({ type: "valueInput", value }, "*");
       alert("送信しました！");
     }
   </script>
