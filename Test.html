@@ -1,8 +1,8 @@
-<!--<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>送信フォーム</title>
+  <title>KSポイント</title>
 </head>
 <body>
   <form id="myForm">
@@ -10,6 +10,9 @@
     <textarea name="message" placeholder="メッセージ"></textarea><br>
     <button type="submit">送信</button>
   </form>
+  <input type="text" id="username" placeholder="名前を入力">
+  <button onclick="loadMessage()">取得</button>
+  <div id="result"></div>
   <script>
     document.getElementById("myForm").addEventListener("submit", function(e) {
       e.preventDefault();
@@ -20,23 +23,7 @@
         body: data
       })
     });
-  </script>
-</body>
-</html>-->
-
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>メッセージ取得</title>
-</head>
-<body>
-  <h2>名前を入力してメッセージを取得</h2>
-  <input type="text" id="username" placeholder="名前を入力">
-  <button onclick="loadMessage()">取得</button>
-  <div id="result">ここにメッセージが表示されます</div>
-
-  <script>
+    
     function loadMessage() {
       const inputUsername = document.getElementById("username").value.trim();
       const API_URL = "https://api.sheetbest.com/sheets/3a58e982-d42d-4a9e-90a3-9182b5c3c9be";
