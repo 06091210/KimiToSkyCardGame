@@ -47,7 +47,7 @@
           const match = data.find(row => row.name === inputUsername);
           const resultDiv = document.getElementById("result");
           if (match) {
-            resultDiv.textContent = match.message || "メッセージがありません。";
+            resultDiv.textContent = match["KSポイント"] || "メッセージがありません。";
           } else {
             resultDiv.textContent = "一致する名前が見つかりませんでした。";
           }
