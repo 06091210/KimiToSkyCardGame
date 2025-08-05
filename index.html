@@ -87,6 +87,7 @@
       <h2 onclick="loadHTML('scoreboard.html')">スコアボード</h2>
       <!--<h2 onclick="loadHTML('ksaccount.html')">KSアカウント</h2>-->
       <h2 onclick="loadHTML('password.html')">KSアカウント</h2>
+      <h2 onclick="loadHTML('login.html')">ログイン</h2>
       <hr>
     </div>
   </div>
@@ -103,6 +104,24 @@
       const header = document.getElementById('header-area');
       header.style.display = (header.style.display === "none") ? "block" : "none";
     }
+
+    window.setPasswordFromLogin = function(passwordText) { //追加
+      const iframe = document.getElementById("viewer");
+      const iframeWindow = iframe.contentWindow;
+
+      try {
+        const iframeDoc = iframe.contentDocument || iframeWindow.document;
+        const input = iframeDoc.getElementById("password");
+
+        if (input) {
+          input.value = passwordText;
+        } else {
+          alert("KSアカウント画面が開かれていないか、まだ読み込まれていません。");
+        }
+      } catch (e) {
+        alert("iframe内にアクセスできません（同一オリジンで開いてください）");
+      }
+    };
   </script>
 </body>
 </html>
