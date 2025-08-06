@@ -308,54 +308,43 @@
 { id: 252, name: "勇者への手助け　ナギ", image: "images/yushahenotedasukenagi.jpg", maxCopies: 5 },
 { id: 253, name: "絶呪・万象喰らい", image: "images/zetujubanshogurai.jpg", maxCopies: 5 }
     ];
-
     const deck = [];
-
     const cardList = document.getElementById('cardList');
     const deckList = document.getElementById('deckList');
-
     function createCardElement(card, onClick) {
       const div = document.createElement('div');
       div.className = 'card';
-      div.onclick = onClick;
-      
+      div.onclick = onClick; 
       const img = document.createElement('img');
       img.src = card.image;
       img.alt = card.name;
       div.appendChild(img);
       return div;
     }
-
     function renderDeck() {
       deckList.innerHTML = '';
       deck.forEach((card, index) => {
         const cardElement = createCardElement(card, () => removeFromDeck(index));
         deckList.appendChild(cardElement);
       });
-    }
-    
+    } 
 function addToDeck(card) {
   if (deck.length >= 50) {
     alert("デッキは50枚までです！");
     return;
   }
-
   const sameCardCount = deck.filter(c => c.id === card.id).length;
-
   if (sameCardCount >= card.maxCopies) {
     alert(`このカード「${card.name}」はデッキに${card.maxCopies}枚までしか入れられません！`);
     return;
   }
-
   deck.push(card);
   renderDeck();
 }
-
     function removeFromDeck(index) {
       deck.splice(index, 1);
       renderDeck();
     }
-
     renderCards();
     renderDeck();
 function generateDeckCode() {
@@ -363,67 +352,54 @@ function generateDeckCode() {
   deck.forEach(card => {
     counts[card.id] = (counts[card.id] || 0) + 1;
   });
-
   const code = Object.entries(counts)
     .map(([id, count]) => `${id}x${count}`)
     .join(',');
-
   const deckCodeTextarea = document.getElementById('deckCode');
   deckCodeTextarea.value = code;
-
   if (!code) {
     alert("デッキが空です。カードを追加してください。");
     return;
   }
-
   navigator.clipboard.writeText(code)
     .then(() => {
       alert("デッキコードをクリップボードにコピーしました！");
     })
     .catch(err => {
-      console.error("コピー失敗:", err);
-      console.error("クリップボードへのコピーに失敗しました:", err);
+      //console.error("コピー失敗:", err);
+      //console.error("クリップボードへのコピーに失敗しました:", err);
       alert("コピーに失敗しました。手動でコピーしてください。");
     });
 }
-    
 function loadDeckFromCode() {
   const code = document.getElementById('deckCode').value.trim();
   if (!code) return;
-
   const newDeck = [];
-
   const entries = code.split(',');
   for (const entry of entries) {
     const [idStr, countStr] = entry.split('x');
     const id = parseInt(idStr);
     const count = parseInt(countStr);
-
     const card = cards.find(c => c.id === id);
     if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
       alert(`無効なカードIDや枚数です: ${entry}`);
       return;
     }
-
     for (let i = 0; i < count; i++) {
       newDeck.push(card);
     }
   }
-
   if (newDeck.length > 50) {
     alert("デッキは50枚までです！");
     return;
   }
-
   deck.length = 0;
   newDeck.forEach(card => deck.push(card));
   renderDeck();
 }
-    
   function renderCards(filteredCards = cards) {
     const cardList = document.getElementById("cardList");
     cardList.innerHTML = "";
-
     filteredCards.forEach(card => {
       const cardElement = document.createElement("div");
       cardElement.className = "card";
@@ -434,15 +410,12 @@ function loadDeckFromCode() {
       cardList.appendChild(cardElement);
     });
   }
-    
   function filterCards() {
     const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
     const filtered = cards.filter(card => card.name.toLowerCase().includes(keyword));
     renderCards(filtered);
   }
-
-  renderCards();
-    
+  renderCards(); 
   </script>
 </body>
 </html>
