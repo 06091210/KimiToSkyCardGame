@@ -10,50 +10,41 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
     #menu-button {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-
-  /* 不要な装飾を削除 ↓ */
-  background: none;
-  border: none;
-  padding: 0;
-
-  font-size: 24px;
-  font-weight: bold;
-  z-index: 1000;
-  cursor: pointer;
-}
-
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 1000;
+      cursor: pointer;
+    }
     html, body {
       height: 100%;
       width: 100%;
     }
-
     body {
       display: flex;
       flex-direction: row;
       font-family: sans-serif;
     }
-
     #header-area {
-  width: 200px;
-  min-width: 150px;
-  background-color: #f0f0f0;
-  padding: 10px;
-  height: 100vh; /* ← 高さを画面いっぱいに */
-  box-sizing: border-box;
-  margin-top: 0;  /* ← ここも忘れずリセット */
-}
-
+      width: 200px;
+      min-width: 150px;
+      background-color: #f0f0f0;
+      padding: 10px;
+      height: 100vh;
+      box-sizing: border-box;
+      margin-top: 0;
+    }
     #viewer {
       flex-grow: 1;
       border: none;
       height: 100vh;
     }
-
     h1:first-of-type {
       position: fixed;
       top: 10px;
@@ -64,62 +55,45 @@
       padding: 5px;
       cursor: pointer;
     }
-
     h2 {
       cursor: pointer;
       margin: 10px 0;
     }
-
     hr {
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div id="menu-button" onclick="toggleHeader()">≡</div> <!-- ← ここを変更 -->
-
+  <div id="menu-button" onclick="toggleHeader()">≡</div>
   <div id="header-area">
-    <!--<h1>きみとスカイカードゲーム</h1>-->
-    <div style="margin-top: 50px;"> <!-- ← 中身を下げる -->
+    <div style="margin-top: 50px;"> 
       <h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
       <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
       <!--<h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>-->
       <h2 onclick="loadHTML('scoreboard.html')">スコアボード</h2>
-      <!--<h2 onclick="loadHTML('ksaccount.html')">KSアカウント</h2>-->
       <h2 onclick="loadHTML('Test.html')">KSアカウント</h2>
       <h2 onclick="loadHTML('login.html')">ログイン</h2>
       <hr>
     </div>
   </div>
-
   <iframe id="viewer" src=""></iframe>
-
   <script>
     const iframe = document.getElementById("viewer");
     let sharedValue = "";
-    
-    /*function loadHTML(file) {
-      const viewer = document.getElementById('viewer');
-      viewer.src = file;
-    }*/
-
     function toggleHeader() {
       const header = document.getElementById('header-area');
       header.style.display = (header.style.display === "none") ? "block" : "none";
     }
-
     function loadHTML(file) {
       iframe.src = file;
     }
-
     window.addEventListener("message", (event) => {
       const data = event.data;
-
       if (data.type === "valueInput") {
         sharedValue = data.value;
-        console.log("受信値:", sharedValue);
+        //console.log("受信値:", sharedValue);
       }
-
       if (data.type === "requestValue") {
         iframe.contentWindow.postMessage({
           type: "setValue",
@@ -127,7 +101,6 @@
         }, "*");
       }
     });
-
   </script>
 </body>
 </html>
