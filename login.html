@@ -26,32 +26,26 @@
   <title>入力ページ</title>
 </head>
 <body>
-  <input type="text" id="nameInput" placeholder="名前を入力"><br><br>
-  <input type="text" id="idInput" placeholder="6桁のIDを入力"><br><br>
+  <input type="text" id="nameInput" placeholder="ユーザー名"><br>
+  <input type="text" id="idInput" placeholder="ID"><br>
   <button onclick="sendValue()">ログイン</button>
-
   <script>
-    // IDと対応する名前のマップ（IDは送信しない）
     const idNameMap = {
       "123456": "スカイ",
       "654321": "フォーエバー",
       "111111": "Firp"
     };
-
     function sendValue() {
       const name = document.getElementById("nameInput").value.trim();
       const id = document.getElementById("idInput").value.trim();
-
       if (name === "" || id === "") {
         alert("名前とIDを両方入力してください。");
         return;
       }
-      // IDが存在し、対応する名前と一致するかチェック
       if (!(id in idNameMap) || idNameMap[id] !== name) {
         alert("IDと名前が一致しません。");
         return;
       }
-      // 認証成功 → 名前のみ送信（IDは送信しない）
       parent.postMessage({ type: "valueInput", value: name }, "*");
       alert("ログインしました！");
     }
