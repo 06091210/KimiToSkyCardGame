@@ -10,18 +10,15 @@
       margin: 0;
       padding: 20px;
     }
-
     h1 {
       text-align: center;
     }
-
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 20px;
       padding: 20px;
     }
-
     .card {
       background: #fff;
       border-radius: 10px;
@@ -30,23 +27,18 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-
     .card:hover {
       transform: scale(1.05);
     }
-
     .card img {
       width: 100%;
       height: 150px;
       object-fit: cover;
     }
-
     .card .info {
       padding: 10px;
       text-align: center;
     }
-
-    /* モーダル */
     .modal {
       display: none;
       position: fixed;
@@ -58,7 +50,6 @@
       overflow: auto;
       background-color: rgba(0,0,0,0.8);
     }
-
     .modal-content {
       background-color: #fff;
       margin: 10% auto;
@@ -68,12 +59,10 @@
       text-align: center;
       position: relative;
     }
-
     .modal-content img {
       width: 100%;
       border-radius: 10px;
     }
-
     .close {
       position: absolute;
       top: 10px;
@@ -85,12 +74,8 @@
 </head>
 <body>
   <h1>カード図鑑</h1>
-
   <div class="card-grid" id="cardGrid">
-    <!-- カードはJavaScriptで追加されます -->
   </div>
-
-  <!-- モーダル -->
   <div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
@@ -99,7 +84,6 @@
       <p id="modalDesc"></p>
     </div>
   </div>
-
   <script>
     const cards = [
 { title: "アビス・メモリア", img: "images/abisumemoria.jpg",　description: "" },
@@ -356,9 +340,7 @@
 { title: "勇者への手助け　ナギ", img: "images/yushahenotedasukenagi.jpg",　description: "" },
 { title: "絶呪・万象喰らい", img: "images/zetujubanshogurai.jpg",　description: "" }
     ];
-
     const cardGrid = document.getElementById("cardGrid");
-
     cards.forEach((card, index) => {
       const cardElement = document.createElement("div");
       cardElement.className = "card";
@@ -371,7 +353,6 @@
       cardElement.onclick = () => showModal(card);
       cardGrid.appendChild(cardElement);
     });
-
     function showModal(card) {
       document.getElementById("modalImg").src = card.img;
       document.getElementById("modalTitle").textContent = card.title;
