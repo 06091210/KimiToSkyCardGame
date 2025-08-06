@@ -12,7 +12,6 @@
       height: 100vh;
       background: #f5f5f5;
     }
-
     .scoreboard {
       display: flex;
       justify-content: space-around;
@@ -21,34 +20,28 @@
       border-radius: 10px;
       overflow: hidden;
     }
-
     .team {
       flex: 1;
       text-align: center;
       padding: 20px;
       color: white;
     }
-
     .red {
       background: #d32f2f;
     }
-
     .blue {
       background: #1976d2;
     }
-
     .score {
       font-size: 5rem;
       margin: 20px 0;
     }
-
     button {
       font-size: 1.5rem;
       margin: 5px;
       padding: 10px 20px;
       cursor: pointer;
     }
-
     input.team-name {
       font-size: 1.5rem;
       text-align: center;
@@ -58,7 +51,6 @@
       color: white;
       font-weight: bold;
     }
-
     input.team-name:focus {
       outline: none;
       background-color: rgba(255, 255, 255, 0.2);
@@ -70,37 +62,22 @@
     <div class="team red">
       <input class="team-name" type="text" value="">
       <div class="score" id="score-red" onclick="changeScore('red', 1)">0</div>
-      <!--<button onclick="changeScore('red', 1)">＋1</button>-->
       <button onclick="changeScore('red', -1)">−1</button>
     </div>
     <div class="team blue">
       <input class="team-name" type="text" value="">
       <div class="score" id="score-blue" onclick="changeScore('blue', 1)">0</div>
-      <!--<button onclick="changeScore('blue', 1)">＋1</button>-->
       <button onclick="changeScore('blue', -1)">−1</button>
     </div>
   </div>
-
   <script>
     let scores = { red: 0, blue: 0 };
-
     function changeScore(team, delta) {
       scores[team] += delta;
       if (scores[team] < 0) scores[team] = 0;
       document.getElementById(`score-${team}`).textContent = scores[team];
     }
-
-    // キーボード操作対応
-    /*document.addEventListener('keydown', (e) => {
-      switch (e.key.toLowerCase()) {
-        case 'a': changeScore('red', 1); break;
-        case 'z': changeScore('red', -1); break;
-        case 'k': changeScore('blue', 1); break;
-        case 'm': changeScore('blue', -1); break;
-      }
-    });*/
     document.addEventListener('keydown', (e) => {
-  // 入力中のとき（input要素にフォーカスがあるとき）は処理をスキップ
   if (document.activeElement.tagName === 'INPUT') return;
   switch (e.key.toLowerCase()) {
     case 'a': changeScore('red', 1); break;
