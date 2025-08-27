@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -49,6 +49,76 @@
         })
         .catch(error => {
           document.getElementById("result").textContent = "エラーが発生しました: " + error;
+        });
+    }
+  </script>
+</body>
+</html>-->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>KSポイント</title>
+</head>
+<body>
+  <form id="myForm">
+    <input type="hidden" name="name" id="nameInput">
+    <input type="number" name="ks" placeholder="KSポイント"><br>
+    <input type="number" name="winlose" placeholder="勝敗数"><br>
+    <input type="text" name="cards" placeholder="所持カード"><br>
+    <button type="submit">上書き</button>
+  </form>
+
+  <button onclick="loadMessage()">取得</button>
+  <div id="result"></div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwoc6e2CMHDI-VsCKb3pWsdmmOCOQeltBWXv4ELmwCpJy3Cm4xbVKks4T0v-mm4fKl8/exec"; 
+    const nameInput = document.getElementById("nameInput");
+
+    // フォーム送信 → doPost
+    document.getElementById("myForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = new FormData(form);
+
+      fetch(GAS_URL, {
+        method: "POST",
+        body: data
+      }).then(r => r.text())
+        .then(t => alert(t));
+    });
+
+    // iframeから名前を受け取る
+    parent.postMessage({ type: "requestValue" }, "*");
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        const name = event.data.value;
+        nameInput.value = name;
+        loadMessage();
+      }
+    });
+
+    // データ取得 → doGet
+    function loadMessage() {
+      const inputUsername = nameInput.value.trim();
+      fetch(`${GAS_URL}?name=${encodeURIComponent(inputUsername)}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultDiv = document.getElementById("result");
+          if (data.error) {
+            resultDiv.textContent = data.error;
+          } else {
+            resultDiv.innerHTML = `
+              <b>${data.name}</b><br>
+              KSポイント: ${data.ks}<br>
+              勝敗数: ${data.winlose}<br>
+              所持カード: ${data.cards}
+            `;
+          }
+        })
+        .catch(error => {
+          document.getElementById("result").textContent = "エラー: " + error;
         });
     }
   </script>
