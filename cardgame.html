@@ -318,6 +318,12 @@
     img.alt = card.name;
     div.appendChild(img);
     return div;
+//↓追加
+img.className = "card";
+img.draggable = true;
+img.dataset.id = card.id; // ←ここ重要
+drawnCardArea.appendChild(img);
+//↑追加
   }
   
   function loadDeckFromCode() {
@@ -428,6 +434,27 @@ function enableDragMove(cardElement) {
   });
 }
   //↓追加
+  function saveCardState() {
+  const drawnCards = document.querySelectorAll('#drawnCardArea .card');
+  const cardStates = [];
+
+  drawnCards.forEach(cardEl => {
+    const rect = cardEl.getBoundingClientRect(); // 表示上の位置
+    const id = parseInt(cardEl.dataset.id);      // card要素に data-id を設定しておく
+    cardStates.push({
+      id: id,
+      x: rect.left + window.scrollX,   // ページ全体のX座標
+      y: rect.top + window.scrollY     // ページ全体のY座標
+    });
+  });
+
+  // GASに送信
+  fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+    method: "POST",
+    body: JSON.stringify(cardStates)
+  }).then(res => res.json())
+    .then(res => console.log(res));
+}
 //↑追加
 </script>
 </body>
