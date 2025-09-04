@@ -25,7 +25,7 @@
   </style>
 </head>
 <body>
-<button onclick="saveBoardState()">Save</button>
+<button onclick="saveBoardState()">save</button>
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 <div id="drawnCardArea" style="display: none;">
@@ -449,7 +449,7 @@ function enableDragMove(cardElement) {
   });
 
   // GASに送信
-  fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+  fetch("https://script.google.com/macros/s/AKfycbyPC5ihHB3F0AKNyJziikYVam7WqXYOR5WsRD1noMI6mCElnA8kfSzOuXREeK_uPs9z-w/exec", {
     method: "POST",
     body: JSON.stringify(cardStates)
   }).then(res => res.json())
