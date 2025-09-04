@@ -442,7 +442,7 @@ function enableDragMove(cardElement) {
   async function saveBoardState() {
   const boardState = getCurrentBoardState();
   
-  await fetch('https://script.google.com/macros/s/あなたのGAS_URL/exec', {
+  await fetch('https://script.google.com/macros/s/AKfycbw7OVEm5a56wgSPedv54sObPCQCbd3XwAKJf2ybNku3ybM21jOZwKuw3sHaENwEL1uIAQ/exec', {
     method: 'POST',
     body: JSON.stringify({ boardState }),
     headers: {
