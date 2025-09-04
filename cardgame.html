@@ -25,7 +25,6 @@
   </style>
 </head>
 <body>
-<button onclick="saveCardState()">SaveCard</button>
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 <div id="drawnCardArea" style="display: none;">
@@ -303,20 +302,20 @@
 { id: 269, name: "影桜衆ノ探索者　ゆら", image: "images/eoshunotansakushayura.jpg", maxCopies: 5 },
 { id: 270, name: "シノビノサダメ〜影桜衆〜", image: "images/shinobinosadame.jpg", maxCopies: 5 }
   ];
-  
   const deck = [];
-  
   function createCardElement(card) {
-  const img = document.createElement("img");
-  img.src = card.image;
-  img.className = "card";
-  img.draggable = true;
-  img.dataset.id = card.id; // ←ここでIDをセット
-  return img;
-  drawnArea.style.display = "block";
-
-}
-  
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.draggable = true;
+    div.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', card.id); 
+    });
+    const img = document.createElement('img');
+    img.src = card.image;
+    img.alt = card.name;
+    div.appendChild(img);
+    return div;
+  }
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
     if (!code) return;
@@ -349,9 +348,7 @@
       <img src="images/brank.jpeg" alt="カードを引く" style="width: 100%; border-radius: 4px;">
     `;
   }
-  
   document.getElementById('drawnCardArea').addEventListener('click', drawRandomCard);
-  
   function drawRandomCard() {
   if (deck.length === 0) {
     alert("デッキにもうカードがありません！");
@@ -372,7 +369,6 @@
   drawnArea.appendChild(cardElement);
   enableDragMove(cardElement);
 }
-  
 function enableDragMove(cardElement) {
   let offsetX = 0;
   let offsetY = 0;
@@ -424,30 +420,6 @@ function enableDragMove(cardElement) {
     }
   });
 }
-  //↓追加
-  function saveCardState() {
-  const drawnCards = document.querySelectorAll('#drawnCardArea .card');
-  const cardStates = [];
-
-  drawnCards.forEach(cardEl => {
-    const rect = cardEl.getBoundingClientRect(); // 表示上の位置
-    const id = parseInt(cardEl.dataset.id);      // card要素に data-id を設定しておく
-    cardStates.push({
-      id: id,
-      x: rect.left + window.scrollX,   // ページ全体のX座標
-      y: rect.top + window.scrollY     // ページ全体のY座標
-    });
-  });
-
-  // GASに送信
-    fetch("https://script.google.com/macros/s/AKfycbyPC5ihHB3F0AKNyJziikYVam7WqXYOR5WsRD1noMI6mCElnA8kfSzOuXREeK_uPs9z-w/exec", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(cardStates)
-})
-
-}
-//↑追加
 </script>
 </body>
 </html>
