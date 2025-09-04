@@ -303,7 +303,9 @@
 { id: 269, name: "影桜衆ノ探索者　ゆら", image: "images/eoshunotansakushayura.jpg", maxCopies: 5 },
 { id: 270, name: "シノビノサダメ〜影桜衆〜", image: "images/shinobinosadame.jpg", maxCopies: 5 }
   ];
+  
   const deck = [];
+  
   function createCardElement(card) {
     const div = document.createElement('div');
     div.className = 'card';
@@ -317,6 +319,7 @@
     div.appendChild(img);
     return div;
   }
+  
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
     if (!code) return;
@@ -349,7 +352,9 @@
       <img src="images/brank.jpeg" alt="カードを引く" style="width: 100%; border-radius: 4px;">
     `;
   }
+  
   document.getElementById('drawnCardArea').addEventListener('click', drawRandomCard);
+  
   function drawRandomCard() {
   if (deck.length === 0) {
     alert("デッキにもうカードがありません！");
@@ -370,6 +375,7 @@
   drawnArea.appendChild(cardElement);
   enableDragMove(cardElement);
 }
+  
 function enableDragMove(cardElement) {
   let offsetX = 0;
   let offsetY = 0;
@@ -422,60 +428,6 @@ function enableDragMove(cardElement) {
   });
 }
   //↓追加
-function renderCard(card) {
-  const cardDiv = document.createElement('div');
-  cardDiv.classList.add('card');
-
-  // カード情報を data-* 属性に付与
-  cardDiv.dataset.id = card.id;
-  cardDiv.dataset.name = card.name;
-
-  // 画像表示
-  const img = document.createElement('img');
-  img.src = card.image;
-  img.alt = card.name;
-  img.style.width = "100px"; // 表示サイズ例
-  cardDiv.appendChild(img);
-
-  // 適当に配置（例: ランダム座標）
-  cardDiv.style.position = "absolute";
-  cardDiv.style.left = Math.random() * 300 + "px";
-  cardDiv.style.top = Math.random() * 200 + "px";
-
-  document.getElementById('drawnCardArea').appendChild(cardDiv);
-}
-  cards.forEach(card => renderCard(card));
-  
-  function getCurrentBoardState() {
-  const cardsOnBoard = document.querySelectorAll('#drawnCardArea .card');
-  const boardState = [];
-
-  cardsOnBoard.forEach(card => {
-    const rect = card.getBoundingClientRect(); // 画面上の座標
-    boardState.push({
-      id: Number(card.dataset.id),         // 文字列 → 数値に変換
-      name: card.dataset.name,
-      x: rect.x,
-      y: rect.y
-    });
-  });
-
-  return boardState;
-}
-  
-  async function saveBoardState() {
-  const boardState = getCurrentBoardState();
-  
-  await fetch('https://script.google.com/macros/s/AKfycbw5T-0m6KWCckFpGfFKrsLcLo6pesglvyo-vDoYcXrusx9A-Hxw6ybX970N8_dYne2lYQ/exec', {
-    method: 'POST',
-    body: JSON.stringify({ boardState }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  alert('保存しました！');
-}
 //↑追加
 </script>
 </body>
