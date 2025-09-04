@@ -307,24 +307,24 @@
   const deck = [];
   
   function createCardElement(card) {
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.draggable = true;
-    div.addEventListener('dragstart', e => {
-      e.dataTransfer.setData('text/plain', card.id); 
-    });
-    const img = document.createElement('img');
-    img.src = card.image;
-    img.alt = card.name;
-    div.appendChild(img);
-    return div;
-//↓追加
-img.className = "card";
-img.draggable = true;
-img.dataset.id = card.id; // ←ここ重要
-drawnCardArea.appendChild(img);
-//↑追加
-  }
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.draggable = true;
+  div.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('text/plain', card.id); 
+  });
+
+  const img = document.createElement('img');
+  img.src = card.image;
+  img.alt = card.name;
+
+  // ←ここで dataset をセット
+  img.dataset.id = card.id;
+
+  div.appendChild(img);
+
+  return div;  // 最後にdivを返す
+}
   
   function loadDeckFromCode() {
     const code = document.getElementById('deckCode').value.trim();
