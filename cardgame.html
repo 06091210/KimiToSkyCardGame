@@ -26,7 +26,7 @@
 </head>
 <body>
 <button onclick="saveBoardState()">Save</button>
-<textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x3,4x3"></textarea><br>
+<textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 <div id="drawnCardArea" style="display: none;">
 </div>
@@ -422,6 +422,30 @@ function enableDragMove(cardElement) {
   });
 }
   //↓追加
+function renderCard(card) {
+  const cardDiv = document.createElement('div');
+  cardDiv.classList.add('card');
+
+  // カード情報を data-* 属性に付与
+  cardDiv.dataset.id = card.id;
+  cardDiv.dataset.name = card.name;
+
+  // 画像表示
+  const img = document.createElement('img');
+  img.src = card.image;
+  img.alt = card.name;
+  img.style.width = "100px"; // 表示サイズ例
+  cardDiv.appendChild(img);
+
+  // 適当に配置（例: ランダム座標）
+  cardDiv.style.position = "absolute";
+  cardDiv.style.left = Math.random() * 300 + "px";
+  cardDiv.style.top = Math.random() * 200 + "px";
+
+  document.getElementById('drawnCardArea').appendChild(cardDiv);
+}
+  cards.forEach(card => renderCard(card));
+  
   function getCurrentBoardState() {
   const cardsOnBoard = document.querySelectorAll('#drawnCardArea .card');
   const boardState = [];
@@ -429,8 +453,8 @@ function enableDragMove(cardElement) {
   cardsOnBoard.forEach(card => {
     const rect = card.getBoundingClientRect(); // 画面上の座標
     boardState.push({
-      id: card.dataset.id,         // 例: card要素に data-id 属性を付与しておく
-      name: card.dataset.name,     // 名前も記録したければ
+      id: Number(card.dataset.id),         // 文字列 → 数値に変換
+      name: card.dataset.name,
       x: rect.x,
       y: rect.y
     });
