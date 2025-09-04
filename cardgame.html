@@ -25,6 +25,7 @@
   </style>
 </head>
 <body>
+<button onclick="saveBoardState()">Save</button>
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 <div id="drawnCardArea" style="display: none;">
@@ -420,6 +421,38 @@ function enableDragMove(cardElement) {
     }
   });
 }
+  //↓追加
+  function getCurrentBoardState() {
+  const cardsOnBoard = document.querySelectorAll('#drawnCardArea .card');
+  const boardState = [];
+
+  cardsOnBoard.forEach(card => {
+    const rect = card.getBoundingClientRect(); // 画面上の座標
+    boardState.push({
+      id: card.dataset.id,         // 例: card要素に data-id 属性を付与しておく
+      name: card.dataset.name,     // 名前も記録したければ
+      x: rect.x,
+      y: rect.y
+    });
+  });
+
+  return boardState;
+}
+  
+  async function saveBoardState() {
+  const boardState = getCurrentBoardState();
+  
+  await fetch('https://script.google.com/macros/s/あなたのGAS_URL/exec', {
+    method: 'POST',
+    body: JSON.stringify({ boardState }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  alert('保存しました！');
+}
+//↑追加
 </script>
 </body>
 </html>
