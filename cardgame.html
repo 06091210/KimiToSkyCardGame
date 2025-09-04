@@ -307,23 +307,14 @@
   const deck = [];
   
   function createCardElement(card) {
-  const div = document.createElement('div');
-  div.className = 'card';
-  div.draggable = true;
-  div.addEventListener('dragstart', e => {
-    e.dataTransfer.setData('text/plain', card.id); 
-  });
-
-  const img = document.createElement('img');
+  const img = document.createElement("img");
   img.src = card.image;
-  img.alt = card.name;
+  img.className = "card";
+  img.draggable = true;
+  img.dataset.id = card.id; // ←ここでIDをセット
+  return img;
+  drawnArea.style.display = "block";
 
-  // ←ここで dataset をセット
-  img.dataset.id = card.id;
-
-  div.appendChild(img);
-
-  return div;  // 最後にdivを返す
 }
   
   function loadDeckFromCode() {
@@ -449,11 +440,12 @@ function enableDragMove(cardElement) {
   });
 
   // GASに送信
-  fetch("https://script.google.com/macros/s/AKfycbyPC5ihHB3F0AKNyJziikYVam7WqXYOR5WsRD1noMI6mCElnA8kfSzOuXREeK_uPs9z-w/exec", {
-    method: "POST",
-    body: JSON.stringify(cardStates)
-  }).then(res => res.json())
-    .then(res => console.log(res));
+    fetch("https://script.google.com/macros/s/AKfycbyPC5ihHB3F0AKNyJziikYVam7WqXYOR5WsRD1noMI6mCElnA8kfSzOuXREeK_uPs9z-w/exec", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(cardStates)
+})
+
 }
 //↑追加
 </script>
