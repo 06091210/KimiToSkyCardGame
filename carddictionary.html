@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -382,4 +382,265 @@
     }
   </script>
 </body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>カード図鑑＋デッキメーカー</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    /* カード図鑑 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .card .info {
+      padding: 10px;
+      text-align: center;
+    }
+    /* モーダル */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+    }
+    .modal-content img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 48px;
+      cursor: pointer;
+    }
+    .modal button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      background: #337ab7;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .modal button:hover {
+      background: #286090;
+    }
+    /* デッキ */
+    .card-container, .deck-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .deck-container .card {
+      width: 100px;
+    }
+    .card img {
+      width: 100%;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>カード図鑑</h1>
+  <input type="text" id="cardFilter" placeholder="カード名を検索" oninput="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
+  <div class="card-grid" id="cardGrid"></div>
+
+  <!-- モーダル -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img id="modalImg" src="" alt="">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <button onclick="addToDeckFromModal()">デッキに追加</button>
+    </div>
+  </div>
+
+  <h2>デッキ</h2>
+  <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
+  <button onclick="generateDeckCode()">コードを生成</button>
+  <button onclick="loadDeckFromCode()">コードから復元</button>
+  <div id="deckList" class="deck-container"></div>
+
+  <script>
+    const cards = [
+      { id: 1, name: "アビス・メモリア", image: "images/abisumemoria.jpg", description: "", maxCopies: 5 },
+      { id: 2, name: "アビスメモリア　ギヌス", image: "images/abisumemoriaginusu.jpg", description: "", maxCopies: 5 },
+      { id: 3, name: "アビスメモリア　スカイ", image: "images/abisumemoriasky.jpg", description: "", maxCopies: 5 },
+      { id: 4, name: "アビスパーティ　グロスティ", image: "images/abisupatexigurosutexi.jpg", description: "", maxCopies: 5 },
+      { id: 5, name: "アビスソウル　アグロス", image: "images/abisusouruagurosu.jpg", description: "", maxCopies: 5 }
+    ];
+
+    const cardGrid = document.getElementById("cardGrid");
+    const deck = [];
+    let selectedCard = null;
+
+    // カード図鑑描画
+    function renderCards(filteredCards = cards) {
+      cardGrid.innerHTML = "";
+      filteredCards.forEach(card => {
+        const cardElement = document.createElement("div");
+        cardElement.className = "card";
+        cardElement.innerHTML = `
+          <img src="${card.image}" alt="${card.name}">
+          <div class="info"><h3>${card.name}</h3></div>
+        `;
+        cardElement.onclick = () => showModal(card);
+        cardGrid.appendChild(cardElement);
+      });
+    }
+
+    function filterCards() {
+      const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
+      const filtered = cards.filter(card => card.name.toLowerCase().includes(keyword));
+      renderCards(filtered);
+    }
+
+    // モーダル
+    function showModal(card) {
+      selectedCard = card;
+      document.getElementById("modalImg").src = card.image;
+      document.getElementById("modalTitle").textContent = card.name;
+      document.getElementById("modalDesc").textContent = card.description;
+      document.getElementById("modal").style.display = "block";
+    }
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function addToDeckFromModal() {
+      if (selectedCard) {
+        addToDeck(selectedCard);
+        closeModal();
+      }
+    }
+
+    // デッキ関連
+    function renderDeck() {
+      const deckList = document.getElementById("deckList");
+      deckList.innerHTML = "";
+      deck.forEach((card, index) => {
+        const cardElement = document.createElement("div");
+        cardElement.className = "card";
+        cardElement.innerHTML = `<img src="${card.image}" alt="${card.name}">`;
+        cardElement.onclick = () => removeFromDeck(index);
+        deckList.appendChild(cardElement);
+      });
+    }
+
+    function addToDeck(card) {
+      if (deck.length >= 50) {
+        alert("デッキは50枚までです！");
+        return;
+      }
+      const sameCardCount = deck.filter(c => c.id === card.id).length;
+      if (sameCardCount >= card.maxCopies) {
+        alert(`このカード「${card.name}」はデッキに${card.maxCopies}枚までしか入れられません！`);
+        return;
+      }
+      deck.push(card);
+      renderDeck();
+    }
+
+    function removeFromDeck(index) {
+      deck.splice(index, 1);
+      renderDeck();
+    }
+
+    function generateDeckCode() {
+      const counts = {};
+      deck.forEach(card => {
+        counts[card.id] = (counts[card.id] || 0) + 1;
+      });
+      const code = Object.entries(counts).map(([id, count]) => `${id}x${count}`).join(',');
+      const deckCodeTextarea = document.getElementById("deckCode");
+      deckCodeTextarea.value = code;
+      if (!code) {
+        alert("デッキが空です。カードを追加してください。");
+        return;
+      }
+      navigator.clipboard.writeText(code)
+        .then(() => alert("デッキコードをクリップボードにコピーしました！"))
+        .catch(() => alert("コピーに失敗しました。手動でコピーしてください。"));
+    }
+
+    function loadDeckFromCode() {
+      const code = document.getElementById("deckCode").value.trim();
+      if (!code) return;
+      const newDeck = [];
+      const entries = code.split(',');
+      for (const entry of entries) {
+        const [idStr, countStr] = entry.split('x');
+        const id = parseInt(idStr);
+        const count = parseInt(countStr);
+        const card = cards.find(c => c.id === id);
+        if (!card || isNaN(count) || count <= 0 || count > card.maxCopies) {
+          alert(`無効なカードIDや枚数です: ${entry}`);
+          return;
+        }
+        for (let i = 0; i < count; i++) {
+          newDeck.push(card);
+        }
+      }
+      if (newDeck.length > 50) {
+        alert("デッキは50枚までです！");
+        return;
+      }
+      deck.length = 0;
+      newDeck.forEach(card => deck.push(card));
+      renderDeck();
+    }
+
+    // 初期描画
+    renderCards();
+    renderDeck();
+  </script>
+</body>
 </html>
+
