@@ -458,7 +458,7 @@
       font-size: 48px;
       cursor: pointer;
     }
-    .modal button {
+    .modal button, select {
       margin-top: 15px;
       padding: 10px 20px;
       border: none;
@@ -492,7 +492,7 @@
   <div class="card-grid" id="cardGrid"></div>
 
   <!-- モーダル -->
-  <div id="modal" class="modal">
+  <!--<div id="modal" class="modal">
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
       <img id="modalImg" src="" alt="">
@@ -500,7 +500,28 @@
       <p id="modalDesc"></p>
       <button onclick="addToDeckFromModal()">デッキに追加</button>
     </div>
+  </div>-->
+  <!-- モーダル -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img id="modalImg" src="" alt="">
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+
+    <!-- 枚数選択 -->
+    <label for="cardCount">枚数:</label>
+    <select id="cardCount">
+      <option value="1">1枚</option>
+      <option value="2">2枚</option>
+      <option value="3">3枚</option>
+      <option value="4">4枚</option>
+      <option value="5">5枚</option>
+    </select>
+
+    <button onclick="addToDeckFromModal()">デッキに追加</button>
   </div>
+</div>
 
   <h2>デッキ</h2>
   <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
@@ -819,12 +840,23 @@
       document.getElementById("modal").style.display = "none";
     }
 
-    function addToDeckFromModal() {
+    /*function addToDeckFromModal() {
       if (selectedCard) {
         addToDeck(selectedCard);
         closeModal();
       }
-    }
+    }*/
+    function addToDeckFromModal() {
+  if (!selectedCard) return;
+
+  const count = parseInt(document.getElementById("cardCount").value, 10);
+
+  for (let i = 0; i < count; i++) {
+    addToDeck(selectedCard);
+  }
+
+  closeModal();
+}
 
     // デッキ関連
     function renderDeck() {
