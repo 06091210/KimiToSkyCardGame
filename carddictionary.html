@@ -388,7 +388,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>カード図鑑＋デッキメーカー</title>
+  <title>カード図鑑</title>
   <style>
     body {
       font-family: sans-serif;
@@ -460,15 +460,12 @@
     }
     button, select {
       margin-top: 15px;
-      padding: 10px 20px;
+      padding: 3.2px 20px;
       border: none;
       background: #337ab7;
       color: white;
       border-radius: 6px;
       cursor: pointer;
-    }
-    .modal button:hover {
-      background: #286090;
     }
     /* デッキ */
     .card-container, .deck-container {
@@ -500,10 +497,6 @@
   display: none; /* 初期は非表示 */
   z-index: 1000;
   transition: background-color 0.3s;
-}
-
-#toTopBtn:hover {
-  background-color: #0056b3;
 }
     /* 共通：カード一覧のレイアウト */
 #cardGrid, #deckList {
