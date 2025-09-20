@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -68,9 +68,9 @@
   <div id="menu-button" onclick="toggleHeader()">≡</div>
   <div id="header-area">
     <div style="margin-top: 50px;"> 
-      <!--<h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>-->
+      <!--<h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>
       <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
-      <!--<h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>-->
+      <!--<h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>
       <h2 onclick="loadHTML('scoreboard.html')">スコアボード</h2>
       <h2 onclick="loadHTML('Test.html')">KSアカウント</h2>
       <h2 onclick="loadHTML('login.html')">ログイン</h2>
@@ -103,4 +103,153 @@
     });
   </script>
 </body>
+</html>-->
+
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>きみとスカイカードゲーム</title>
+
+  <!-- PWA マニフェスト -->
+  <link rel="manifest" href="/manifest.json">
+
+  <!-- iOS 用（Safari） -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="KimiToSkyCardGameIcon.png">
+
+  <!-- テーマカラー -->
+  <meta name="theme-color" content="#0066cc">
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Helvetica Neue", sans-serif;
+      padding: 2rem;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    #menu-button {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 1000;
+      cursor: pointer;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: row;
+    }
+    #header-area {
+      width: 200px;
+      min-width: 150px;
+      background-color: #f0f0f0;
+      padding: 10px;
+      height: 100vh;
+      box-sizing: border-box;
+      margin-top: 0;
+    }
+    #viewer {
+      flex-grow: 1;
+      border: none;
+      height: 100vh;
+    }
+    h1:first-of-type {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 5px;
+      cursor: pointer;
+    }
+    h2 {
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    hr {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="menu-button" onclick="toggleHeader()">≡</div>
+  <div id="header-area">
+    <div style="margin-top: 50px;"> 
+      <!--<h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2>-->
+      <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
+      <!--<h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>-->
+      <h2 onclick="loadHTML('scoreboard.html')">スコアボード</h2>
+      <h2 onclick="loadHTML('Test.html')">KSアカウント</h2>
+      <h2 onclick="loadHTML('login.html')">ログイン</h2>
+      <hr>
+    </div>
+  </div>
+  <iframe id="viewer" src=""></iframe>
+
+  <script>
+    const iframe = document.getElementById("viewer");
+    let sharedValue = "";
+    function toggleHeader() {
+      const header = document.getElementById('header-area');
+      header.style.display = (header.style.display === "none") ? "block" : "none";
+    }
+    function loadHTML(file) {
+      iframe.src = file;
+    }
+    window.addEventListener("message", (event) => {
+      const data = event.data;
+      if (data.type === "valueInput") {
+        sharedValue = data.value;
+        //console.log("受信値:", sharedValue);
+      }
+      if (data.type === "requestValue") {
+        iframe.contentWindow.postMessage({
+          type: "setValue",
+          value: sharedValue
+        }, "*");
+      }
+    });
+    
+    // サービスワーカー登録（PWA のための基本）
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js').then(() => {
+        console.log('Service Worker registered');
+      }).catch((e) => console.error('SW登録失敗', e));
+    }
+
+    // 任意："インストール促進"のための beforeinstallprompt を扱う（Chrome系）
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // 好きなUIでインストール促進ボタンを出すことができます
+      const btn = document.createElement('button');
+      btn.textContent = 'ホーム画面に追加';
+      btn.onclick = async () => {
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        console.log('choice', choice);
+        deferredPrompt = null;
+      };
+      document.body.appendChild(btn);
+    });
+  </script>
+</body>
 </html>
+
