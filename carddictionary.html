@@ -484,12 +484,64 @@
       width: 100%;
       border-radius: 4px;
     }
+    #toTopBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  display: none; /* 初期は非表示 */
+  z-index: 1000;
+  transition: background-color 0.3s;
+}
+
+#toTopBtn:hover {
+  background-color: #0056b3;
+}
+    /* 共通：カード一覧のレイアウト */
+#cardGrid, #deckList {
+  display: grid;
+  gap: 10px;
+  justify-content: center;
+}
+    #cardGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+/* 縦画面（ポートレート）: 5枚ずつ */
+@media (orientation: portrait) {
+  #deckList {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 横画面（ランドスケープ）: 10枚ずつ */
+@media (orientation: landscape) {
+  #deckList {
+    grid-template-columns: repeat(10, 1fr);
+  }
+}
+
   </style>
 </head>
 <body>
   <h1>カード図鑑</h1>
   <input type="text" id="cardFilter" placeholder="カード名を検索" oninput="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
+  <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
+  <button onclick="generateDeckCode()">コードを生成</button>
+  <button onclick="loadDeckFromCode()">コードから復元</button>
+  <div id="deckList" class="deck-container"></div>
   <div class="card-grid" id="cardGrid"></div>
+  <!-- トップへ戻るボタン -->
+  <button id="toTopBtn" onclick="scrollToTop()">↑</button>
+
 
   <!-- モーダル -->
   <!--<div id="modal" class="modal">
@@ -522,12 +574,6 @@
     <button onclick="addToDeckFromModal()">デッキに追加</button>
   </div>
 </div>
-
-  <h2>デッキ</h2>
-  <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
-  <button onclick="generateDeckCode()">コードを生成</button>
-  <button onclick="loadDeckFromCode()">コードから復元</button>
-  <div id="deckList" class="deck-container"></div>
 
   <script>
     const cards = [
@@ -933,6 +979,23 @@
       newDeck.forEach(card => deck.push(card));
       renderDeck();
     }
+    // スクロールして下に行ったらボタンを表示
+window.onscroll = function() {
+  const btn = document.getElementById("toTopBtn");
+  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+};
+
+// 上にスクロールする関数
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
 
     // 初期描画
     renderCards();
