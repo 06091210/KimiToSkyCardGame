@@ -528,15 +528,24 @@
     grid-template-columns: repeat(10, 1fr);
   }
 }
+.deck-code-container {
+  text-align: center;   /* 中央寄せ */
+}
 
+.deck-code-container textarea {
+  display: block;
+  margin: 0 auto;
+}
   </style>
 </head>
 <body>
   <h1>カード図鑑</h1>
   <input type="text" id="cardFilter" placeholder="カード名を検索" oninput="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
-  <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
-  <button onclick="generateDeckCode()">コードを生成</button>
-  <button onclick="loadDeckFromCode()">コードから復元</button>
+  <div class="deck-code-container">
+    <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
+    <button onclick="generateDeckCode()">コードを生成</button>
+    <button onclick="loadDeckFromCode()">コードから復元</button>
+  </div>
   <div id="deckList" class="deck-container"></div>
   <div class="card-grid" id="cardGrid"></div>
   <!-- トップへ戻るボタン -->
