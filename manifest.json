@@ -1,13 +1,14 @@
 {
   "name": "きみとスカイカードゲーム",
   "short_name": "SkyCard",
-  "start_url": ".",
+  "start_url": "/KimiToSkyCardGame/index.html",
+  "scope": "/KimiToSkyCardGame/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#A1E0F9",
   "icons": [
     {
-      "src": "/KimiToSkyCardGameIcon.png",
+      "src": "KimiToSkyCardGameIcon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
