@@ -4,7 +4,7 @@
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0066cc",
+  "theme_color": "#A1E0F9",
   "icons": [
     {
       "src": "KimiToSkyCardGameIcon.png",
