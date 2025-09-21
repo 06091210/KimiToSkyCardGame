@@ -1,6 +1,6 @@
 {
   "name": "きみとスカイカードゲーム",
-  "short_name": "SkyCard",
+  "short_name": "きみとスカイカードゲーム",
   "start_url": "/KimiToSkyCardGame/index.html",
   "scope": "/KimiToSkyCardGame/",
   "display": "standalone",
