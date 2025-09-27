@@ -228,6 +228,7 @@
 <body>
   <h1>カード図鑑</h1>
   <input type="text" id="cardFilter" placeholder="カード名を検索" oninput="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
+  <!--
   <select id="attributeFilter" onchange="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
   <option value="">すべての属性</option>
   <option value="火">火</option>
@@ -240,6 +241,19 @@
   <option value="闇">闇</option>
   <option value="無">無</option>
   </select>
+  -->
+  <div id="attributeFilterBox" style="text-align:center; margin-bottom:20px;">
+  <label><input type="checkbox" name="attr" value="火" onchange="filterCards()"> 火</label>
+  <label><input type="checkbox" name="attr" value="水" onchange="filterCards()"> 水</label>
+  <label><input type="checkbox" name="attr" value="草" onchange="filterCards()"> 草</label>
+  <label><input type="checkbox" name="attr" value="土" onchange="filterCards()"> 土</label>
+  <label><input type="checkbox" name="attr" value="風" onchange="filterCards()"> 風</label>
+  <label><input type="checkbox" name="attr" value="雷" onchange="filterCards()"> 雷</label>
+  <label><input type="checkbox" name="attr" value="光" onchange="filterCards()"> 光</label>
+  <label><input type="checkbox" name="attr" value="闇" onchange="filterCards()"> 闇</label>
+  <label><input type="checkbox" name="attr" value="無" onchange="filterCards()"> 無</label>
+  </div>
+
   <div class="deck-code-container">
     <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
     <button onclick="generateDeckCode()">コードを生成</button>
@@ -404,7 +418,9 @@
 { id: 117, name: "無限螺旋斬", image: "images/mugenrasenzan.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 118, name: "仲良し!スカイ&ひかちゃん", image: "images/nakayoshiskyandhikachan.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 119, name: "名もなきナギの弟", image: "images/namonakinaginoototo.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 120, name: "虹の魂", image: "images/nijinotamashi.jpg",description: "",  description: "", maxCopies: 5 },
+      
+{ id: 120, name: "虹の魂", image: "images/nijinotamashi.jpg",description: "",  description: "", maxCopies: 5, attribute: ["火", "水", "草", "土", "風", "雷", "光", "闇", "無"] },
+      
 { id: 121, name: "人形屋敷のパペットルーム", image: "images/ningyoyashikinopapettorumu.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 122, name: "二刀流武装", image: "images/nitoryubuso.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 123, name: "ノゥツ", image: "images/noxutsu.jpg",description: "",  description: "", maxCopies: 5 },
@@ -471,7 +487,7 @@
 { id: 184, name: "漆葬竜ネザ＝ヴェルト", image: "images/sissoryunezaveruto.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 185, name: "自然妖精ミリュエ", image: "images/sizenyosemiryue.jpg",description: "",  description: "", maxCopies: 5 },
       
-{ id: 186, name: "スカイ", image: "images/sky.jpg",description: "",  description: "", maxCopies: 5, attribute: "風" },
+{ id: 186, name: "スカイ", image: "images/sky.jpg",description: "",  description: "", maxCopies: 5, attribute: ["風"] },
       
 { id: 187, name: "スカイからの招待", image: "images/skykaranoshotai.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 188, name: "スカイの相棒　クマルゥ", image: "images/skynoaibokumaruxu.jpg",description: "",  description: "", maxCopies: 5 },
@@ -564,7 +580,7 @@
     let selectedCard = null;
 
     // カード図鑑描画
-    function renderCards(filteredCards = cards) {
+    /*function renderCards(filteredCards = cards) {
       cardGrid.innerHTML = "";
       filteredCards.forEach(card => {
         const cardElement = document.createElement("div");
@@ -576,14 +592,27 @@
         cardElement.onclick = () => showModal(card);
         cardGrid.appendChild(cardElement);
       });
-    }
-
-    /*function filterCards() {
-      const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
-      const filtered = cards.filter(card => card.name.toLowerCase().includes(keyword));
-      renderCards(filtered);
     }*/
-    function filterCards() {
+    function renderCards(cardsToShow) {
+  const cardGrid = document.getElementById("cardGrid");
+  cardGrid.innerHTML = "";
+
+  cardsToShow.forEach(card => {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    cardDiv.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="info">
+        <h3>${card.name}</h3>
+        <p>属性: ${card.attribute.join("・")}</p>
+      </div>
+    `;
+    cardGrid.appendChild(cardDiv);
+  });
+}
+
+    
+    /*function filterCards() {
   const nameFilter = document.getElementById("cardFilter").value.toLowerCase();
   const attributeFilter = document.getElementById("attributeFilter").value;
 
@@ -594,6 +623,29 @@
   });
 
   renderCards(filteredCards);
+}*/
+    function filterCards() {
+  const nameFilter = document.getElementById("cardFilter").value.toLowerCase();
+
+  // 選択された属性を配列として取得
+  const checkedAttributes = Array.from(document.querySelectorAll('input[name="attr"]:checked'))
+                                .map(cb => cb.value);
+
+  const filteredCards = cards.filter(card => {
+    // カード名フィルター
+    const matchesName = card.name.toLowerCase().includes(nameFilter);
+
+    // 属性フィルター
+    // → 属性が未選択なら全て表示
+    // → 何か選択されている場合、カードの属性配列にいずれかが含まれていれば表示
+    const matchesAttribute = 
+      checkedAttributes.length === 0 || 
+      checkedAttributes.some(attr => card.attribute.includes(attr));
+
+    return matchesName && matchesAttribute;
+  });
+
+  randerCards(filteredCards);
 }
 
     // モーダル
