@@ -609,15 +609,21 @@
 
     function renderCards(filteredCards = cards) {
   cardGrid.innerHTML = "";
+
   filteredCards.forEach(card => {
     const cardElement = document.createElement("div");
     cardElement.className = "card";
+
+    // 属性が配列なら join("・") で表示
+    const attrText = Array.isArray(card.attribute) 
+                     ? card.attribute.join("・") 
+                     : card.attribute || "";
 
     cardElement.innerHTML = `
       <img src="${card.image}" alt="${card.name}">
       <div class="info">
         <h3>${card.name}</h3>
-        <p>属性: ${Array.isArray(card.attribute) ? card.attribute.join("・") : card.attribute}</p>
+        <p>属性: ${attrText}</p>
       </div>
     `;
 
