@@ -606,8 +606,8 @@
 
   renderCards(filteredCards);
 }*/
-
-    function renderCards(filteredCards = cards) {
+//↑元
+    /*function renderCards(filteredCards = cards) {
   cardGrid.innerHTML = "";
 
   filteredCards.forEach(card => {
@@ -666,7 +666,94 @@
     }
     function closeModal() {
       document.getElementById("modal").style.display = "none";
-    }
+    }*/
+
+    // ====== renderCards を差し替え ======
+function renderCards(filteredCards = cards) {
+  cardGrid.innerHTML = "";
+
+  filteredCards.forEach(card => {
+    const cardElement = document.createElement("div");
+    cardElement.className = "card";
+
+    // 属性テキスト（配列 or 文字列 or 空）を正規化して表示
+    const attrText = Array.isArray(card.attribute)
+      ? card.attribute.map(a => a.trim()).filter(Boolean).join("・")
+      : (card.attribute ? String(card.attribute).trim() : "");
+
+    cardElement.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="info">
+        <h3>${card.name}</h3>
+        ${attrText ? `<p>属性: ${attrText}</p>` : ""}
+      </div>
+    `;
+
+    cardElement.onclick = () => showModal(card);
+    cardGrid.appendChild(cardElement);
+  });
+}
+
+// ====== 属性取得ユーティリティ（チェックボックス or multiple select に対応） ======
+function getSelectedAttributes() {
+  // 1) チェックボックス (name="attr")
+  const checked = Array.from(document.querySelectorAll('input[name="attr"]:checked'))
+                       .map(cb => cb.value.trim())
+                       .filter(Boolean);
+  if (checked.length) return checked;
+
+  // 2) multiple select (id="attributeFilter")
+  const select = document.getElementById('attributeFilter');
+  if (select) {
+    return Array.from(select.selectedOptions).map(o => o.value.trim()).filter(Boolean);
+  }
+
+  return [];
+}
+
+// ====== filterCards を差し替え ======
+function filterCards() {
+  const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
+  const selectedAttrs = getSelectedAttributes(); // 選択された属性配列
+
+  // デバッグ（動かないときは開いてConsoleで確認してみて）
+  // console.log("keyword:", keyword, "selectedAttrs:", selectedAttrs);
+
+  const filtered = cards.filter(card => {
+    // name フィルタ
+    const matchesName = !keyword || card.name.toLowerCase().includes(keyword);
+
+    // card.attribute を配列に正規化
+    const cardAttrs = Array.isArray(card.attribute)
+      ? card.attribute.map(a => a.trim()).filter(Boolean)
+      : (card.attribute ? [String(card.attribute).trim()] : []);
+
+    // 属性フィルタ: 選択なし => 全て通す。選択あり => OR（いずれか一致）で通す
+    const matchesAttr = selectedAttrs.length === 0 || selectedAttrs.some(attr => cardAttrs.includes(attr));
+
+    return matchesName && matchesAttr;
+  });
+
+  renderCards(filtered);
+}
+
+// ====== showModal に属性表示を追加（任意だが便利） ======
+function showModal(card) {
+  selectedCard = card;
+  document.getElementById("modalImg").src = card.image;
+  document.getElementById("modalTitle").textContent = card.name;
+
+  const attrText = Array.isArray(card.attribute)
+    ? card.attribute.join("・")
+    : (card.attribute || "");
+
+  // description が空なら属性だけ表示
+  document.getElementById("modalDesc").innerHTML =
+    (card.description ? `<div>${card.description}</div>` : "") +
+    (attrText ? `<div>属性: ${attrText}</div>` : "");
+
+  document.getElementById("modal").style.display = "block";
+}
 
     /*function addToDeckFromModal() {
       if (selectedCard) {
