@@ -580,7 +580,7 @@
     let selectedCard = null;
 
     // カード図鑑描画
-    function renderCards(filteredCards = cards) {
+    /*function renderCards(filteredCards = cards) {
       cardGrid.innerHTML = "";
       filteredCards.forEach(card => {
         const cardElement = document.createElement("div");
@@ -594,7 +594,7 @@
       });
     }
     
-    /*function filterCards() {
+    function filterCards() {
   const nameFilter = document.getElementById("cardFilter").value.toLowerCase();
   const attributeFilter = document.getElementById("attributeFilter").value;
 
@@ -606,6 +606,26 @@
 
   renderCards(filteredCards);
 }*/
+
+    function renderCards(filteredCards = cards) {
+  cardGrid.innerHTML = "";
+  filteredCards.forEach(card => {
+    const cardElement = document.createElement("div");
+    cardElement.className = "card";
+
+    cardElement.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="info">
+        <h3>${card.name}</h3>
+        <p>属性: ${Array.isArray(card.attribute) ? card.attribute.join("・") : card.attribute}</p>
+      </div>
+    `;
+
+    cardElement.onclick = () => showModal(card);
+    cardGrid.appendChild(cardElement);
+  });
+}
+    
     function filterCards() {
   const nameFilter = document.getElementById("cardFilter").value.toLowerCase();
 
