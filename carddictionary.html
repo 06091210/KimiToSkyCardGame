@@ -580,7 +580,7 @@
     let selectedCard = null;
 
     // カード図鑑描画
-    /*function renderCards(filteredCards = cards) {
+    function renderCards(filteredCards = cards) {
       cardGrid.innerHTML = "";
       filteredCards.forEach(card => {
         const cardElement = document.createElement("div");
@@ -594,7 +594,7 @@
       });
     }
     
-    function filterCards() {
+    /*function filterCards() {
   const nameFilter = document.getElementById("cardFilter").value.toLowerCase();
   const attributeFilter = document.getElementById("attributeFilter").value;
 
@@ -606,33 +606,28 @@
 
   renderCards(filteredCards);
 }*/
-    function renderCards(list) {
-  const grid = document.getElementById("cardGrid");
-  grid.innerHTML = "";
-  list.forEach(card => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `
-      <img src="${card.image}" alt="${card.name}">
-      <div class="info">${card.name}</div>
-    `;
-    div.onclick = () => openModal(card);
-    grid.appendChild(div);
-  });
-}
+    function filterCards() {
+  const nameFilter = document.getElementById("cardFilter").value.toLowerCase();
 
-function filterCards() {
-  const text = document.getElementById("cardFilter").value.trim();
-  const selectedAttrs = [...document.querySelectorAll('input[name="attr"]:checked')]
-                         .map(cb => cb.value);
+  // 選択された属性を配列として取得
+  const checkedAttributes = Array.from(document.querySelectorAll('input[name="attr"]:checked'))
+                                .map(cb => cb.value);
 
-  const filtered = cards.filter(c => {
-    const matchText = c.name.includes(text);
-    const matchAttr = selectedAttrs.length === 0 || selectedAttrs.includes(c.attr);
-    return matchText && matchAttr;
+  const filteredCards = cards.filter(card => {
+    // カード名フィルター
+    const matchesName = card.name.toLowerCase().includes(nameFilter);
+
+    // 属性フィルター
+    // → 属性が未選択なら全て表示
+    // → 何か選択されている場合、カードの属性配列にいずれかが含まれていれば表示
+    const matchesAttribute = 
+      checkedAttributes.length === 0 || 
+      checkedAttributes.some(attr => card.attribute.includes(attr));
+
+    return matchesName && matchesAttribute;
   });
 
-  renderCards(filtered);
+  renderCards(filteredCards);
 }
 
     // モーダル
