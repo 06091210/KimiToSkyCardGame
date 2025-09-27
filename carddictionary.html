@@ -716,20 +716,21 @@ function filterCards() {
   const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
   const selectedAttrs = getSelectedAttributes(); // 選択された属性配列
 
-  // デバッグ（動かないときは開いてConsoleで確認してみて）
-  // console.log("keyword:", keyword, "selectedAttrs:", selectedAttrs);
-
   const filtered = cards.filter(card => {
-    // name フィルタ
+    // カード名でフィルタ
     const matchesName = !keyword || card.name.toLowerCase().includes(keyword);
 
-    // card.attribute を配列に正規化
+    // カード側の属性を配列に正規化
     const cardAttrs = Array.isArray(card.attribute)
-      ? card.attribute.map(a => a.trim()).filter(Boolean)
+      ? card.attribute.map(a => a.trim())
       : (card.attribute ? [String(card.attribute).trim()] : []);
 
-    // 属性フィルタ: 選択なし => 全て通す。選択あり => OR（いずれか一致）で通す
-    const matchesAttr = selectedAttrs.length === 0 || selectedAttrs.some(attr => cardAttrs.includes(attr));
+    // ★AND検索★
+    // selectedAttrs が空なら無条件通過
+    // 1つ以上あれば「その全部が cardAttrs に含まれる」カードだけ残す
+    const matchesAttr =
+      selectedAttrs.length === 0 ||
+      selectedAttrs.every(attr => cardAttrs.includes(attr));
 
     return matchesName && matchesAttr;
   });
