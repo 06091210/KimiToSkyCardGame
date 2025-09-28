@@ -300,14 +300,800 @@
 
   <script>
     const cards = [
-{ id: 1, name: "アビス・メモリア", image: "images/abisumemoria.jpg",description: "",  description: "", maxCopies: 5, attribute: ["なし"] },
-{ id: 2, name: "アビスメモリア　ギヌス", image: "images/abisumemoriaginusu.jpg",description: "",  description: "", maxCopies: 5, attribute: ["風"] },
-{ id: 3, name: "アビスメモリア　スカイ", image: "images/abisumemoriasky.jpg",description: "",  description: "", maxCopies: 5, attribute: ["水"] },
-{ id: 4, name: "アビスパーティ　グロスティ", image: "images/abisupatexigurosutexi.jpg",description: "",  description: "", maxCopies: 5, attribute: ["闇"] },
-{ id: 5, name: "アビスソウル　アグロス", image: "images/abisusouruagurosu.jpg",description: "",  description: "", maxCopies: 5, attribute: ["火"] },
-{ id: 6, name: "紅の記憶", image: "images/akanokioku.jpg",description: "",  description: "", maxCopies: 5, attribute: ["火"] },
-{ id: 7, name: "悪魔人形　ナイトメアドール", image: "images/akumaningyonaitomeadoru.jpg",description: "",  description: "", maxCopies: 5, attribute: ["闇"] },
-{ id: 8, name: "暗黒妖精　ノクティア", image: "images/ankokuyosenokutexia.jpg",description: "",  description: "", maxCopies: 5 },
+  {
+    id: 1,
+    name: 'アビス・メモリア',
+    image: 'images/abisumemoria.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ 'なし' ]
+  },
+  {
+    id: 2,
+    name: 'アビスメモリア　ギヌス',
+    image: 'images/abisumemoriaginusu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 3,
+    name: 'アビスメモリア　スカイ',
+    image: 'images/abisumemoriasky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 4,
+    name: 'アビスパーティ　グロスティ',
+    image: 'images/abisupatexigurosutexi.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 5,
+    name: 'アビスソウル　アグロス',
+    image: 'images/abisusouruagurosu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 6,
+    name: '紅の記憶',
+    image: 'images/akanokioku.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 7,
+    name: '悪魔人形　ナイトメアドール',
+    image: 'images/akumaningyonaitomeadoru.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 8,
+    name: '暗黒妖精　ノクティア',
+    image: 'images/ankokuyosenokutexia.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 9,
+    name: 'アオ',
+    image: 'images/ao.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 10,
+    name: '蒼の記憶',
+    image: 'images/aonokioku.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 11,
+    name: 'アース・オブ・ルミナス',
+    image: 'images/asuofruminasu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 12,
+    name: 'バグデリート',
+    image: 'images/baguderito.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '無' ]
+  },
+  {
+    id: 13,
+    name: 'ブラッドオブヴァンパイア',
+    image: 'images/buraddoofvanpaia.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ 'なし' ]
+  },
+  {
+    id: 14,
+    name: '地質妖精グランベイル',
+    image: 'images/chishitsuyoseguranberu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '土' ]
+  },
+  {
+    id: 15,
+    name: '大導鎖神ソル＝アルグレア',
+    image: 'images/daidosashinsoruarugurea.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '草' ]
+  },
+  {
+    id: 16,
+    name: 'ダンジョンウォーク',
+    image: 'images/danjonwhoku.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 17,
+    name: '断罪の炎獄回廊',
+    image: 'images/danzainoengokukairo.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 18,
+    name: '断絶の時鎖(タイムバインド)',
+    image: 'images/danzetsunojisataimubaindo.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 19,
+    name: '堕落の魔法陣',
+    image: 'images/darakunomahojin.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 20,
+    name: '導蔦の番虫ネイロス',
+    image: 'images/dochonobanchunerosu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '土' ]
+  },
+  {
+    id: 21,
+    name: 'Do It Yourself',
+    image: 'images/DoItYourself.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '無' ]
+  },
+  {
+    id: 22,
+    name: '土輪妖精　グランベイル',
+    image: 'images/dorinyouseguranbeiru.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '土' ]
+  },
+  {
+    id: 23,
+    name: 'エディットorデリート',
+    image: 'images/edexittoorderito.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 24,
+    name: 'エンドレス・ネイチャー',
+    image: 'images/endoresunecha.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '草' ]
+  },
+  {
+    id: 25,
+    name: 'える＆ケモ耳フードスカイ',
+    image: 'images/eruandkemomimihudosky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 26,
+    name: 'える(進化後)',
+    image: 'images/erushinkago.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 27,
+    name: 'える(進化前)',
+    image: 'images/erushinkamae.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 28,
+    name: 'FA　ダブルラブ・サンハート',
+    image: 'images/FAdabururabusanhato.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火,草' ]
+  },
+  {
+    id: 29,
+    name: 'FA　ラブ・ビトレイ　カイ',
+    image: 'images/FArabubitoreikai.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 30,
+    name: 'FA　ラブ・チュリスラッシュ',
+    image: 'images/FArabuchurisurasshu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 31,
+    name: 'FA　ラブ・ゴースト　ビット',
+    image: 'images/FArabugosutobitto.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 32,
+    name: 'FA　ラブ・キュアスカイ',
+    image: 'images/FArabukyuasky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 33,
+    name: 'FA　ラブ・パンダシャンマオ',
+    image: 'images/FArabupandashanmao.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 34,
+    name: 'FA　ラブ・ライオネル',
+    image: 'images/FAraburaioneru.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 35,
+    name: 'FA　ラブ・ロン・ギヌス',
+    image: 'images/FAraburonginusu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 36,
+    name: 'FA　ラブ・シエルーナ',
+    image: 'images/FArabushieruna.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 37,
+    name: 'FA　ラブ・シープ　ソフト',
+    image: 'images/FArabushipusohuto.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '草' ]
+  },
+  {
+    id: 38,
+    name: 'FA　ラブ・トゥルーシュウラ',
+    image: 'images/FArabutoxurushura.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 39,
+    name: 'FA　スカイ　聖なるの大天使',
+    image: 'images/FAskysenarunodaitenshi.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 40,
+    name: 'FA　スカイ　裏切りの堕天使',
+    image: 'images/FAskyuragirinodatenshi.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 41,
+    name: '学習ノート',
+    image: 'images/gakushunoto.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 42,
+    name: '月王降臨',
+    image: 'images/gekkokorin.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 43,
+    name: '原初の魔王　忘却ノゥツ',
+    image: 'images/genshonomaobokyakunoxutsu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 44,
+    name: '原初の魔王　大呪ギヌス',
+    image: 'images/genshonomaodaijuginusu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 45,
+    name: '原初の魔王　月光シエン',
+    image: 'images/genshonomaogekkoshien.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 46,
+    name: '原初の魔王　憤怒シュウラ',
+    image: 'images/genshonomaohundoshura.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 47,
+    name: 'ギヌス',
+    image: 'images/ginusu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 48,
+    name: 'ギヌスの槍',
+    image: 'images/ginusunoyari.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 49,
+    name: '轟獄魔イグラルド',
+    image: 'images/gogokumaigurarudo.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 50,
+    name: 'ひかちゃん',
+    image: 'images/hikachan.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 51,
+    name: 'ひかちゃんキーホルダー',
+    image: 'images/hikachankihoruda.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 52,
+    name: 'ひかちゃん2nd Anniversary',
+    image: 'images/hikachannerusecondAnniversary.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 53,
+    name: 'ひかちゃんの手助け',
+    image: 'images/hikachannotedasuke.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 54,
+    name: '光も闇も超えて',
+    image: 'images/hikarimoyamimokoete.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 55,
+    name: 'ひかとえる',
+    image: 'images/hikatoeru.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 56,
+    name: 'ホームランバット',
+    image: 'images/homuranbatto.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 57,
+    name: '焔に咲く幻影(フィールド)',
+    image: 'images/homuranisakugenefirudo.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 58,
+    name: '吹雪妖精シルフィス',
+    image: 'images/hubukiyoseshirufisu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 59,
+    name: '風雷炎妖精スパルナ',
+    image: 'images/huraienyosesuparuna.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 60,
+    name: '歪なる支配者',
+    image: 'images/ibitsunashihaisha.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ 'なし' ]
+  },
+  {
+    id: 61,
+    name: '怒りの解放',
+    image: 'images/ikarinokaiho.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 62,
+    name: '怒りの魔法陣',
+    image: 'images/ikarinomahojin.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 63,
+    name: '怒りの臨界点',
+    image: 'images/ikarinorinkaiten.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 64,
+    name: 'ジェネシスリンク',
+    image: 'images/jeneshisurinku.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '無' ]
+  },
+  {
+    id: 65,
+    name: '次元の揺らぎ空間',
+    image: 'images/jigennoyuragikukan.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 66,
+    name: '時空の守護者　アクア・ルミナス',
+    image: 'images/jikunoshugoshaakuaruminasu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 67,
+    name: '時空跳躍(クロノスジャンプ)',
+    image: 'images/jikutyoyakukuronojanpu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 68,
+    name: '時空歪曲の間',
+    image: 'images/jikuwaikyokunoma.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 69,
+    name: '神風の魔法陣',
+    image: 'images/jinpunomahojin.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 70,
+    name: '時蝕竜王　ヴォルティス＝オメガ',
+    image: 'images/jishokuryuovorutexisuomega.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 71,
+    name: '蒸影レイス',
+    image: 'images/joeresu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 72,
+    name: '呪滅龍ヴェル＝アガン',
+    image: 'images/jumeturyuvaruagan.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 73,
+    name: '順風妖精　シルフィス',
+    image: 'images/junpuyosesirufisu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 74,
+    name: '影踏ミノ境界線',
+    image: 'images/kagefuminokyokaisen.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 75,
+    name: '影より出でしもの',
+    image: 'images/kageyoriideshimono.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 76,
+    name: 'カイ(記憶のカケラ)',
+    image: 'images/kaikiokunokakera.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 77,
+    name: 'カラクリノトビラ',
+    image: 'images/karakurinotobira.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 78,
+    name: 'カルカの焔を継ぐ者',
+    image: 'images/karukanohomurawotsugumono.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ 'なし' ]
+  },
+  {
+    id: 79,
+    name: '月と森の誓い',
+    image: 'images/kazetomorinochikai.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷,風' ]
+  },
+  {
+    id: 80,
+    name: '風よ､憤怒を包み込め',
+    image: 'images/kazeyofundowotutumikome.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '風' ]
+  },
+  {
+    id: 81,
+    name: '決戦!シュウラvsスカイ',
+    image: 'images/kessenshuravssky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水,火' ]
+  },
+  {
+    id: 82,
+    name: 'きみスカ初期メン　スカイ',
+    image: 'images/kimiskashokimensky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 83,
+    name: 'きみスカメンバー　ギヌス',
+    image: 'images/kimisukamenbaginusu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 84,
+    name: 'きみスカ初期メン　シュウラ',
+    image: 'images/kimisukashokimenshura.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 85,
+    name: 'きみスカ初期メン　ゆら',
+    image: 'images/kimisukashokimenyura.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 86,
+    name: 'きみとスカイ',
+    image: 'images/kimitosky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 87,
+    name: 'きみとスカイ(フィールド)',
+    image: 'images/kimitoskyfirudo.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 88,
+    name: 'きみスカリーダー　スカイ',
+    image: 'images/kimitoskyridasky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 89,
+    name: '記憶の封焔',
+    image: 'images/kiokunofuen.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  },
+  {
+    id: 90,
+    name: '絆!きみとスカイ&ひかちゃんねる',
+    image: 'images/kizunakimitoskyandhikachanneru.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 91,
+    name: '古代文明の残骸層',
+    image: 'images/kodaibunmenozangaiso.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '土' ]
+  },
+  {
+    id: 92,
+    name: 'コードライダー・ベアスカイ',
+    image: 'images/kodoraidabeasky.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 93,
+    name: 'コードライダー・ラビネア',
+    image: 'images/kodoraidarabinea.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '光' ]
+  },
+  {
+    id: 94,
+    name: 'コード・ソロン',
+    image: 'images/kodosoron.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ 'なし' ]
+  },
+  {
+    id: 95,
+    name: 'こは',
+    image: 'images/koha.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 96,
+    name: 'こはしゃま',
+    image: 'images/kohashama.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '水' ]
+  },
+  {
+    id: 97,
+    name: '黒焔根刃(コクエンコクジン)',
+    image: 'images/kokuenkonjin.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '闇' ]
+  },
+  {
+    id: 98,
+    name: '黒閃妖精ヴォルトリス',
+    image: 'images/kokusenyosevorutorisu.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '雷' ]
+  },
+  {
+    id: 99,
+    name: '根絶の書',
+    image: 'images/konzetsunosho.jpg',
+    description: '',
+    maxCopies: 5,
+    attribute: [ '火' ]
+  }
+     ];
+/*{ id: 8, name: "暗黒妖精　ノクティア", image: "images/ankokuyosenokutexia.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 9, name: "アオ", image: "images/ao.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 10, name: "蒼の記憶", image: "images/aonokioku.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 11, name: "アース・オブ・ルミナス", image: "images/asuofruminasu.jpg",description: "",  description: "", maxCopies: 5 },
@@ -574,7 +1360,7 @@
 { id: 268, name: "影桜衆ノ旅人　ツバキ", image: "images/eoshunotabibitotubaki.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 269, name: "影桜衆ノ探索者　ゆら", image: "images/eoshunotansakushayura.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 270, name: "シノビノサダメ〜影桜衆〜", image: "images/shinobinosadame.jpg",description: "",  description: "", maxCopies: 5 }
-    ];
+*/
 
     const cardGrid = document.getElementById("cardGrid");
     const deck = [];
