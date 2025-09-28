@@ -252,6 +252,7 @@
   <label><input type="checkbox" name="attr" value="光" onchange="filterCards()"> 光</label>
   <label><input type="checkbox" name="attr" value="闇" onchange="filterCards()"> 闇</label>
   <label><input type="checkbox" name="attr" value="無" onchange="filterCards()"> 無</label>
+  <label><input type="checkbox" name="attr" value="なし" onchange="filterCards()"> なし</label>
   </div>
 
   <div class="deck-code-container">
@@ -299,13 +300,13 @@
 
   <script>
     const cards = [
-{ id: 1, name: "アビス・メモリア", image: "images/abisumemoria.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 2, name: "アビスメモリア　ギヌス", image: "images/abisumemoriaginusu.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 3, name: "アビスメモリア　スカイ", image: "images/abisumemoriasky.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 4, name: "アビスパーティ　グロスティ", image: "images/abisupatexigurosutexi.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 5, name: "アビスソウル　アグロス", image: "images/abisusouruagurosu.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 6, name: "紅の記憶", image: "images/akanokioku.jpg",description: "",  description: "", maxCopies: 5 },
-{ id: 7, name: "悪魔人形　ナイトメアドール", image: "images/akumaningyonaitomeadoru.jpg",description: "",  description: "", maxCopies: 5 },
+{ id: 1, name: "アビス・メモリア", image: "images/abisumemoria.jpg",description: "",  description: "", maxCopies: 5, attribute: ["なし"] },
+{ id: 2, name: "アビスメモリア　ギヌス", image: "images/abisumemoriaginusu.jpg",description: "",  description: "", maxCopies: 5, attribute: ["風"] },
+{ id: 3, name: "アビスメモリア　スカイ", image: "images/abisumemoriasky.jpg",description: "",  description: "", maxCopies: 5, attribute: ["水"] },
+{ id: 4, name: "アビスパーティ　グロスティ", image: "images/abisupatexigurosutexi.jpg",description: "",  description: "", maxCopies: 5, attribute: ["闇"] },
+{ id: 5, name: "アビスソウル　アグロス", image: "images/abisusouruagurosu.jpg",description: "",  description: "", maxCopies: 5, attribute: ["火"] },
+{ id: 6, name: "紅の記憶", image: "images/akanokioku.jpg",description: "",  description: "", maxCopies: 5, attribute: ["火"] },
+{ id: 7, name: "悪魔人形　ナイトメアドール", image: "images/akumaningyonaitomeadoru.jpg",description: "",  description: "", maxCopies: 5, attribute: ["闇"] },
 { id: 8, name: "暗黒妖精　ノクティア", image: "images/ankokuyosenokutexia.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 9, name: "アオ", image: "images/ao.jpg",description: "",  description: "", maxCopies: 5 },
 { id: 10, name: "蒼の記憶", image: "images/aonokioku.jpg",description: "",  description: "", maxCopies: 5 },
@@ -750,8 +751,8 @@ function showModal(card) {
 
   // description が空なら属性だけ表示
   document.getElementById("modalDesc").innerHTML =
-    (card.description ? `<div>${card.description}</div>` : "") +
-    (attrText ? `<div>属性: ${attrText}</div>` : "");
+    (card.description ? `<div>${card.description}</div>` : "")
+    //+(attrText ? `<div>属性: ${attrText}</div>` : "");
 
   document.getElementById("modal").style.display = "block";
 }
