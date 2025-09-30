@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
@@ -30,4 +30,69 @@
     }
   </script>
 </body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>入力ページ</title>
+  <style>
+    /* ヘッダー分の余白を確保 */
+    body {
+      padding-top: 60px; /* 親ページのヘッダー高さに合わせる */
+      font-family: system-ui, sans-serif;
+      background: #f9f9f9;
+    }
+    input, button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      font-size: 1rem;
+      width: 90%;
+      max-width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #4A90E2;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #357ABD;
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="nameInput" placeholder="ユーザー名">
+  <input type="text" id="idInput" placeholder="ID">
+  <button onclick="sendValue()">ログイン</button>
+
+  <script>
+    const idNameMap = {
+      "123456": "スカイ",
+      "654321": "フォーエバー",
+      "111111": "Firp"
+    };
+
+    function sendValue() {
+      const name = document.getElementById("nameInput").value.trim();
+      const id = document.getElementById("idInput").value.trim();
+      if (name === "" || id === "") {
+        alert("名前とIDを両方入力してください。");
+        return;
+      }
+      if (!(id in idNameMap) || idNameMap[id] !== name) {
+        alert("IDと名前が一致しません。");
+        return;
+      }
+      parent.postMessage({ type: "valueInput", value: name }, "*");
+      alert("ログインしました！");
+    }
+  </script>
+</body>
 </html>
+
