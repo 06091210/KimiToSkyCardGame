@@ -169,6 +169,37 @@
   <meta name="theme-color" content="#A1E0F9">
 
   <style>
+    
+  /* 既存CSSに追記または修正 */
+  iframe {
+    width: 100%;
+    height: calc(100vh - 120px); /* ヘッダー60px + 下部余白60px */
+    border: none;
+    display: none;
+  }
+
+  /* installボタン用のスペースを確保 */
+  #install {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 100; /* iframeの上に表示 */
+  }
+
+  /* メインメニューが表示されるときも同様に下余白を考慮 */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;  /* ヘッダー分 */
+    padding-bottom: 80px; /* installボタン分 */
+    gap: 2rem;
+  }
+
     * {
       margin: 0;
       padding: 0;
@@ -228,16 +259,16 @@
     background: #5AA517;
   }
 
-    /* メインエリア */
+    /* メインエリア
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding-top: 80px; /* ヘッダー分の余白 */
+      padding-top: 80px;
       gap: 2rem;
-    }
+    }*/
 
     h1 {
       font-size: 2rem;
@@ -272,11 +303,11 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
-    iframe {
+    /*iframe {
       width: 100%;
       height: calc(100vh - 60px);
       border: none;
-      display: none; /* 初期は隠す */
+      display: none;
     }
 
     #install {
@@ -285,7 +316,7 @@
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
-    }
+    }*/
     #install button {
       padding:10px 20px;
       font-size:1rem;
