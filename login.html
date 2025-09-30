@@ -40,9 +40,28 @@
   <style>
     /* ヘッダー分の余白を確保 */
     body {
-      padding-top: 60px; /* 親ページのヘッダー高さに合わせる */
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center; /* 横中央 */
+      align-items: center;     /* 縦中央 */
       font-family: system-ui, sans-serif;
       background: #f9f9f9;
+      padding-top: 60px; /* 親ページのヘッダー高さに合わせる */
+      box-sizing: border-box;
+    }
+
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 90%;
+      max-width: 300px;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
     input, button {
       display: block;
@@ -67,9 +86,12 @@
   </style>
 </head>
 <body>
-  <input type="text" id="nameInput" placeholder="ユーザー名">
-  <input type="text" id="idInput" placeholder="ID">
-  <button onclick="sendValue()">ログイン</button>
+  <div class="login-container">
+    <input type="text" id="nameInput" placeholder="ユーザー名">
+    <input type="text" id="idInput" placeholder="ID">
+    <button onclick="sendValue()">ログイン</button>
+    <div id="result"></div>
+  </div>
 
   <script>
     const idNameMap = {
@@ -91,8 +113,44 @@
       }
       parent.postMessage({ type: "valueInput", value: name }, "*");
       alert("ログインしました！");
+      loadMessage()
+    }
+
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwoc6e2CMHDI-VsCKb3pWsdmmOCOQeltBWXv4ELmwCpJy3Cm4xbVKks4T0v-mm4fKl8/exec"; 
+    const nameInput = document.getElementById("nameInput");
+
+    // iframeから名前を受け取る
+    parent.postMessage({ type: "requestValue" }, "*");
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        const name = event.data.value;
+        nameInput.value = name;
+        loadMessage();
+      }
+    });
+
+    // データ取得 → doGet
+    function loadMessage() {
+      const inputUsername = nameInput.value.trim();
+      fetch(`${GAS_URL}?name=${encodeURIComponent(inputUsername)}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultDiv = document.getElementById("result");
+          if (data.error) {
+            resultDiv.textContent = data.error;
+          } else {
+            resultDiv.innerHTML = `
+              <b>${data.name}</b><br>
+              KSポイント: ${data.ks}<br>
+              勝敗数: ${data.winlose}<br>
+              所持カード: ${data.cards}
+            `;
+          }
+        })
+        .catch(error => {
+          document.getElementById("result").textContent = "エラー: " + error;
+        });
     }
   </script>
 </body>
 </html>
-
