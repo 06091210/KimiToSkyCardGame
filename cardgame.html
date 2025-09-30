@@ -27,45 +27,9 @@
       width: 120px;
       cursor: pointer;
     }
-
-    header {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 0.5rem 1rem;
-      background: rgba(255,255,255,0.8);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: fixed;
-      
-      width: calc(100% - 100px);
-      margin: 0 15px;
-      
-      top: 0;
-      z-index: 100;
-      height: 60px;
-    }
-
-    #home-button {
-      background: #7ED321;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      margin-right: 0.5rem;
-      transition: background 0.3s;
-    }
-    #home-button:hover {
-      background: #5AA517;
-    }
   </style>
 </head>
 <body>
-  <header>
-        <button id="home-button" onclick="location.href='index.html'">ホーム</button>
-  </header>
 <textarea id="deckCode" rows="2" cols="50" placeholder="例: 1x2,2x3"></textarea><br>
 <button id="loadDeckBtn" onclick="loadDeckFromCode()">デッキを復元</button>
 <div id="drawnCardArea" style="display: none;">
