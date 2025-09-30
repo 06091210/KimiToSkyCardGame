@@ -432,19 +432,6 @@
       height: 60px;
     }
 
-    #login-button {
-      background: #4A90E2;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    #login-button:hover { background: #357ABD; }
-
     #home-button {
       background: #7ED321;
       color: #fff;
@@ -457,7 +444,24 @@
       margin-right: 0.5rem;
       transition: background 0.3s;
     }
-    #home-button:hover { background: #5AA517; }
+    #home-button:hover {
+      background: #5AA517;
+    }
+
+    #login-button {
+      background: #4A90E2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #login-button:hover {
+      background: #357ABD;
+    }
 
     /* メインエリア */
     main {
@@ -466,10 +470,8 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding-top: 80px;        /* ヘッダー分 */
-      padding-bottom: 80px;     /* ← 下部にも余白を確保（重要）*/
+      padding-top: 80px; /* ヘッダー分 */
       gap: 2rem;
-      overflow-y: auto;         /* 必要に応じてスクロール */
     }
 
     h1 {
@@ -505,24 +507,12 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.15);
     }
 
-    /* iframe エリア */
-    iframe {
-      width: 100%;
-      height: calc(100vh - 60px);  /* ヘッダー分を除外 */
-      border: none;
-      display: none;
-      padding-bottom: 80px;        /* ← 下側に隠れないように調整 */
-      box-sizing: border-box;
-    }
-
-    /* インストールボタン */
     #install {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       text-align: center;
-      z-index: 200;
     }
     #install button {
       padding:10px 20px;
@@ -538,63 +528,21 @@
 <body>
 
   <header>
-    <button id="home-button" onclick="showMainMenu()">ホーム</button>
-    <button id="login-button" onclick="loadHTML('login.html')">ログイン</button>
+    <button id="home-button" onclick="location.href='index.html'">ホーム</button>
+    <button id="login-button" onclick="location.href='login.html'">ログイン</button>
   </header>
 
-  <main id="main-menu">
+  <main>
     <h1>きみとスカイカードゲーム</h1>
     <div class="card-menu">
-      <button class="menu-btn" onclick="loadHTML('carddictionary.html')">カード図鑑</button>
-      <button class="menu-btn" onclick="loadHTML('cardgame.html')">カードゲーム</button>
+      <button class="menu-btn" onclick="location.href='carddictionary.html'">カード図鑑</button>
+      <button class="menu-btn" onclick="location.href='cardgame.html'">カードゲーム</button>
     </div>
   </main>
 
-  <iframe id="viewer"></iframe>
   <div id="install"></div>
 
   <script>
-    const iframe = document.getElementById("viewer");
-    const mainMenu = document.getElementById("main-menu");
-
-    let sharedValue = "";
-
-    function showMainMenu() {
-      mainMenu.style.display = "flex";
-      iframe.style.display = "none";
-      iframe.src = ""; // ← 前のページをリセット
-    }
-    
-    function loadHTML(file) {
-      iframe.src = file;
-      iframe.style.display = "block";
-      mainMenu.style.display = "none";
-    }
-
-    iframe.addEventListener("load", () => {
-      try {
-        const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
-        const innerHeight = innerDoc.documentElement.scrollHeight;
-        // ↓ ページが短い場合でも最低限確保
-        iframe.style.height = Math.max(innerHeight + 80, window.innerHeight - 60) + "px";
-      } catch(e) {
-        console.error("高さの調整に失敗", e);
-      }
-    });
-    
-    window.addEventListener("message", (event) => {
-      const data = event.data;
-      if (data.type === "valueInput") {
-        sharedValue = data.value;
-      }
-      if (data.type === "requestValue") {
-        iframe.contentWindow.postMessage({
-          type: "setValue",
-          value: sharedValue
-        }, "*");
-      }
-    });
-
     // サービスワーカー登録
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/service-worker.js')
@@ -618,7 +566,7 @@
         console.log('ユーザー選択:', result.outcome);
         deferredPrompt = null;
       });
-    });    
+    });
   </script>
 </body>
 </html>
