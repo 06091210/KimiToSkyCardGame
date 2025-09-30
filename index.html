@@ -150,7 +150,6 @@
 </body>
 </html>
 -->
-
 <!doctype html>
 <html lang="ja">
 <head>
@@ -213,6 +212,21 @@
     #login-button:hover {
       background: #357ABD;
     }
+    #home-button {
+    background: #7ED321;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: background 0.3s;
+  }
+  #home-button:hover {
+    background: #5AA517;
+  }
 
     /* メインエリア */
     main {
@@ -286,6 +300,7 @@
 <body>
 
   <header>
+    <button id="home-button" onclick="showMainMenu()">ホーム</button>
     <button id="login-button" onclick="loadHTML('login.html')">ログイン</button>
   </header>
 
@@ -306,6 +321,11 @@
 
     let sharedValue = "";
 
+    function showMainMenu() {
+      mainMenu.style.display = "flex";
+      iframe.style.display = "none";
+    }
+    
     function loadHTML(file) {
       iframe.src = file;
       iframe.style.display = "block";
