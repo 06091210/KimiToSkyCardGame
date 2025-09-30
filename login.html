@@ -50,6 +50,18 @@
       padding-top: 60px; /* 親ページのヘッダー高さに合わせる */
       box-sizing: border-box;
     }
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 90%;
+      max-width: 300px;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
     input, button {
       display: block;
       margin: 10px auto;
@@ -73,10 +85,12 @@
   </style>
 </head>
 <body>
+  <div class="login-container">
     <input type="text" id="nameInput" placeholder="ユーザー名"><br>
     <input type="text" id="idInput" placeholder="ID"><br>
     <button onclick="sendValue()">ログイン</button><br>
     <div id="result"></div>
+  </div>
 
   <script>
     const idNameMap = {
