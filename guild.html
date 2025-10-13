@@ -1,73 +1,116 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>ギルドサイト（外部版）</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; background: #eef6ff; margin: 0; padding: 20px; }
-    #taskList { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin-top: 20px; }
-    .task { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    button { background: #007bff; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
-    button:disabled { background: gray; cursor: default; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ギルド一覧</title>
+<style>
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #f0f7ff;
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+h1 { color: #2a4d8f; }
+h2 { color: #3a5ca9; margin-top: 30px; }
+.guild-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  padding: 12px 15px;
+  margin: 10px auto;
+  max-width: 350px;
+  text-align: left;
+}
+.guild-card button {
+  background: #2a4d8f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.guild-card button:disabled {
+  background: gray;
+  cursor: default;
+}
+</style>
 </head>
 <body>
-  <h1>🏰 ギルドサイト（外部版）</h1>
 
-  <input id="name" placeholder="プレイヤー名">
-  <button onclick="loadData()">ログイン</button>
+<h1>🏰 ギルド一覧</h1>
 
-  <h3 id="pointDisplay"></h3>
+<label>プレイヤー名: <input type="text" id="username" placeholder="例：Firp"></label>
+<button onclick="login()">ログイン</button>
 
-  <div id="taskList"></div>
+<h2>🟢 未完了ギルド</h2>
+<div id="guilds-incomplete"></div>
 
-  <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxaHl3XMjJKZr5V0bQ--Mo9dj6Pz1xwZBak-6hp82ISXxwVWpZwiB2WQD-bTrgw_gl4/exec";
+<h2>🟣 完了ギルド</h2>
+<div id="guilds-complete"></div>
 
-    async function loadData() {
-      const name = document.getElementById("name").value.trim();
-      if (!name) return alert("名前を入力してください。");
+<script>
+let user = "";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbw-xZ8j0y4K_lBfXMIn-m-kfZe1JHPUqCkobkm1bY6TUhY5ZHsDL4SQEEJRvL4TtG9z/exec"; // ←あなたのGAS URLに置き換える
 
-      // メンバーポイントを取得
-      const pointRes = await fetch(`${GAS_URL}?action=getPoint&name=${encodeURIComponent(name)}`);
-      const point = await pointRes.text();
-      document.getElementById("pointDisplay").textContent = `${name} さんのポイント：${point}`;
+function login() {
+  user = document.getElementById("username").value.trim();
+  if(!user) return alert("名前を入力してください。");
+  loadGuilds();
+}
 
-      // 課題リストを取得
-      const taskRes = await fetch(`${GAS_URL}?action=getTasks`);
-      const tasks = await taskRes.json();
-      displayTasks(tasks, name);
-    }
+async function loadGuilds() {
+  if(!user) return;
 
-    function displayTasks(tasks, name) {
-      const container = document.getElementById("taskList");
-      container.innerHTML = "";
+  // 共通ギルド
+  const res1 = await fetch(`${GAS_URL}?action=getGuilds`);
+  const guilds = await res1.json();
 
-      tasks.forEach(row => {
-        const [id, title, point, status] = row;
-        const div = document.createElement("div");
-        div.className = "task";
-        div.innerHTML = `
-          <h4>${title}</h4>
-          <p>ポイント: ${point}</p>
-          <button ${status === "完了" ? "disabled" : ""} onclick="clearTask('${name}', '${id}')">
-            ${status === "完了" ? "✅ 完了" : "クリア！"}
-          </button>
-        `;
-        container.appendChild(div);
-      });
-    }
+  // 個別ギルド
+  const res2 = await fetch(`${GAS_URL}?action=getPersonalGuilds&user=${encodeURIComponent(user)}`);
+  const personal = await res2.json();
 
-    async function clearTask(name, taskId) {
-      const res = await fetch(`${GAS_URL}?action=clearTask&name=${encodeURIComponent(name)}&taskId=${taskId}`);
-      const result = await res.text();
-      if (result === "OK") {
-        alert("課題をクリアしました！");
-        loadData();
-      } else {
-        alert("エラー：すでに完了済みか見つかりません。");
-      }
-    }
-  </script>
+  displayGuilds([...guilds, ...personal]);
+}
+
+function displayGuilds(allGuilds) {
+  const incompleteDiv = document.getElementById("guilds-incomplete");
+  const completeDiv = document.getElementById("guilds-complete");
+  incompleteDiv.innerHTML = "";
+  completeDiv.innerHTML = "";
+
+  allGuilds.forEach(g => {
+    // g: [id, user?, name, description, point, type]
+    let id = g[0];
+    let name = g[2];
+    let desc = g[3];
+    let point = g[4];
+    let type = g[5];
+
+    const completedCount = Number(localStorage.getItem(`${user}_${id}`) || 0);
+    const isComplete = (type === "once" && completedCount > 0);
+
+    const div = document.createElement("div");
+    div.className = "guild-card";
+    div.innerHTML = `
+      <h3>${name}</h3>
+      <p>${desc}</p>
+      <p>タイプ: ${type === "once" ? "一人一回まで" : "何回でもOK"}</p>
+      ${type === "repeat" ? `<p>完了回数: ${completedCount}</p>` : ""}
+      <button ${isComplete ? "disabled" : ""}>＋ ギルド完了</button>
+    `;
+    const button = div.querySelector("button");
+    button.addEventListener("click", async () => {
+      await fetch(`${GAS_URL}?action=complete&user=${encodeURIComponent(user)}&guildId=${id}`);
+      localStorage.setItem(`${user}_${id}`, completedCount+1);
+      loadGuilds();
+    });
+
+    (isComplete ? completeDiv : incompleteDiv).appendChild(div);
+  });
+}
+</script>
+
 </body>
 </html>
