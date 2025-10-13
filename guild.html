@@ -1,4 +1,3 @@
-https://script.google.com/macros/s/AKfycbz8axpmacW0-JGZ0RnCiELFoD3bIXn5xRwPpc-rEbPAtQNKtD7-W22-rWNnrRKK0qjb/exec
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -42,7 +41,7 @@ h2 { color: #4a5dbb; margin-top: 25px; }
 
 <h1>🏰 ギルド管理システム</h1>
 
-<label>プレイヤー名: <input type="text" id="username" placeholder="例：Firp"></label>
+<input type="text" id="username" placeholder="例：スカイ">
 <button onclick="login()">ログイン</button>
 
 <h2>🟢 未完了ギルド</h2>
@@ -52,7 +51,7 @@ h2 { color: #4a5dbb; margin-top: 25px; }
 <div id="guilds-complete"></div>
 
 <script>
-const GAS_URL = "https://script.google.com/macros/s/XXXXX/exec"; // ←あなたのGAS URLに変更
+const GAS_URL = "https://script.google.com/macros/s/AKfycbz8axpmacW0-JGZ0RnCiELFoD3bIXn5xRwPpc-rEbPAtQNKtD7-W22-rWNnrRKK0qjb/exec"; // ←あなたのGAS URLに変更
 let user = "";
 let completedMap = {};
 
@@ -110,6 +109,15 @@ function displayGuilds(allGuilds) {
     (isComplete ? completeDiv : incompleteDiv).appendChild(div);
   });
 }
+  const nameInput = document.getElementById("username");
+  parent.postMessage({ type: "requestValue" }, "*");
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        const name = event.data.value;
+        nameInput.value = name;
+        login();
+      }
+    });
 </script>
 
 </body>
