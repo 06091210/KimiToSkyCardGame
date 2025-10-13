@@ -1,19 +1,20 @@
+https://script.google.com/macros/s/AKfycbz8axpmacW0-JGZ0RnCiELFoD3bIXn5xRwPpc-rEbPAtQNKtD7-W22-rWNnrRKK0qjb/exec
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ギルド一覧</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ギルド管理システム</title>
 <style>
 body {
   font-family: "Segoe UI", sans-serif;
-  background: #f0f7ff;
+  background: #eef5ff;
   margin: 0;
   padding: 20px;
   text-align: center;
 }
-h1 { color: #2a4d8f; }
-h2 { color: #3a5ca9; margin-top: 30px; }
+h1 { color: #284d9e; }
+h2 { color: #4a5dbb; margin-top: 25px; }
 .guild-card {
   background: white;
   border-radius: 12px;
@@ -24,7 +25,7 @@ h2 { color: #3a5ca9; margin-top: 30px; }
   text-align: left;
 }
 .guild-card button {
-  background: #2a4d8f;
+  background: #284d9e;
   color: white;
   border: none;
   border-radius: 6px;
@@ -39,10 +40,10 @@ h2 { color: #3a5ca9; margin-top: 30px; }
 </head>
 <body>
 
-<h1>🏰 ギルド一覧</h1>
+<h1>🏰 ギルド管理システム</h1>
 
-<input type="hidden" id="username" placeholder="例：スカイ">
-<!--<button onclick="login()">ログイン</button>-->
+<label>プレイヤー名: <input type="text" id="username" placeholder="例：Firp"></label>
+<button onclick="login()">ログイン</button>
 
 <h2>🟢 未完了ギルド</h2>
 <div id="guilds-incomplete"></div>
@@ -51,27 +52,27 @@ h2 { color: #3a5ca9; margin-top: 30px; }
 <div id="guilds-complete"></div>
 
 <script>
+const GAS_URL = "https://script.google.com/macros/s/XXXXX/exec"; // ←あなたのGAS URLに変更
 let user = "";
-const GAS_URL = "https://script.google.com/macros/s/AKfycbw-xZ8j0y4K_lBfXMIn-m-kfZe1JHPUqCkobkm1bY6TUhY5ZHsDL4SQEEJRvL4TtG9z/exec"; // ←あなたのGAS URLに置き換える
+let completedMap = {};
 
-function login() {
+async function login() {
   user = document.getElementById("username").value.trim();
-  if(!user) return alert("名前を入力してください。");
+  if (!user) return alert("名前を入力してください。");
   loadGuilds();
 }
 
 async function loadGuilds() {
-  if(!user) return;
+  const [guilds, personals, completed] = await Promise.all([
+    fetch(`${GAS_URL}?action=getGuilds`).then(r=>r.json()),
+    fetch(`${GAS_URL}?action=getPersonalGuilds&user=${encodeURIComponent(user)}`).then(r=>r.json()),
+    fetch(`${GAS_URL}?action=getCompleted&user=${encodeURIComponent(user)}`).then(r=>r.json())
+  ]);
 
-  // 共通ギルド
-  const res1 = await fetch(`${GAS_URL}?action=getGuilds`);
-  const guilds = await res1.json();
+  completedMap = {};
+  completed.forEach(c => completedMap[c[1]] = Number(c[2]));
 
-  // 個別ギルド
-  const res2 = await fetch(`${GAS_URL}?action=getPersonalGuilds&user=${encodeURIComponent(user)}`);
-  const personal = await res2.json();
-
-  displayGuilds([...guilds, ...personal]);
+  displayGuilds([...guilds, ...personals]);
 }
 
 function displayGuilds(allGuilds) {
@@ -81,45 +82,34 @@ function displayGuilds(allGuilds) {
   completeDiv.innerHTML = "";
 
   allGuilds.forEach(g => {
-    // g: [id, user?, name, description, point, type]
-    let id = g[0];
-    let name = g[2];
-    let desc = g[3];
-    let point = g[4];
-    let type = g[5];
-
-    const completedCount = Number(localStorage.getItem(`${user}_${id}`) || 0);
-    const isComplete = (type === "once" && completedCount > 0);
+    const [id, , name, desc, point, type] = g;
+    const count = completedMap[id] || 0;
+    const isComplete = (type === "once" && count > 0);
 
     const div = document.createElement("div");
     div.className = "guild-card";
     div.innerHTML = `
       <h3>${name}</h3>
       <p>${desc}</p>
-      <p>タイプ: ${type === "once" ? "一人一回まで" : "何回でもOK"}</p>
-      ${type === "repeat" ? `<p>完了回数: ${completedCount}</p>` : ""}
+      <p>ポイント: ${point} / タイプ: ${type === "once" ? "一人一回まで" : "何回でもOK"}</p>
+      ${type === "repeat" ? `<p>完了回数: ${count}</p>` : ""}
       <button ${isComplete ? "disabled" : ""}>＋ ギルド完了</button>
     `;
-    const button = div.querySelector("button");
-    button.addEventListener("click", async () => {
-      await fetch(`${GAS_URL}?action=complete&user=${encodeURIComponent(user)}&guildId=${id}`);
-      localStorage.setItem(`${user}_${id}`, completedCount+1);
+
+    div.querySelector("button").addEventListener("click", async () => {
+      const res = await fetch(`${GAS_URL}?action=complete&user=${encodeURIComponent(user)}&guildId=${id}`);
+      const json = await res.json();
+      if (json.result === "already_completed") {
+        alert("このギルドはすでに完了済みです！");
+      } else {
+        alert(`ギルド「${name}」を完了！ +${point}ポイント`);
+      }
       loadGuilds();
     });
 
     (isComplete ? completeDiv : incompleteDiv).appendChild(div);
   });
 }
-  const nameInput = document.getElementById("username")
-  parent.postMessage({ type: "requestValue" }, "*");
-    window.addEventListener("message", (event) => {
-      if (event.data.type === "setValue") {
-        const name = event.data.value;
-        nameInput.value = name;
-        //loadMessage();
-        login();
-      }
-    });
 </script>
 
 </body>
