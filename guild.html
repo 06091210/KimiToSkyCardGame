@@ -41,8 +41,8 @@ h2 { color: #3a5ca9; margin-top: 30px; }
 
 <h1>🏰 ギルド一覧</h1>
 
-<input type="hidden" id="username" placeholder="例：スカイ" oninput="login()">
-<!--<button onclick="login()">ログイン</button>-->
+<input type="text" id="username" placeholder="例：スカイ" oninput="login()">
+<button onclick="login()">ログイン</button>
 
 <h2>🟢 未完了ギルド</h2>
 <div id="guilds-incomplete"></div>
@@ -119,6 +119,9 @@ function displayGuilds(allGuilds) {
         loadMessage();
       }
     });
+  if (nameInput !== ""){
+    login();
+  }
 </script>
 
 </body>
