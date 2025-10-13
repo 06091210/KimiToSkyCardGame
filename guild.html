@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ギルドサイト（外部版）</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; background: #eef6ff; margin: 0; padding: 20px; }
+    #taskList { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px; margin-top: 20px; }
+    .task { background: white; border-radius: 10px; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    button { background: #007bff; color: white; border: none; border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+    button:disabled { background: gray; cursor: default; }
+  </style>
+</head>
+<body>
+  <h1>🏰 ギルドサイト（外部版）</h1>
+
+  <input id="name" placeholder="プレイヤー名">
+  <button onclick="loadData()">ログイン</button>
+
+  <h3 id="pointDisplay"></h3>
+
+  <div id="taskList"></div>
+
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxaHl3XMjJKZr5V0bQ--Mo9dj6Pz1xwZBak-6hp82ISXxwVWpZwiB2WQD-bTrgw_gl4/exec";
+
+    async function loadData() {
+      const name = document.getElementById("name").value.trim();
+      if (!name) return alert("名前を入力してください。");
+
+      // メンバーポイントを取得
+      const pointRes = await fetch(`${GAS_URL}?action=getPoint&name=${encodeURIComponent(name)}`);
+      const point = await pointRes.text();
+      document.getElementById("pointDisplay").textContent = `${name} さんのポイント：${point}`;
+
+      // 課題リストを取得
+      const taskRes = await fetch(`${GAS_URL}?action=getTasks`);
+      const tasks = await taskRes.json();
+      displayTasks(tasks, name);
+    }
+
+    function displayTasks(tasks, name) {
+      const container = document.getElementById("taskList");
+      container.innerHTML = "";
+
+      tasks.forEach(row => {
+        const [id, title, point, status] = row;
+        const div = document.createElement("div");
+        div.className = "task";
+        div.innerHTML = `
+          <h4>${title}</h4>
+          <p>ポイント: ${point}</p>
+          <button ${status === "完了" ? "disabled" : ""} onclick="clearTask('${name}', '${id}')">
+            ${status === "完了" ? "✅ 完了" : "クリア！"}
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function clearTask(name, taskId) {
+      const res = await fetch(`${GAS_URL}?action=clearTask&name=${encodeURIComponent(name)}&taskId=${taskId}`);
+      const result = await res.text();
+      if (result === "OK") {
+        alert("課題をクリアしました！");
+        loadData();
+      } else {
+        alert("エラー：すでに完了済みか見つかりません。");
+      }
+    }
+  </script>
+</body>
+</html>
