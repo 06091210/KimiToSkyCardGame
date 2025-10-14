@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -42,7 +42,7 @@ h2 { color: #4a5dbb; margin-top: 25px; }
 <h1> </h1>
 
 <input type="hidden" id="username" placeholder="例：スカイ">
-<!--<button onclick="login()">ログイン</button>-->
+<!--<button onclick="login()">ログイン</button>
 
 <h2>🟢 未完了ギルド</h2>
 <div id="guilds-incomplete"></div>
@@ -120,5 +120,145 @@ function displayGuilds(allGuilds) {
     });
 </script>
 
+</body>
+</html>-->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>ギルドサイト</title>
+<style>
+body {
+  font-family: "Hiragino Kaku Gothic ProN", sans-serif;
+  background: #f5f5f5;
+  text-align: center;
+  padding: 20px;
+}
+.container {
+  background: white;
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h2 { border-bottom: 2px solid #4CAF50; padding-bottom: 5px; }
+button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover { background: #388E3C; }
+ul { list-style: none; padding: 0; }
+li {
+  margin: 10px 0;
+  padding: 10px;
+  background: #e8f5e9;
+  border-radius: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🌟 ギルド一覧 🌟</h1>
+
+  <div>
+    <input id="username" value="例：スカイ">
+    <button onclick="login()">ログイン</button>
+  </div>
+
+  <h2>未完了ギルド</h2>
+  <ul id="available"></ul>
+
+  <h2>完了済みギルド</h2>
+  <ul id="completed"></ul>
+</div>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwdDrNEY67xq7s8fjb2Nc2BQJonEKARaSbptxOmMNfqDj4JrUSyI69D0ruwQZfqKLGk/exec";
+
+let currentUser = {};
+
+function login() {
+  const name = document.getElementById("username").value.trim();
+  if (!name) return alert("名前を入力してください！");
+
+  currentUser = {
+    name: name,
+    level: 10,
+    loginCount: 1,
+    quizCount: 3,
+  };
+
+  loadGuilds();
+}
+
+function loadGuilds() {
+  const payload = {
+    mode: "getGuildData",
+    user: currentUser
+  };
+
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .then(data => renderGuilds(data))
+  .catch(err => alert("通信エラー: " + err));
+}
+
+function renderGuilds(data) {
+  const availableList = document.getElementById("available");
+  const completedList = document.getElementById("completed");
+
+  availableList.innerHTML = "";
+  completedList.innerHTML = "";
+
+  data.available.forEach(g => {
+    availableList.innerHTML += `
+      <li>
+        <b>${g.タイトル}</b><br>${g.内容}<br>
+        <small>${g.ポイント}pt</small><br>
+        <button onclick="completeGuild('${g.ID}')">完了</button>
+      </li>`;
+  });
+
+  data.completed.forEach(g => {
+    completedList.innerHTML += `
+      <li>✅ <b>${g.タイトル}</b>（${g.ポイント}pt）</li>`;
+  });
+}
+
+function completeGuild(id) {
+  const payload = {
+    mode: "completeGuild",
+    user: currentUser,
+    id: id
+  };
+
+  fetch(GAS_URL, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.text())
+  .then(() => {
+    alert("ギルド完了！ポイントが加算されました🎉");
+    loadGuilds();
+  });
+}
+  const nameInput = document.getElementById("username");
+  parent.postMessage({ type: "requestValue" }, "*");
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        const name = event.data.value;
+        nameInput.value = name;
+        login();
+      }
+    });
+</script>
 </body>
 </html>
