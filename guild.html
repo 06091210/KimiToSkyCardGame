@@ -166,8 +166,8 @@ li {
   <h1>🌟 ギルド一覧 🌟</h1>
 
   <div>
-    <input id="username" value="例：スカイ">
-    <button onclick="login()">ログイン</button>
+    <!--<input id="username" value="例：スカイ">
+    <button onclick="login()">ログイン</button>-->
   </div>
 
   <h2>未完了ギルド</h2>
@@ -184,7 +184,7 @@ let currentUser = {};
 
 function login() {
   const name = document.getElementById("username").value.trim();
-  if (!name) return alert("名前を入力してください！");
+  if (!name) return alert("ログインしてください！");
 
   currentUser = {
     name: name,
@@ -259,6 +259,7 @@ function completeGuild(id) {
         login();
       }
     });
+  login();
 </script>
 </body>
 </html>
