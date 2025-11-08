@@ -259,6 +259,18 @@
   <label><input type="checkbox" name="attr" value="なし" onchange="filterCards()"> なし</label>
   </div>
 
+  <!-- ✅ 種族フィルタを追加 -->
+<div id="speciesFilterBox" style="text-align:center; margin-bottom:20px;">
+  <label><input type="checkbox" name="species" value="人型" onchange="filterCards()"> 人型</label>
+  <label><input type="checkbox" name="species" value="獣" onchange="filterCards()"> 獣</label>
+  <label><input type="checkbox" name="species" value="竜" onchange="filterCards()"> 竜</label>
+  <label><input type="checkbox" name="species" value="精霊" onchange="filterCards()"> 精霊</label>
+  <label><input type="checkbox" name="species" value="不死" onchange="filterCards()"> 不死</label>
+  <label><input type="checkbox" name="species" value="機械" onchange="filterCards()"> 機械</label>
+  <label><input type="checkbox" name="species" value="無" onchange="filterCards()"> 無</label>
+</div>
+
+
   <div class="deck-code-container">
     <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
     <button onclick="generateDeckCode()">コードを生成</button>
@@ -310,7 +322,8 @@
     image: 'images/abisumemoria.jpg',
     description: '',
     maxCopies: 5,
-    attribute: [ 'なし' ]
+    attribute: [ 'なし' ],
+    species: [ '無' ]   // ✅ 追加
   },
   {
     id: 2,
@@ -318,7 +331,8 @@
     image: 'images/abisumemoriaginusu.jpg',
     description: '',
     maxCopies: 5,
-    attribute: [ '風' ]
+    attribute: [ '風' ],
+    species: [ '人型' ]  // ✅ 追加
   },
   {
     id: 3,
@@ -326,7 +340,8 @@
     image: 'images/abisumemoriasky.jpg',
     description: '',
     maxCopies: 5,
-    attribute: [ '水' ]
+    attribute: [ '水' ],
+    species: [ '精霊' ]  // ✅ 追加
   },
   {
     id: 4,
@@ -2559,7 +2574,7 @@
       document.getElementById("modal").style.display = "none";
     }*/
 
-    // ====== renderCards を差し替え ======
+    /* ====== renderCards を差し替え ======
 function renderCards(filteredCards = cards) {
   cardGrid.innerHTML = "";
 
@@ -2577,6 +2592,34 @@ function renderCards(filteredCards = cards) {
       <div class="info">
         <h3>${card.name}</h3>
         ${attrText ? `<p>属性: ${attrText}</p>` : ""}
+      </div>
+    `;
+
+    cardElement.onclick = () => showModal(card);
+    cardGrid.appendChild(cardElement);
+  });
+}*/
+    function renderCards(filteredCards = cards) {
+  cardGrid.innerHTML = "";
+
+  filteredCards.forEach(card => {
+    const cardElement = document.createElement("div");
+    cardElement.className = "card";
+
+    const attrText = Array.isArray(card.attribute)
+      ? card.attribute.join("・")
+      : (card.attribute || "");
+
+    const speciesText = Array.isArray(card.species)
+      ? card.species.join("・")
+      : (card.species || "");
+
+    cardElement.innerHTML = `
+      <img src="${card.image}" alt="${card.name}">
+      <div class="info">
+        <h3>${card.name}</h3>
+        ${attrText ? `<p>属性: ${attrText}</p>` : ""}
+        ${speciesText ? `<p>種族: ${speciesText}</p>` : ""}
       </div>
     `;
 
@@ -2601,8 +2644,14 @@ function getSelectedAttributes() {
 
   return [];
 }
+    // ✅ 種族チェックボックスの取得
+function getSelectedSpecies() {
+  return Array.from(document.querySelectorAll('input[name="species"]:checked'))
+               .map(cb => cb.value.trim())
+               .filter(Boolean);
+}
 
-// ====== filterCards を差し替え ======
+/* ====== filterCards を差し替え ======
 function filterCards() {
   const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
   const selectedAttrs = getSelectedAttributes(); // 選択された属性配列
@@ -2624,6 +2673,39 @@ function filterCards() {
       selectedAttrs.every(attr => cardAttrs.includes(attr));
 
     return matchesName && matchesAttr;
+  });
+
+  renderCards(filtered);
+}*/
+    function filterCards() {
+  const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
+  const selectedAttrs = getSelectedAttributes();   // 属性
+  const selectedSpecies = getSelectedSpecies();    // ✅ 種族
+
+  const filtered = cards.filter(card => {
+    const matchesName =
+      !keyword ||
+      card.name.toLowerCase().includes(keyword);
+
+    const cardAttrs = Array.isArray(card.attribute)
+      ? card.attribute.map(a => a.trim())
+      : (card.attribute ? [String(card.attribute).trim()] : []);
+
+    const cardSpecies = Array.isArray(card.species)
+      ? card.species.map(s => s.trim())
+      : (card.species ? [String(card.species).trim()] : []);
+
+    // ✅ 属性は AND検索
+    const matchesAttr =
+      selectedAttrs.length === 0 ||
+      selectedAttrs.every(attr => cardAttrs.includes(attr));
+
+    // ✅ 種族も AND検索
+    const matchesSpecies =
+      selectedSpecies.length === 0 ||
+      selectedSpecies.every(sp => cardSpecies.includes(sp));
+
+    return matchesName && matchesAttr && matchesSpecies;
   });
 
   renderCards(filtered);
