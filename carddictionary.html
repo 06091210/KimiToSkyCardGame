@@ -168,6 +168,18 @@
       width: 100%;
       border-radius: 4px;
     }
+    .filter-row {
+  width: 60%;
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.filter-row select {
+  width: 100%;
+  padding: 5px;
+}
     #toTopBtn {
   position: fixed;
   bottom: 20px;
@@ -246,30 +258,30 @@
   <option value="無">無</option>
   </select>
   -->
-  <div id="attributeFilterBox" style="text-align:center; margin-bottom:20px;">
-  <label><input type="checkbox" name="attr" value="火" onchange="filterCards()"> 火</label>
-  <label><input type="checkbox" name="attr" value="水" onchange="filterCards()"> 水</label>
-  <label><input type="checkbox" name="attr" value="草" onchange="filterCards()"> 草</label>
-  <label><input type="checkbox" name="attr" value="土" onchange="filterCards()"> 土</label>
-  <label><input type="checkbox" name="attr" value="風" onchange="filterCards()"> 風</label>
-  <label><input type="checkbox" name="attr" value="雷" onchange="filterCards()"> 雷</label>
-  <label><input type="checkbox" name="attr" value="光" onchange="filterCards()"> 光</label>
-  <label><input type="checkbox" name="attr" value="闇" onchange="filterCards()"> 闇</label>
-  <label><input type="checkbox" name="attr" value="無" onchange="filterCards()"> 無</label>
-  <label><input type="checkbox" name="attr" value="なし" onchange="filterCards()"> なし</label>
-  </div>
+  <div class="filter-row">
+  <select id="attributeFilter" multiple size="3" onchange="filterCards()">
+    <option value="火">火</option>
+    <option value="水">水</option>
+    <option value="草">草</option>
+    <option value="土">土</option>
+    <option value="風">風</option>
+    <option value="雷">雷</option>
+    <option value="光">光</option>
+    <option value="闇">闇</option>
+    <option value="無">無</option>
+    <option value="なし">なし</option>
+  </select>
 
-  <!-- ✅ 種族フィルタを追加 -->
-<div id="speciesFilterBox" style="text-align:center; margin-bottom:20px;">
-  <label><input type="checkbox" name="species" value="人型" onchange="filterCards()"> 人型</label>
-  <label><input type="checkbox" name="species" value="獣" onchange="filterCards()"> 獣</label>
-  <label><input type="checkbox" name="species" value="竜" onchange="filterCards()"> 竜</label>
-  <label><input type="checkbox" name="species" value="精霊" onchange="filterCards()"> 精霊</label>
-  <label><input type="checkbox" name="species" value="不死" onchange="filterCards()"> 不死</label>
-  <label><input type="checkbox" name="species" value="機械" onchange="filterCards()"> 機械</label>
-  <label><input type="checkbox" name="species" value="無" onchange="filterCards()"> 無</label>
+  <select id="speciesFilter" multiple size="3" onchange="filterCards()">
+    <option value="人型">人型</option>
+    <option value="獣">獣</option>
+    <option value="竜">竜</option>
+    <option value="精霊">精霊</option>
+    <option value="不死">不死</option>
+    <option value="機械">機械</option>
+    <option value="無">無</option>
+  </select>
 </div>
-
 
   <div class="deck-code-container">
     <textarea id="deckCode" rows="2" cols="50" placeholder="ここにコードが表示されます／貼り付けて復元"></textarea><br>
@@ -2629,7 +2641,7 @@ function renderCards(filteredCards = cards) {
 }
 
 // ====== 属性取得ユーティリティ（チェックボックス or multiple select に対応） ======
-function getSelectedAttributes() {
+/*function getSelectedAttributes() {
   // 1) チェックボックス (name="attr")
   const checked = Array.from(document.querySelectorAll('input[name="attr"]:checked'))
                        .map(cb => cb.value.trim())
@@ -2649,6 +2661,14 @@ function getSelectedSpecies() {
   return Array.from(document.querySelectorAll('input[name="species"]:checked'))
                .map(cb => cb.value.trim())
                .filter(Boolean);
+}*/
+    function getSelectedAttributes() {
+  const select = document.getElementById("attributeFilter");
+  return Array.from(select.selectedOptions).map(o => o.value);
+}
+function getSelectedSpecies() {
+  const select = document.getElementById("speciesFilter");
+  return Array.from(select.selectedOptions).map(o => o.value);
 }
 
 /* ====== filterCards を差し替え ======
@@ -2677,7 +2697,7 @@ function filterCards() {
 
   renderCards(filtered);
 }*/
-    function filterCards() {
+    /*function filterCards() {
   const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
   const selectedAttrs = getSelectedAttributes();   // 属性
   const selectedSpecies = getSelectedSpecies();    // ✅ 種族
@@ -2701,6 +2721,37 @@ function filterCards() {
       selectedAttrs.every(attr => cardAttrs.includes(attr));
 
     // ✅ 種族も AND検索
+    const matchesSpecies =
+      selectedSpecies.length === 0 ||
+      selectedSpecies.every(sp => cardSpecies.includes(sp));
+
+    return matchesName && matchesAttr && matchesSpecies;
+  });
+
+  renderCards(filtered);
+}*/
+    function filterCards() {
+  const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
+
+  const selectedAttrs = getSelectedAttributes();   // select版
+  const selectedSpecies = getSelectedSpecies();   // select版
+
+  const filtered = cards.filter(card => {
+    const matchesName =
+      !keyword || card.name.toLowerCase().includes(keyword);
+
+    const cardAttrs = Array.isArray(card.attribute)
+      ? card.attribute.map(a => a.trim())
+      : (card.attribute ? [String(card.attribute).trim()] : []);
+
+    const cardSpecies = Array.isArray(card.species)
+      ? card.species.map(s => s.trim())
+      : (card.species ? [String(card.species).trim()] : []);
+
+    const matchesAttr =
+      selectedAttrs.length === 0 ||
+      selectedAttrs.every(attr => cardAttrs.includes(attr));
+
     const matchesSpecies =
       selectedSpecies.length === 0 ||
       selectedSpecies.every(sp => cardSpecies.includes(sp));
