@@ -339,14 +339,14 @@
 
   <script>
     const cards = [
-{ id: 1, name: '怒りの解放', image: 'images/ikarinokaiho.jpg', maxCopies: 5, attribute: [ '水', '火' ], species: [ '狂戦士', 'フィールドウォーカー' ], type: [ 'スペル' ] },
-{ id: 2, name: '夢双覇王　サカタ＆リクシ', image: 'images/5C2985F1-2987-4C1D-AEFD-8E222D0326B5.jpg', maxCopies: 5, attribute: [ '闇', '雷', '水', '光', '火', '風', '草' ], species: [ 'ヨミドリーム・マスターレジェンド' ], type: [ 'キャラ' ] },
-{ id: 3, name: '森林の勇者　ソロン', image: 'images/03D903E2-D711-437D-B313-0E3BDBAAFA1D.jpg', maxCopies: 5, attribute: [ '水', '風', '草' ], species: [ '勇者', '巨大文明' ], type: [ '勇者キャラ' ] },
-{ id: 4, name: '霊墓グレイブ＝ブリザード', image: 'images/AE07862D-1F23-4312-A6D8-6748E7BF5A23.jpg', maxCopies: 5, attribute: [ '水', '火', '草' ], species: [ '魂', '科学者' ], type: [ 'キャラ' ] },
-{ id: 5, name: 'にんじんの収穫祭', image: 'images/ACF4BE2A-C659-41F2-896B-C9E942D3D748.jpg', maxCopies: 5, attribute: [ '闇' ], species: [ 'イベント' ], type: [ 'スペル' ] },
-{ id: 6, name: '天空の勇者　スカイ', image: 'images/781DEF8E-243D-45CF-9EFE-926CD21941E4.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ '勇者', 'フィールドウォーカー' ], type: [ '勇者キャラ' ] },
-{ id: 7, name: '霊速ブランチ', image: 'images/9A90E905-FCFB-48FA-9F9D-317535EE466E.jpg', maxCopies: 5, attribute: [ '水', '草' ], species: [ '魂', '科学者' ], type: [ '勇者キャラ' ] },
-{ id: 8, name: '新星旋律龍セイファリア', image: 'images/AA96AE97-7A60-4B68-951B-1F9E58E71821.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ 'フィールドウォーカー', 'ドラゴン', 'エンジェル' ], type: [ 'キャラ' ] }
+{ id: 1, name: '怒りの解放', image: 'images/ikarinokaiho.jpg', maxCopies: 5, attribute: [ '水', '火' ], species: [ '狂戦士', 'フィールドウォーカー' ] },
+{ id: 2, name: '夢双覇王　サカタ＆リクシ', image: 'images/5C2985F1-2987-4C1D-AEFD-8E222D0326B5.jpg', maxCopies: 5, attribute: [ '闇', '雷', '水', '光', '火', '風', '草' ], species: [ 'ヨミドリーム・マスターレジェンド' ] },
+{ id: 3, name: '森林の勇者　ソロン', image: 'images/03D903E2-D711-437D-B313-0E3BDBAAFA1D.jpg', maxCopies: 5, attribute: [ '水', '風', '草' ], species: [ '勇者', '巨大文明' ] },
+{ id: 4, name: '霊墓グレイブ＝ブリザード', image: 'images/AE07862D-1F23-4312-A6D8-6748E7BF5A23.jpg', maxCopies: 5, attribute: [ '水', '火', '草' ], species: [ '魂', '科学者' ] },
+{ id: 5, name: 'にんじんの収穫祭', image: 'images/ACF4BE2A-C659-41F2-896B-C9E942D3D748.jpg', maxCopies: 5, attribute: [ '闇' ], species: [ 'イベント' ] },
+{ id: 6, name: '天空の勇者　スカイ', image: 'images/781DEF8E-243D-45CF-9EFE-926CD21941E4.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ '勇者', 'フィールドウォーカー' ] },
+{ id: 7, name: '霊速ブランチ', image: 'images/9A90E905-FCFB-48FA-9F9D-317535EE466E.jpg', maxCopies: 5, attribute: [ '水', '草' ], species: [ '魂', '科学者' ] },
+{ id: 8, name: '新星旋律龍セイファリア', image: 'images/AA96AE97-7A60-4B68-951B-1F9E58E71821.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ 'フィールドウォーカー', 'ドラゴン', 'エンジェル' ] }
     ];
 
     const cardGrid = document.getElementById("cardGrid");
@@ -482,17 +482,12 @@ function renderCards(filteredCards = cards) {
       ? card.species.join("・")
       : (card.species || "");
 
-    const typeText = Array.isArray(card.type)
-      ? card.type.join("・")
-      : (card.type || "");
-
     cardElement.innerHTML = `
       <img src="${card.image}" alt="${card.name}">
       <div class="info">
         <h3>${card.name}</h3>
         ${attrText ? `<p>属性: ${attrText}</p>` : ""}
         ${speciesText ? `<p>種族: ${speciesText}</p>` : ""}
-        ${typeText ? `<p>カードタイプ: ${typeText}</p>` : ""}
       </div>
     `;
 
@@ -529,11 +524,6 @@ function getSelectedSpecies() {
 }
 function getSelectedSpecies() {
   const select = document.getElementById("speciesFilter");
-  return Array.from(select.selectedOptions).map(o => o.value);
-}
-
-function getSelectedType() {
-  const select = document.getElementById("typeFilter");
   return Array.from(select.selectedOptions).map(o => o.value);
 }
 
@@ -601,7 +591,6 @@ function filterCards() {
 
   const selectedAttrs = getSelectedAttributes();   // select版
   const selectedSpecies = getSelectedSpecies();   // select版
-  const selectedType = getSelectedType();   // select版
 
   const filtered = cards.filter(card => {
     const matchesName =
@@ -614,10 +603,6 @@ function filterCards() {
     const cardSpecies = Array.isArray(card.species)
       ? card.species.map(s => s.trim())
       : (card.species ? [String(card.species).trim()] : []);
-    //add↓
-    const cardType = Array.isArray(card.type)
-      ? card.type.map(s => s.trim())
-      : (card.type ? [String(card.type).trim()] : []);
 
     const matchesAttr =
       selectedAttrs.length === 0 ||
