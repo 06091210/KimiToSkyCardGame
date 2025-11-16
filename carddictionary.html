@@ -529,6 +529,11 @@ function getSelectedSpecies() {
   return Array.from(select.selectedOptions).map(o => o.value);
 }
 
+    function getSelectedType() {
+  return document.getElementById("typeFilter").value;
+}
+
+
 /* ====== filterCards を差し替え ======
 function filterCards() {
   const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
@@ -588,7 +593,7 @@ function filterCards() {
 
   renderCards(filtered);
 }*/
-    function filterCards() {
+/*    function filterCards() {
   const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
 
   const selectedAttrs = getSelectedAttributes();   // select版
@@ -615,6 +620,46 @@ function filterCards() {
       selectedSpecies.every(sp => cardSpecies.includes(sp));
 
     return matchesName && matchesAttr && matchesSpecies;
+  });
+
+  renderCards(filtered);
+}*/
+    function filterCards() {
+  const keyword = document.getElementById("cardFilter").value.trim().toLowerCase();
+
+  const selectedAttrs = getSelectedAttributes();
+  const selectedSpecies = getSelectedSpecies();
+  const selectedType = getSelectedType();  // ←追加
+
+  const filtered = cards.filter(card => {
+    
+    // 名前
+    const matchesName =
+      !keyword || card.name.toLowerCase().includes(keyword);
+
+    // 属性（AND）
+    const cardAttrs = Array.isArray(card.attribute)
+      ? card.attribute.map(a => a.trim())
+      : (card.attribute ? [String(card.attribute).trim()] : []);
+
+    const matchesAttr =
+      selectedAttrs.length === 0 ||
+      selectedAttrs.every(attr => cardAttrs.includes(attr));
+
+    // 種族（AND）
+    const cardSpecies = Array.isArray(card.species)
+      ? card.species.map(s => s.trim())
+      : (card.species ? [String(card.species).trim()] : []);
+
+    const matchesSpecies =
+      selectedSpecies.length === 0 ||
+      selectedSpecies.every(sp => cardSpecies.includes(sp));
+
+    // ★タイプ（1つだけ／完全一致）
+    const matchesType =
+      !selectedType || card.type === selectedType;
+
+    return matchesName && matchesAttr && matchesSpecies && matchesType;
   });
 
   renderCards(filtered);
