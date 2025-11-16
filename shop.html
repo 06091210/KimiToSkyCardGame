@@ -47,7 +47,37 @@ const cards = [
 ];
 
 let selectedCard = null;
-let ksPoint = 0;
+let ksPoint = 0; // スプレッドシートから取得した手持ちポイント
+
+// 名前入力時に KS ポイント取得
+document.getElementById("name").addEventListener("change", async () => {
+  const name = document.getElementById("name").value;
+  if (!name) return;
+  try {
+    ksPoint = await fetchKSPoint(name); // GASから取得した値を代入
+    updateTotal(); // 合計金額・購入ボタン判定を更新
+  } catch (e) {
+    ksPoint = 0;
+    document.getElementById("result").innerText = "KSポイント取得エラー";
+  }
+});
+
+// 枚数変更やカード選択時に即座に合計金額更新
+function updateTotal() {
+  if (!selectedCard) return;
+  const count = Number(document.getElementById("count").value || 1);
+  const total = selectedCard.price * count;
+  document.getElementById("totalPrice").innerText = total;
+
+  const buyBtn = document.getElementById("buyBtn");
+  if (total > ksPoint) {
+    buyBtn.disabled = true;
+    document.getElementById("result").innerText = `ポイント不足！ 所持: ${ksPoint}, 必要: ${total}`;
+  } else {
+    buyBtn.disabled = false;
+    document.getElementById("result").innerText = "";
+  }
+}
 
 window.onload = () => {
   const container = document.getElementById("cardContainer");
@@ -90,7 +120,7 @@ function selectCard(card, imgElem) {
 }
 
 // 合計金額更新 & KS判定
-function updateTotal() {
+/*function updateTotal() {
   if (!selectedCard) return;
 
   const count = Number(document.getElementById("count").value || 1);
@@ -106,7 +136,7 @@ function updateTotal() {
     document.getElementById("result").innerText = "";
   }
 }
-
+*/
 // KSポイント取得
 async function fetchKSPoint(playerName) {
   const url = `${GAS_URL}?action=getKSPoint&name=${encodeURIComponent(playerName)}`;
