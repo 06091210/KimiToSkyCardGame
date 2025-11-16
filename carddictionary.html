@@ -259,6 +259,7 @@
   </select>
   -->
   <div class="filter-row">
+    
   <select id="attributeFilter" multiple size="3" onchange="filterCards()">
     <option value="火">火</option>
     <option value="水">水</option>
@@ -285,6 +286,14 @@
     <option value="エンジェル">エンジェル</option>
     <option value="なし">なし</option>
   </select>
+    
+    <select id="typeFilter" onchange="filterCards()">
+  <option value="">すべてのタイプ</option>
+  <option value="スペル">スペル</option>
+  <option value="キャラ">キャラ</option>
+  <option value="勇者キャラ">勇者キャラ</option>
+</select>
+
 </div>
 
   <div class="deck-code-container">
@@ -332,14 +341,14 @@
 
   <script>
     const cards = [
-{ id: 1, name: '怒りの解放', image: 'images/ikarinokaiho.jpg', maxCopies: 5, attribute: [ '水', '火' ], species: [ '狂戦士', 'フィールドウォーカー' ] },
-{ id: 2, name: '夢双覇王　サカタ＆リクシ', image: 'images/5C2985F1-2987-4C1D-AEFD-8E222D0326B5.jpg', maxCopies: 5, attribute: [ '闇', '雷', '水', '光', '火', '風', '草' ], species: [ 'ヨミドリーム・マスターレジェンド' ] },
-{ id: 3, name: '森林の勇者　ソロン', image: 'images/03D903E2-D711-437D-B313-0E3BDBAAFA1D.jpg', maxCopies: 5, attribute: [ '水', '風', '草' ], species: [ '勇者', '巨大文明' ] },
-{ id: 4, name: '霊墓グレイブ＝ブリザード', image: 'images/AE07862D-1F23-4312-A6D8-6748E7BF5A23.jpg', maxCopies: 5, attribute: [ '水', '火', '草' ], species: [ '魂', '科学者' ] },
-{ id: 5, name: 'にんじんの収穫祭', image: 'images/ACF4BE2A-C659-41F2-896B-C9E942D3D748.jpg', maxCopies: 5, attribute: [ '闇' ], species: [ 'イベント' ] },
-{ id: 6, name: '天空の勇者　スカイ', image: 'images/781DEF8E-243D-45CF-9EFE-926CD21941E4.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ '勇者', 'フィールドウォーカー' ] },
-{ id: 7, name: '霊速ブランチ', image: 'images/9A90E905-FCFB-48FA-9F9D-317535EE466E.jpg', maxCopies: 5, attribute: [ '水', '草' ], species: [ '魂', '科学者' ] },
-{ id: 8, name: '新星旋律龍セイファリア', image: 'images/AA96AE97-7A60-4B68-951B-1F9E58E71821.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ 'フィールドウォーカー', 'ドラゴン', 'エンジェル' ] }
+{ id: 1, name: '怒りの解放', image: 'images/ikarinokaiho.jpg', maxCopies: 5, attribute: [ '水', '火' ], species: [ '狂戦士', 'フィールドウォーカー' ], type: 'スペル' },
+{ id: 2, name: '夢双覇王　サカタ＆リクシ', image: 'images/5C2985F1-2987-4C1D-AEFD-8E222D0326B5.jpg', maxCopies: 5, attribute: [ '闇', '雷', '水', '光', '火', '風', '草' ], species: [ 'ヨミドリーム・マスターレジェンド' ], type: 'キャラ' },
+{ id: 3, name: '森林の勇者　ソロン', image: 'images/03D903E2-D711-437D-B313-0E3BDBAAFA1D.jpg', maxCopies: 5, attribute: [ '水', '風', '草' ], species: [ '勇者', '巨大文明' ], type: '勇者キャラ' },
+{ id: 4, name: '霊墓グレイブ＝ブリザード', image: 'images/AE07862D-1F23-4312-A6D8-6748E7BF5A23.jpg', maxCopies: 5, attribute: [ '水', '火', '草' ], species: [ '魂', '科学者' ], type: 'キャラ' },
+{ id: 5, name: 'にんじんの収穫祭', image: 'images/ACF4BE2A-C659-41F2-896B-C9E942D3D748.jpg', maxCopies: 5, attribute: [ '闇' ], species: [ 'イベント' ], type: 'スペル' },
+{ id: 6, name: '天空の勇者　スカイ', image: 'images/781DEF8E-243D-45CF-9EFE-926CD21941E4.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ '勇者', 'フィールドウォーカー' ], type: '勇者キャラ' },
+{ id: 7, name: '霊速ブランチ', image: 'images/9A90E905-FCFB-48FA-9F9D-317535EE466E.jpg', maxCopies: 5, attribute: [ '水', '草' ], species: [ '魂', '科学者' ], type: 'キャラ' },
+{ id: 8, name: '新星旋律龍セイファリア', image: 'images/AA96AE97-7A60-4B68-951B-1F9E58E71821.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ 'フィールドウォーカー', 'ドラゴン', 'エンジェル' ], type: 'キャラ' }
     ];
 
     const cardGrid = document.getElementById("cardGrid");
