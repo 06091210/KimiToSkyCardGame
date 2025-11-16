@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>カードショップ</title>
+<style>
+  body { font-family: sans-serif; padding: 20px; }
+  input { margin: 5px 0; padding: 5px; width: 200px; }
+  button { padding: 10px 20px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+  .cardWrapper { text-align: center; }
+  .card { width: 100px; cursor: pointer; border: 3px solid transparent; border-radius: 10px; transition: 0.2s; }
+  .card.selected { border-color: red; }
+  .cardName { font-size: 14px; }
+  .cardPrice { font-size: 14px; color: blue; }
+  #totalPrice { font-size: 24px; color: green; }
+</style>
+</head>
+<body>
+
+<h2>カードショップ</h2>
+
+<label>名前：</label><br>
+<input id="name"><br>
+
+<h3>カードを選択</h3>
+<div id="cardContainer" class="cards"></div>
+
+<input type="hidden" id="cardId">
+
+<label>枚数：</label><br>
+<input id="count" type="number" min="1" value="1"><br>
+
+<h3>1枚あたりの価格: <span id="price">0</span> KS</h3>
+<h1>合計価格: <span id="totalPrice">0</span> KS</h1>
+
+<button id="buyBtn" onclick="buy()">購入する</button>
+<p id="result"></p>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxNvjooYm8AtLf3OhOL4qkmOGGg6Bc4bswLAeRlpGJMAJnpH8G_QBRX_AtCHjdswG2m/exec";
+
+const cards = [
+  { id: 1, name: "怒りの解放", img: "images/ikarinokaiho.jpg", price: 150 },
+  { id: 2, name: "夢双覇王　サカタ＆リクシ", img: "images/5C2985F1-2987-4C1D-AEFD-8E222D0326B5.jpg", price: 120 },
+  { id: 3, name: "森林の勇者　ソロン",   img: "images/03D903E2-D711-437D-B313-0E3BDBAAFA1D.jpg", price: 180 }
+];
+
+let selectedCard = null;
+let ksPoint = 0;
+
+window.onload = () => {
+  const container = document.getElementById("cardContainer");
+  cards.forEach(card => {
+    const wrap = document.createElement("div");
+    wrap.className = "cardWrapper";
+
+    const img = document.createElement("img");
+    img.src = card.img;
+    img.className = "card";
+    img.onclick = () => selectCard(card, img);
+
+    const name = document.createElement("div");
+    name.className = "cardName";
+    name.textContent = card.name;
+
+    const price = document.createElement("div");
+    price.className = "cardPrice";
+    price.textContent = `1枚: ${card.price} KS`;
+
+    wrap.appendChild(img);
+    wrap.appendChild(name);
+    wrap.appendChild(price);
+    container.appendChild(wrap);
+  });
+
+  document.getElementById("count").addEventListener("input", updateTotal);
+};
+
+// カード選択
+function selectCard(card, imgElem) {
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("selected"));
+  imgElem.classList.add("selected");
+
+  selectedCard = card;
+  document.getElementById("cardId").value = card.id;
+  document.getElementById("price").innerText = card.price;
+
+  updateTotal();
+}
+
+// 合計金額更新 & KS判定
+function updateTotal() {
+  if (!selectedCard) return;
+
+  const count = Number(document.getElementById("count").value || 1);
+  const total = selectedCard.price * count;
+  document.getElementById("totalPrice").innerText = total;
+
+  const buyBtn = document.getElementById("buyBtn");
+  if (total > ksPoint) {
+    buyBtn.disabled = true;
+    document.getElementById("result").innerText = `ポイント不足！ 所持: ${ksPoint}, 必要: ${total}`;
+  } else {
+    buyBtn.disabled = false;
+    document.getElementById("result").innerText = "";
+  }
+}
+
+// KSポイント取得
+async function fetchKSPoint(playerName) {
+  const url = `${GAS_URL}?action=getKSPoint&name=${encodeURIComponent(playerName)}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.ksPoint;
+}
+
+// 購入処理
+async function buy() {
+  if (!selectedCard) {
+    alert("カードを選択してください！");
+    return;
+  }
+
+  const count = Number(document.getElementById("count").value || 1);
+  const totalCost = selectedCard.price * count;
+
+  if (totalCost > ksPoint) {
+    alert("ポイントが足りません！");
+    return;
+  }
+
+  const payload = {
+    action: "purchase",
+    name: document.getElementById("name").value,
+    cardId: selectedCard.id,
+    count: count,
+    price: selectedCard.price
+  };
+
+  const res = await fetch(GAS_URL + "?data=" + encodeURIComponent(JSON.stringify(payload)));
+  const result = await res.json();
+  ksPoint = result.ksPoint; // 更新された所持ポイント
+  document.getElementById("result").innerText = result.message;
+  updateTotal();
+}
+
+// 名前入力時にKS取得
+document.getElementById("name").addEventListener("change", async () => {
+  const name = document.getElementById("name").value;
+  if (!name) return;
+  try {
+    ksPoint = await fetchKSPoint(name);
+    updateTotal();
+  } catch (e) {
+    ksPoint = 0;
+    document.getElementById("result").innerText = "KSポイント取得エラー";
+  }
+});
+</script>
+</body>
+</html>
