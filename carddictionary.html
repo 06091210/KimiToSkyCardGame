@@ -341,6 +341,7 @@
 
   <script>
     const cards = [
+carddictionary:
 { id: 1, name: '怒りの解放', image: 'images/ikarinokaiho.jpg', maxCopies: 5, attribute: [ '水', '火' ], species: [ '狂戦士', 'フィールドウォーカー' ], type: 'スペル' },
 { id: 2, name: '夢双覇王　サカタ＆リクシ', image: 'images/5C2985F1-2987-4C1D-AEFD-8E222D0326B5.jpg', maxCopies: 5, attribute: [ '闇', '雷', '水', '光', '火', '風', '草' ], species: [ 'ヨミドリーム・マスターレジェンド' ], type: 'キャラ' },
 { id: 3, name: '森林の勇者　ソロン', image: 'images/03D903E2-D711-437D-B313-0E3BDBAAFA1D.jpg', maxCopies: 5, attribute: [ '水', '風', '草' ], species: [ '勇者', '巨大文明' ], type: '勇者キャラ' },
@@ -348,7 +349,23 @@
 { id: 5, name: 'にんじんの収穫祭', image: 'images/ACF4BE2A-C659-41F2-896B-C9E942D3D748.jpg', maxCopies: 5, attribute: [ '闇' ], species: [ 'イベント' ], type: 'スペル' },
 { id: 6, name: '天空の勇者　スカイ', image: 'images/781DEF8E-243D-45CF-9EFE-926CD21941E4.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ '勇者', 'フィールドウォーカー' ], type: '勇者キャラ' },
 { id: 7, name: '霊速ブランチ', image: 'images/9A90E905-FCFB-48FA-9F9D-317535EE466E.jpg', maxCopies: 5, attribute: [ '水', '草' ], species: [ '魂', '科学者' ], type: 'キャラ' },
-{ id: 8, name: '新星旋律龍セイファリア', image: 'images/AA96AE97-7A60-4B68-951B-1F9E58E71821.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ 'フィールドウォーカー', 'ドラゴン', 'エンジェル' ], type: 'キャラ' }
+{ id: 8, name: '新星旋律龍セイファリア', image: 'images/AA96AE97-7A60-4B68-951B-1F9E58E71821.jpg', maxCopies: 5, attribute: [ '水', '光' ], species: [ 'フィールドウォーカー', 'ドラゴン', 'エンジェル' ], type: 'キャラ' },
+{ id: 9, name: '時蝕王ヴォルティス＝オメガ', image: 'images/05A961CD-8DE1-4619-A108-AE35C43A996B.jpg', maxCopies: 5, attribute: [ '雷', '水' ], species: [ 'ヴォルティス・ドラゴン' ], type: 'キャラ' },
+{ id: 10, name: 'スカイ＆ゆら〜絆の物語〜', image: 'images/D00C4909-7061-4932-81D1-DE7C77DF172B.jpg', maxCopies: 5, attribute: [ '闇', '水', '光', '風' ], species: [ 'youtuber', 'タッグ', 'バトラー', 'フィールドウォーカー' ], type: 'キャラ' },
+{ id: 11, name: '惑ウ代表　ツバキ', image: 'images/DEF86064-99A4-4400-A5EE-91A8CE782B68.jpg', maxCopies: 5, attribute: [ '光', '雷' ], species: [ '忍', '影桜衆' ], type: 'キャラ' },
+{ id: 12, name: '森林精霊　リフィナ', image: 'images/59AD9A43-4B64-4B68-9398-FB8333F38691.jpg', maxCopies: 5, attribute: [ '草' ], species: [ '妖精', '精霊' ], type: 'キャラ' },
+{ id: 13, name: '歩ム旅人　ツバキ', image: 'images/863A89AF-1B1F-41C4-B2A5-6D0F77E6505C.jpg', maxCopies: 5, attribute: [ '闇', '雷', '水', '光', '火', '風', '草' ], species: [ '忍', '影桜衆', 'フィールドウォーカー', '冒険者' ], type: 'キャラ' },
+{ id: 14, name: '騙ル混沌　ゆら', image: 'images/CAF93C8B-76A0-4F82-AC98-D85630061799.jpg', maxCopies: 5, attribute: [ '闇', '水', '光' ], species: [ '忍', '影桜衆', 'バトラー' ], type: 'キャラ' },
+{ id: 15, name: 'ツヴァイクリスタ　ナギ', image: 'images/3E34B679-9EDF-4284-99A3-2804996E31A9.jpg', maxCopies: 5, attribute: [ '光', '火' ], species: [ '真なる魔王' ], type: 'キャラ' },
+{ id: 16, name: '雷鳴妖精　ヴォルトリス', image: 'images/8A463066-8347-4B81-8FA5-B3ACB0E7D2BB.jpg', maxCopies: 5, attribute: [ '光' ], species: [ '妖精', '精霊' ], type: 'キャラ' },
+{ id: 17, name: '原初の魔王　月光シエン', image: 'images/4E04C85B-2C70-46EB-A0F0-D49E4B3AFEB3.jpg', maxCopies: 5, attribute: [ '闇', '雷' ], species: [ 'ハンター', '魔王' ], type: '魔王キャラ' },
+{ id: 18, name: '炎水双覇　ポンテ', image: 'images/334674EC-B9CC-402C-8DB9-F320074C88F9.jpg', maxCopies: 5, attribute: [ '水', '火' ], species: [ 'マジカルプリズム', '冒険者' ], type: 'キャラ' },
+{ id: 19, name: '吹雪妖精　シルフィス', image: 'images/98501B6F-2448-46AC-B6B0-765C2E529EB0.jpg', maxCopies: 5, attribute: [ '風' ], species: [ '妖精', '精霊' ], type: 'キャラ' },
+{ id: 20, name: '天使妖精　ルミナ', image: 'images/DAD4988C-5D3F-44AE-ACD8-E9F9AAED4AA2.jpg', maxCopies: 5, attribute: [ '光' ], species: [ '妖精', '精霊' ], type: 'キャラ' },
+{ id: 21, name: '未来覇神　ポンテ＝ネクス', image: 'images/10C45FEB-31CC-458C-9434-EDA772E7C195.jpg', maxCopies: 5, attribute: [ '水', '光', '火' ], species: [ 'マジカルプリズム', '冒険者', 'ミラクル・ドラゴン' ], type: 'キャラ' },
+{ id: 22, name: 'きみスカ初期メン　シュウラ', image: 'images/kimisukashokimenShura.jpg', maxCopies: 5, attribute: [ '闇', '雷', '火' ], species: [ '狂戦士', '冒険者' ], type: 'キャラ' },
+{ id: 23, name: '焔鬼　ボグロス', image: 'images/4D4FEAC9-CC15-4194-BEFD-CEB0D611F9E6.jpg', maxCopies: 5, attribute: [ '火' ], species: [ 'オーガ', '鬼' ], type: 'キャラ' },
+{ id: 24, name: 'FA 双闘王道　ギヌス', image: 'images/755290F1-2EF4-44DA-B31F-AA6658E07696.jpg', maxCopies: 5, attribute: [ '闇', '水', '風' ], species: [ '呪術師', '槍使い', '魔法少女' ], type: 'リプレイス' },
     ];
 
     const cardGrid = document.getElementById("cardGrid");
