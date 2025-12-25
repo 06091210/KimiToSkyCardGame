@@ -497,7 +497,7 @@ function renderCards(filteredCards = cards) {
       : (card.attribute || "");
 
     const speciesText = Array.isArray(card.species)
-      ? card.species.join("・")
+      ? card.species.join("/")
       : (card.species || "");
 
     cardElement.innerHTML = `
