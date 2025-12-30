@@ -194,9 +194,9 @@ const USER_KEY = "loginUser";
 
 /* ユーザー別アイコン定義 */
 const userIcons = {
-  "スカイ": "icon_sky.png",
-  "フォーエバー": "icon_forever.png",
-  "Firp": "icon_firp.png"
+  "スカイ": "icon_sky.jpeg",
+  "フォーエバー": "icon_forever.jpeg",
+  "Firp": "icon_firp.jpeg"
 };
 
 /* 起動時：ログイン状態復元 */
@@ -212,7 +212,7 @@ window.addEventListener("DOMContentLoaded", () => {
 function setUser(name) {
   document.getElementById("user-name").textContent = name;
   document.getElementById("user-icon").src =
-    userIcons[name] || "default_icon.png";
+    ("icons/"+userIcons[name]) || "icons/default_icon.png";
 }
 
 /* アイコンタップ → login.html を表示 */
