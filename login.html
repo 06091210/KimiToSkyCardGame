@@ -99,7 +99,7 @@
       "111111": "Firp"
     };
 
-    function sendValue() {
+    /*function sendValue() {
       const name = document.getElementById("nameInput").value.trim();
       const id = document.getElementById("idInput").value.trim();
       if (name === "" || id === "") {
@@ -113,7 +113,30 @@
       parent.postMessage({ type: "valueInput", value: name }, "*");
       alert("ログインしました！");
       loadMessage();
-    }
+    }*/
+    function sendValue() {
+  const name = document.getElementById("nameInput").value.trim();
+  const id = document.getElementById("idInput").value.trim();
+
+  if (name === "" || id === "") {
+    alert("名前とIDを両方入力してください。");
+    return;
+  }
+  if (!(id in idNameMap) || idNameMap[id] !== name) {
+    alert("IDと名前が一致しません。");
+    return;
+  }
+
+  /* 親へログイン成功通知 */
+  parent.postMessage({
+    type: "loginSuccess",
+    name: name
+  }, "*");
+
+  alert("ログインしました！");
+  loadMessage();
+}
+
 
     const GAS_URL = "https://script.google.com/macros/s/AKfycbwoc6e2CMHDI-VsCKb3pWsdmmOCOQeltBWXv4ELmwCpJy3Cm4xbVKks4T0v-mm4fKl8/exec"; 
     const nameInput = document.getElementById("nameInput");
