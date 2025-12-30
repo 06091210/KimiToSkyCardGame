@@ -217,7 +217,42 @@ function setUser(name) {
 
 /* アイコンタップ → login.html を表示 */
 function openUserInfo() {
-  loadHTML("login.html");
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwoc6e2CMHDI-VsCKb3pWsdmmOCOQeltBWXv4ELmwCpJy3Cm4xbVKks4T0v-mm4fKl8/exec"; 
+    const nameInput = document.getElementById("nameInput");
+
+    // iframeから名前を受け取る
+    parent.postMessage({ type: "requestValue" }, "*");
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "setValue") {
+        const name = event.data.value;
+        nameInput.value = name;
+        loadMessage();
+      }
+    });
+
+    // データ取得 → doGet
+    function loadMessage() {
+      const inputUsername = nameInput.value.trim();
+      fetch(`${GAS_URL}?name=${encodeURIComponent(inputUsername)}`)
+        .then(response => response.json())
+        .then(data => {
+          const resultDiv = document.getElementById("result");
+          if (data.error) {
+            resultDiv.textContent = data.error;
+          } else {
+            resultDiv.innerHTML = `
+              <b>${data.name}</b><br>
+              KSポイント: ${data.ks}<br>
+              勝敗数: ${data.winlose}<br>
+              所持カード: ${data.cards}
+            `;
+          }
+        })
+        .catch(error => {
+          document.getElementById("result").textContent = "エラー: " + error;
+        });
+    }
+    loadMessage();
 }
 
 /* iframe からの受信 */
