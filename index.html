@@ -1,155 +1,3 @@
-<!--<!doctype html>
-<html lang="ja">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>きみとスカイカードゲーム</title>
-
-  <!-- PWA マニフェスト
-  <link rel="manifest" href="manifest.json">
-
-  <!-- iOS 対応
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="apple-touch-icon" href="KimiToSkyCardGameIcon.png">
-
-  <!-- テーマカラー
-  <meta name="theme-color" content="#A1E0F9">
-
-  <style>
-    body {
-      font-family: system-ui, -apple-system, "Helvetica Neue", sans-serif;
-      /*padding: 2rem;*/
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    #menu-button {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background: none;
-      border: none;
-      padding: 0;
-      font-size: 24px;
-      font-weight: bold;
-      z-index: 1000;
-      cursor: pointer;
-    }
-    html, body {
-      height: 100%;
-      width: 100%;
-    }
-    body {
-      display: flex;
-      flex-direction: row;
-    }
-    #header-area {
-      width: 200px;
-      min-width: 150px;
-      background-color: #f0f0f0;
-      padding: 10px;
-      height: 100vh;
-      box-sizing: border-box;
-      margin-top: 0;
-    }
-    #viewer {
-      flex-grow: 1;
-      border: none;
-      height: 100vh;
-    }
-    h1:first-of-type {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      z-index: 10;
-      background: white;
-      border: 1px solid #ccc;
-      padding: 5px;
-      cursor: pointer;
-    }
-    h2 {
-      cursor: pointer;
-      margin: 10px 0;
-    }
-    hr {
-      margin-top: 10px;
-    }
-  </style>
-</head>
-<body>
-
-  <div id="menu-button" onclick="toggleHeader()">≡</div>
-  <div id="header-area">
-    <div style="margin-top: 50px;"> 
-      <!--<h2 onclick="loadHTML('deckmaker.html')">デッキメーカー</h2
-      <h2 onclick="loadHTML('carddictionary.html')">カード図鑑</h2>
-      <h2 onclick="loadHTML('cardgame.html')">カードゲーム</h2>
-      <!--<h2 onclick="loadHTML('scoreboard.html')">スコアボード</h2>
-      <h2 onclick="loadHTML('Test.html')">KSアカウント</h2>
-      <h2 onclick="loadHTML('login.html')">ログイン</h2>
-      <hr>
-    </div>
-  </div>
-  <iframe id="viewer" src=""></iframe>
-
-  <div id="install"></div>
-
-  <script>
-    const iframe = document.getElementById("viewer");
-    let sharedValue = "";
-    function toggleHeader() {
-      const header = document.getElementById('header-area');
-      header.style.display = (header.style.display === "none") ? "block" : "none";
-    }
-    function loadHTML(file) {
-      iframe.src = file;
-    }
-    window.addEventListener("message", (event) => {
-      const data = event.data;
-      if (data.type === "valueInput") {
-        sharedValue = data.value;
-        //console.log("受信値:", sharedValue);
-      }
-      if (data.type === "requestValue") {
-        iframe.contentWindow.postMessage({
-          type: "setValue",
-          value: sharedValue
-        }, "*");
-      }
-    });
-    
-    // サービスワーカー登録
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(() => console.log('SW 登録成功'))
-        .catch(err => console.error('SW 登録失敗:', err));
-    }
-
-    // Chrome/Edge/Opera/AndroidFirefox では beforeinstallprompt が使える
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-
-      const btn = document.createElement('button');
-      btn.textContent = 'ホーム画面に追加（対応ブラウザ用）';
-      btn.style.cssText = "padding:10px 20px; margin:20px; font-size:1rem;";
-      document.getElementById('install').appendChild(btn);
-
-      btn.addEventListener('click', async () => {
-        deferredPrompt.prompt();
-        const result = await deferredPrompt.userChoice;
-        console.log('ユーザー選択:', result.outcome);
-        deferredPrompt = null;
-      });
-    });
-  </script>
-</body>
-</html>
--->
 <!doctype html>
 <html lang="ja">
 <head>
@@ -295,14 +143,40 @@
       color:#fff;
       cursor:pointer;
     }
+    #user-area {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+#user-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+#user-name {
+  font-weight: bold;
+  color: #333;
+}
   </style>
 </head>
 <body>
-
   <header>
+  <!-- ユーザー表示エリア -->
+  <div id="user-area" onclick="openUserInfo()">
+    <img id="user-icon" src="default_icon.png">
+    <span id="user-name">ゲスト</span>
+  </div>
+
+  <div style="margin-left:auto;">
     <button id="home-button" onclick="showMainMenu()">ホーム</button>
     <button id="login-button" onclick="loadHTML('login.html')">ログイン</button>
-  </header>
+  </div>
+</header>
+
 
   <main id="main-menu">
     <div class="card-menu">
@@ -315,8 +189,46 @@
 
   <iframe id="viewer"></iframe>
   <div id="install"></div>
+<script>
+const USER_KEY = "loginUser";
 
-  <script>
+/* ユーザー別アイコン定義 */
+const userIcons = {
+  "スカイ": "icon_sky.png",
+  "フォーエバー": "icon_forever.png",
+  "Firp": "icon_firp.png"
+};
+
+/* 起動時：ログイン状態復元 */
+window.addEventListener("DOMContentLoaded", () => {
+  const saved = localStorage.getItem(USER_KEY);
+  if (saved) {
+    const user = JSON.parse(saved);
+    setUser(user.name);
+  }
+});
+
+/* ユーザー表示更新 */
+function setUser(name) {
+  document.getElementById("user-name").textContent = name;
+  document.getElementById("user-icon").src =
+    userIcons[name] || "default_icon.png";
+}
+
+/* アイコンタップ → login.html を表示 */
+function openUserInfo() {
+  loadHTML("login.html");
+}
+
+/* iframe からの受信 */
+window.addEventListener("message", (event) => {
+  if (event.data.type === "loginSuccess") {
+    const user = { name: event.data.name };
+    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    setUser(user.name);
+  }
+});
+//↑追加
     const iframe = document.getElementById("viewer");
     const mainMenu = document.getElementById("main-menu");
 
