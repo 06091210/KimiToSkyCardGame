@@ -1,1 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>行検索</title>
+  <style>
+    body { font-family: sans-serif; }
+    table {
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    td {
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+    }
+  </style>
+</head>
+<body>
+
+<!--<input type="text" id="keyword" placeholder="検索文字列">-->
+<button onclick="search()">表示</button>
+
+<table id="result"></table>
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwAxfyN74uuxHJ-7-3CiMqXgd7fkyKHDyMImQnBqW5CCzdVAk0XA295-pAagQmAh3UA/exec";
+
+function search() {
+  //const keyword = document.getElementById("keyword").value;
+  const keyword = sessionStorage.getItem("userName");
+
+  fetch(`${GAS_URL}?keyword=${encodeURIComponent(keyword)}`)
+    .then(res => res.json())
+    .then(json => {
+      const table = document.getElementById("result");
+      table.innerHTML = "";
+
+      if (json.data.length === 0) {
+        table.innerHTML = "<tr><td>該当なし</td></tr>";
+        return;
+      }
+
+      json.data.forEach(row => {
+        const tr = document.createElement("tr");
+        row.forEach(cell => {
+          const td = document.createElement("td");
+          td.textContent = cell;
+          tr.appendChild(td);
+        });
+        table.appendChild(tr);
+      });
+    });
+}
+</script>
+
+</body>
+</html>
 
