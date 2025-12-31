@@ -138,9 +138,9 @@
 }
 
 
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwoc6e2CMHDI-VsCKb3pWsdmmOCOQeltBWXv4ELmwCpJy3Cm4xbVKks4T0v-mm4fKl8/exec"; 
+    //const GAS_URL = "https://script.google.com/macros/s/AKfycbwoc6e2CMHDI-VsCKb3pWsdmmOCOQeltBWXv4ELmwCpJy3Cm4xbVKks4T0v-mm4fKl8/exec"; 
     const nameInput = document.getElementById("nameInput");
-
+    
     // iframeから名前を受け取る
     parent.postMessage({ type: "requestValue" }, "*");
     window.addEventListener("message", (event) => {
@@ -150,7 +150,7 @@
         loadMessage();
       }
     });
-
+/*
     // データ取得 → doGet
     function loadMessage() {
       const inputUsername = nameInput.value.trim();
@@ -172,7 +172,7 @@
         .catch(error => {
           document.getElementById("result").textContent = "エラー: " + error;
         });
-    }
+    }*/
     loadMessage();
   </script>
 </body>
