@@ -212,7 +212,8 @@ window.addEventListener("DOMContentLoaded", () => {
 function setUser(name) {
   document.getElementById("user-name").textContent = name;
   document.getElementById("user-icon").src =
-    ("icons/"+userIcons[name]) || "icons/default_icon.png";
+    ("icons/"+userIcons[name]) || "";
+  sessionStorage.setItem("userName", name);
 }
 
 /* アイコンタップ → login.html を表示 */
