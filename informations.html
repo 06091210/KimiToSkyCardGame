@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <title>ユーザー情報</title>
   <style>
-    body {
-      font-family: sans-serif;
-    }
+    
     table {
       border-collapse: collapse;
       margin-top: 10px;
@@ -15,14 +13,40 @@
       border: 1px solid #ccc;
       padding: 6px 10px;
     }
+    
+    /* ヘッダー分の余白を確保 */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center; /* 横中央 */
+      align-items: center;     /* 縦中央 */
+      font-family: system-ui, sans-serif;
+      background: #f9f9f9;
+      padding-top: 60px; /* 親ページのヘッダー高さに合わせる */
+      box-sizing: border-box;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 90%;
+      max-width: 300px;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
-
+<div class="container">
 <!--<input type="text" id="keyword" placeholder="検索文字列">
 <button onclick="search()">表示</button>-->
 
 <table id="result"></table>
+</div>
 
 <script>
 const GAS_URL = "https://script.google.com/macros/s/AKfycbwAxfyN74uuxHJ-7-3CiMqXgd7fkyKHDyMImQnBqW5CCzdVAk0XA295-pAagQmAh3UA/exec";
@@ -58,4 +82,17 @@ function search() {
 
 </body>
 </html>
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>入力ページ</title>
+</head>
+<body>
+  <
+</body>
+</html>
+
 
