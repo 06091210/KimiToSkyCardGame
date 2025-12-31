@@ -2,9 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>行検索</title>
+  <title>ユーザー情報</title>
   <style>
-    body { font-family: sans-serif; }
+    body {
+      font-family: sans-serif;
+    }
     table {
       border-collapse: collapse;
       margin-top: 10px;
@@ -17,8 +19,8 @@
 </head>
 <body>
 
-<!--<input type="text" id="keyword" placeholder="検索文字列">-->
-<button onclick="search()">表示</button>
+<!--<input type="text" id="keyword" placeholder="検索文字列">
+<button onclick="search()">表示</button>-->
 
 <table id="result"></table>
 
@@ -51,6 +53,7 @@ function search() {
       });
     });
 }
+  search();
 </script>
 
 </body>
