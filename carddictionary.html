@@ -126,7 +126,7 @@
     }
     .modal-content {
       background-color: #fff;
-      margin: 5% auto;
+      margin: 20% auto;
       padding: 20px;
       border-radius: 10px;
       max-width: 500px;
@@ -242,7 +242,7 @@
 </head>
 <body>
   
-  <h1>カード図鑑</h1>
+  <!--<h1>カード図鑑</h1>-->
   <input type="text" id="cardFilter" placeholder="カード名を検索" oninput="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
   <!--
   <select id="attributeFilter" onchange="filterCards()" style="display:block; margin:0 auto 20px; padding:5px; width:60%;">
@@ -264,7 +264,6 @@
     <option value="火">火</option>
     <option value="水">水</option>
     <option value="草">草</option>
-    <option value="土">土</option>
     <option value="風">風</option>
     <option value="雷">雷</option>
     <option value="光">光</option>
@@ -523,10 +522,10 @@ function renderCards(filteredCards = cards) {
       <img src="${card.image}" alt="${card.name}">
       <div class="info">
         <h3>${card.name}</h3>
-        ${attrText ? `<p>属性: ${attrText}</p>` : ""}
         ${speciesText ? `<p>種族: ${speciesText}</p>` : ""}
       </div>
     `;
+    //↑ ${attrText ? `<p>属性: ${attrText}</p>` : ""}
 
     cardElement.onclick = () => showModal(card);
     cardGrid.appendChild(cardElement);
