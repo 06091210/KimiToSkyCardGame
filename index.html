@@ -161,9 +161,43 @@
   font-weight: bold;
   color: #333;
 }
+    /**/
+    @keyframes animate {
+      0% {opacity: 100%;}
+      50% {opacity: 0%;}
+      100% {opacity: 100%;}
+    }
+    .step1 {
+      display: block;
+      text-align: center;
+    }
+    .step2 {
+      display: none;
+    }
+    #no {
+      display: none;
+    }
+    #show {
+      display: block;
+    }
+    #title {
+      margin-top: 30vh;
+    }
+    #button {
+      margin-top: 30vh;
+      animation-name: animate;
+      animation-duration: 1.5s;
+      animation-iteration-count: infinite;
+    }
   </style>
 </head>
 <body>
+  <div id="step1" class="step1" onclick="nextStep()">
+    <h1 id="title">きみとスカイ<br>〜パラレルクロニクル〜</h1>
+    <h2 id="startButton">Tap to start</h2>
+  </div>
+  
+  <div id="step2" class="step2">
   <header>
   <!-- ユーザー表示エリア -->
   <div id="user-area" onclick="openUserInfo()">
@@ -180,8 +214,8 @@
 
   <main id="main-menu">
     <div class="card-menu">
-      <button class="menu-btn" onclick="loadHTML('carddictionary.html')">カード図鑑</button>
-      <!--<button class="menu-btn" onclick="loadHTML('cardgame.html')">カードゲーム</button>
+      <!--<button class="menu-btn" onclick="loadHTML('carddictionary.html')">カード図鑑</button>
+      <button class="menu-btn" onclick="loadHTML('cardgame.html')">カードゲーム</button>
       <button class="menu-btn" onclick="loadHTML('guild.html')">ギルド（試作）</button>
       <button class="menu-btn" onclick="loadHTML('shop.html')">ショップ（試作）</button>-->
     </div>
@@ -189,7 +223,12 @@
 
   <iframe id="viewer"></iframe>
   <div id="install"></div>
+  </div>
 <script>
+  function nextStep() {
+    document.getElementById("step1").id = "no";
+    document.getElementById("step2").id = "show";
+  }
 const USER_KEY = "loginUser";
 
 /* ユーザー別アイコン定義 */
@@ -293,6 +332,7 @@ window.addEventListener("message", (event) => {
         deferredPrompt = null;
       });
     });    
+  loadHTML('carddictionary.html');
   </script>
 </body>
 </html>
