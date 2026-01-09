@@ -125,8 +125,9 @@
       height: calc(100vh - 60px);
       border: none;
       display: none;
+      overflow-y: auto;
     }
-
+    
     #install {
       position: fixed;
       bottom: 20px;
@@ -285,7 +286,7 @@ window.addEventListener("message", (event) => {
       mainMenu.style.display = "none";
     }
 
-    iframe.addEventListener("load", () => {
+    /*iframe.addEventListener("load", () => {
   try {
     const innerDoc = iframe.contentDocument || iframe.contentWindow.document;
     const innerHeight = innerDoc.documentElement.scrollHeight;
@@ -293,7 +294,7 @@ window.addEventListener("message", (event) => {
   } catch(e) {
     console.error("高さの調整に失敗", e);
   }
-});
+});*/
     
     window.addEventListener("message", (event) => {
       const data = event.data;
