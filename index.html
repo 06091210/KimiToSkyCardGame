@@ -179,8 +179,6 @@
     }
     #show {
       display: block;
-      position: fixed;
-      width: 100%;
     }
     #title {
       margin-top: 30vh;
@@ -228,7 +226,7 @@
   </div>
 <script>
   function nextStep() {
-    document.getElementById("step1").id = "no";
+    document.getElementById("step1").remove();
     document.getElementById("step2").id = "show";
   }
 const USER_KEY = "loginUser";
