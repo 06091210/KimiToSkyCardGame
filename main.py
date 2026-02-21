@@ -13,18 +13,23 @@ def write_command(cmd):
     frame += bytes([dcs, 0x00])
     i2c.writeto(PN532_ADDR, frame)
 
-def read_response(length=32):
+def read_ack():
+    time.sleep(0.05)
+    return i2c.readfrom(PN532_ADDR, 7)
+
+def read_response():
     time.sleep(0.2)
-    return i2c.readfrom(PN532_ADDR, length)
+    return i2c.readfrom(PN532_ADDR, 32)
 
 def sam_configuration():
     write_command(b'\x14\x01\x14\x01')
+    read_ack()
     read_response()
 
 def read_passive_target():
     write_command(b'\x4A\x01\x00')
-    data = read_response()
-    return data
+    read_ack()
+    return read_response()
 
 print("PN532 初期化中...")
 time.sleep(1)
@@ -35,12 +40,11 @@ print("カードをかざしてください")
 while True:
     data = read_passive_target()
 
-    if data and len(data) > 20:
-        # UID長さ取得
-        uid_length = data[19]
-        uid = data[20:20+uid_length]
+    # 正しいレスポンスか確認
+    if data and len(data) > 20 and data[6] == 0xD5 and data[7] == 0x4B:
+        uid_length = data[12]
+        uid = data[13:13+uid_length]
 
-        if uid_length > 0:
-            uid_hex = ''.join('{:02X}'.format(b) for b in uid)
-            print("UID:", uid_hex)
-            time.sleep(2)
+        uid_hex = ''.join('{:02X}'.format(b) for b in uid)
+        print("UID:", uid_hex)
+        time.sleep(2)
