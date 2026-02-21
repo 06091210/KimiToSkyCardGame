@@ -1,44 +1,46 @@
 from machine import Pin, I2C
 import time
 
-# I2C設定
-i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=400000)
-
 PN532_ADDR = 0x24
 
-def wakeup():
-    i2c.writeto(PN532_ADDR, b'\x00\x00\xFF\x00\xFF\x00')
-    time.sleep(0.1)
+i2c = I2C(0, scl=Pin(1), sda=Pin(0), freq=400000)
 
-def get_firmware():
-    cmd = b'\x00\x00\xFF\x02\xFE\xD4\x02\x2A\x00'
-    i2c.writeto(PN532_ADDR, cmd)
-    time.sleep(0.1)
-    return i2c.readfrom(PN532_ADDR, 12)
+def write_command(cmd):
+    length = len(cmd) + 1
+    lcs = (~length + 1) & 0xFF
+    frame = b'\x00\x00\xFF' + bytes([length, lcs]) + b'\xD4' + cmd
+    dcs = (~(0xD4 + sum(cmd)) + 1) & 0xFF
+    frame += bytes([dcs, 0x00])
+    i2c.writeto(PN532_ADDR, frame)
+
+def read_response(length=32):
+    time.sleep(0.2)
+    return i2c.readfrom(PN532_ADDR, length)
+
+def sam_configuration():
+    write_command(b'\x14\x01\x14\x01')
+    read_response()
 
 def read_passive_target():
-    cmd = b'\x00\x00\xFF\x04\xFC\xD4\x4A\x01\x00\xE1\x00'
-    i2c.writeto(PN532_ADDR, cmd)
-    time.sleep(0.3)
-    data = i2c.readfrom(PN532_ADDR, 24)
+    write_command(b'\x4A\x01\x00')
+    data = read_response()
     return data
 
-print("PN532 起動中...")
-wakeup()
+print("PN532 初期化中...")
+time.sleep(1)
 
+sam_configuration()
 print("カードをかざしてください")
 
 while True:
-    try:
-        data = read_passive_target()
+    data = read_passive_target()
 
-        # UID抽出（位置固定）
-        uid = data[13:17]
+    if data and len(data) > 20:
+        # UID長さ取得
+        uid_length = data[19]
+        uid = data[20:20+uid_length]
 
-        if len(uid) == 4:
+        if uid_length > 0:
             uid_hex = ''.join('{:02X}'.format(b) for b in uid)
             print("UID:", uid_hex)
             time.sleep(2)
-
-    except:
-        pass
